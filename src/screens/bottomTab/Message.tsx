@@ -26,7 +26,7 @@ const Message = () => {
     }
 
     return (
-        <MenuWrapper title='Mesajlar'>
+        <MenuWrapper title='Mesajlar' >
 
             <HandleData title={"Mesajınız Bulunmamaktadır"} loading={false}>
 

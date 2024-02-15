@@ -9,7 +9,7 @@ import { Modal } from 'react-native-paper'
 const Header = () => {
     const navigation = useNavigation()
     return (
-        <View className='bg-white flex-row items-center justify-between w-[95%] self-center h-[38px] '>
+        <View className='flex-row items-center justify-between w-[95%] self-center h-[38px] '>
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <HeaderBackIcon />
             </TouchableOpacity>

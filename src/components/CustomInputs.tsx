@@ -56,7 +56,7 @@ const CustomInputs: React.FC<props> = ({
                 <View className='w-full mb-3' style={style}>
                     <View className='flex-row items-center'>
                         {title && <Text className='text-sm font-poppins font-normal text-customGray w-[40%] text-right pr-3'>{title}</Text>}
-                        <View className='h-[40px] flex-1 bg-white rounded-lg border border-customLightGray px-2 flex-row items-center'>
+                        <View className='h-[40px] flex-1 bg-white rounded-lg border border-customGray px-2 flex-row items-center'>
                             <TextInput
                                 value={value}
                                 defaultValue={defaultValue}
@@ -64,7 +64,8 @@ const CustomInputs: React.FC<props> = ({
                                 onBlur={onBlur}
                                 onChangeText={onChangeText}
                                 secureTextEntry={showSecure}
-                                className='placeholder:text-customGray/[.5] flex-1 text-customGray text-sm p-0'
+                                placeholderTextColor={"rgba(77, 74, 72, 0.5)"}
+                                className='flex-1 text-customGray text-sm p-0'
                             />
                             {
                                 secureTextEntry &&
@@ -74,17 +75,18 @@ const CustomInputs: React.FC<props> = ({
                             }
                         </View>
                     </View>
-                    {error && <Text className='text-red-400 text-xs '> {error?.message}</Text>}
+                    {error && <Text className='text-red-400 text-xs '> {error}</Text>}
                 </View>
             )}
             {type == "textarea" && (
                 <View className='mb-3' style={style}>
                     <TextInput
-                        className={`placeholder:text-customGray/[.5] border border-customLightGray rounded-xl bg-white min-h-[100] max-h-[300] px-2`}
+                        className={`border border-customGray text-customGray text-sm rounded-xl bg-white min-h-[100] max-h-[300] px-2`}
                         value={value}
                         defaultValue={defaultValue}
-                        onChangeText={onChange}
+                        onChangeText={onChangeText}
                         placeholder={placeholder}
+                        placeholderTextColor={"rgba(77, 74, 72, 0.5)"}
                         onBlur={onBlur}
                         textAlignVertical='top'
                         multiline
@@ -96,7 +98,7 @@ const CustomInputs: React.FC<props> = ({
                 <View className='mb-3' style={style}>
                     <Text className='font-medium text-customGray text-base font-poppins mb-3'>Başlık Metni</Text>
                     <TextInput
-                        className={` border border-customLightGray rounded-xl bg-white max-h-[80px] px-2`}
+                        className={` border border-customGray rounded-xl bg-white max-h-[80px] px-2`}
                         value={value}
                         defaultValue={defaultValue}
                         onChangeText={onChange}
@@ -112,7 +114,7 @@ const CustomInputs: React.FC<props> = ({
                     <Text className='font-medium text-customGray text-base font-poppins mb-3'>{title}</Text>
                     <TextInput
                         textAlignVertical='top'
-                        className={` border border-customLightGray rounded-xl bg-white min-h-[100px] max-h-[400px] px-2`}
+                        className={` border border-customGray rounded-xl bg-white min-h-[100px] max-h-[400px] px-2`}
                         value={value}
                         defaultValue={defaultValue}
                         onChangeText={onChange}
@@ -126,7 +128,7 @@ const CustomInputs: React.FC<props> = ({
                 <View className=' mb-3 w-full' style={style}>
                     <Pressable
                         onPress={() => setShowDateModal(!showDateModal)}
-                        className='h-[40px] bg-white rounded-lg border border-customLightGray px-1 placeholder:text-customGray/[.5] flex-row items-center'
+                        className='h-[40px] bg-white rounded-lg border border-customGray px-1 placeholder:text-customGray/[.5] flex-row items-center'
                     >
                         <TextInput
                             value={value}
@@ -168,7 +170,7 @@ const CustomInputs: React.FC<props> = ({
                             disable={disable}
                             onChange={onChange}
                             renderRightIcon={() => isFocusDropdown ? <DropdownRightUpIcon /> : <DropdownRightDownIcon />}
-                            style={[{ paddingLeft: 8, height: 40, backgroundColor: "white", flex: 1, borderRadius: 8, borderWidth: 1, borderColor: "#CECECE", overflow: "hidden", }, style]}
+                            style={[{ paddingLeft: 8, height: 40, backgroundColor: "white", flex: 1, borderRadius: 8, borderWidth: 1, borderColor: "#4D4A48", overflow: "hidden", }, style]}
                             selectedTextStyle={{ fontSize: 14, color: "#4D4A48", }}
                         />
                     </View>

@@ -6,7 +6,7 @@ import MessageComp from '../../components/MessageComp'
 
 const IncomingMessage = () => {
     return (
-        <MenuWrapper title='Mesajlar'>
+        <MenuWrapper title='Mesajlar' type='message'>
 
             <HandleData data={[""]} title={"Mesajınız Bulunmamaktadır"} loading={false}>
 

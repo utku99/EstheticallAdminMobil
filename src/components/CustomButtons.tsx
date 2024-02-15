@@ -77,7 +77,7 @@ const CustomButtons: React.FC<props> = ({ type, label, onPress, theme = "middle"
             )}
             {type == "brownoutlined" && (
                 <TouchableOpacity onPress={onPress} style={style} className={`bg-white border border-customBrown  ${handleSize()}   rounded-lg items-center justify-center  px-4 `}>
-                    <Text className={`font-semibold text-customBrown  ${handleFontSize()}    font-poppins`}>{label}</Text>
+                    <Text className={`font-semibold text-customBrown  ${handleFontSize()}   font-poppins`}>{label}</Text>
                 </TouchableOpacity>
             )}
         </>

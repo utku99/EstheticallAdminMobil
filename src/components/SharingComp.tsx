@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { Switch } from 'react-native-paper'
 import TrashIcon from '../assets/svg/firm/TrashIcon'
+import BlueTick from '../assets/svg/common/BlueTick'
 
 
 const CommentComp = ({ item }: any) => {
@@ -60,9 +61,14 @@ const SharingComp = ({ item, onClickable = false }: { item: any, onClickable?: b
 
             {/* header */}
             <View className='flex-row justify-between items-center p-[10px]'>
-                <TouchableOpacity onPress={() => onClickable && navigation.navigate("firmprofile", { companyId: item?.companyId, companyOfficeId: item?.companyOfficeId })} className='flex-row items-center w-[60%] '>
-                    <View className='w-[55px] h-[55px] overflow-hidden rounded-full border-[0.6px] border-customGray'>
-                        <Image source={{ uri: temp }} className='w-full h-full' resizeMode='cover' />
+                <TouchableOpacity onPress={() => onClickable && navigation.navigate("firmprofile", { companyId: item?.companyId, companyOfficeId: item?.companyOfficeId })} className='flex-row items-center w-[70%] '>
+                    <View className='relative'>
+                        <View className='w-[55px] h-[55px] overflow-hidden rounded-full border-[0.6px] border-customGray '>
+                            <Image source={{ uri: temp }} className='w-full h-full' resizeMode='cover' />
+                        </View>
+                        <View className='absolute right-0 bg-white rounded-full overflow-hidden'>
+                            <BlueTick />
+                        </View>
                     </View>
                     <View className='pl-2 flex-shrink'>
                         <Text numberOfLines={1} className='text-customGray font-poppins text-xs font-bold'>Lorem ipsum dolor sit amet.</Text>

@@ -8,6 +8,7 @@ module.exports = {
         customGray: "#4D4A48",
         customLightGray: "#CECECE",
         customBrown: "#8F7A6C",
+        background: "#FAFAFA"
       },
       fontFamily: {
         poppins: ["Poppins"]

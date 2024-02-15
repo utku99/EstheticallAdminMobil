@@ -13,7 +13,8 @@ import { useTranslation } from 'react-i18next'
 import WebClient from '../../utility/WebClient'
 import { setLoggedIn, setUser } from '../../redux/slices/user'
 import CustomInputs from '../../components/CustomInputs'
-
+import { useFormik } from 'formik'
+import * as Yup from "yup"
 
 
 const Login = () => {
@@ -24,25 +25,28 @@ const Login = () => {
     const dispatch = useDispatch()
 
 
-    const { control, handleSubmit, } = useForm({
-        defaultValues: {
+    const formik = useFormik({
+        initialValues: {
             email: "",
             password: ""
+        },
+        validationSchema: Yup.object().shape({
+            email: Yup.string().required("mail alanı gereklidir").email("email formatında olmalıdır"),
+            password: Yup.string().required("şifre alanı gereklidir")
+        }),
+        onSubmit: (values) => {
+            Post("/api/Auth/LoginCompany", {
+                username: values.email,
+                password: values.password,
+            }, true, true)
+                .then((res) => {
+                    if (res.data.code === "100" && res.data.object.userRoleId === 2) {
+                        dispatch(setUser(res.data.object));
+                        dispatch(setLoggedIn(true))
+                    }
+                })
         }
-    });
-
-    const onSubmit = (values: any) => {
-        Post("/api/Auth/LoginCompany", {
-            username: values.email,
-            password: values.password,
-        }, true, true)
-            .then((res) => {
-                if (res.data.code === "100" && res.data.object.userRoleId === 2) {
-                    dispatch(setUser(res.data.object));
-                    dispatch(setLoggedIn(true))
-                }
-            })
-    }
+    })
 
 
     return (
@@ -81,30 +85,33 @@ const Login = () => {
                 <View className='w-full '>
                     <Text className='text-customGray font-medium text-xl font-poppins self-center mb-6'>Kurum Girişi</Text>
                     <View className=''>
-                        <Controller
-                            control={control}
-                            render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
-                                <CustomInputs type='text' placeholder='E-Posta' value={value} onBlur={onBlur} onChangeText={onChange} error={error} />
-                            )}
-                            name='email'
-                            rules={{ required: { value: true, message: "email gereklidir" }, }}
+
+                        <CustomInputs
+                            type='text'
+                            placeholder='E-Posta'
+                            value={formik.values.email}
+                            onBlur={formik.handleBlur("email")}
+                            onChangeText={formik.handleChange("email")}
+                            error={formik.errors.email}
                         />
 
-                        <Controller
-                            control={control}
-                            render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
-                                <CustomInputs type='text' placeholder='Şifre' value={value} onBlur={onBlur} onChangeText={onChange} error={error} secureTextEntry />
-                            )}
-                            name='password'
-                            rules={{ required: { value: true, message: "şifre gereklidir" }, }}
+                        <CustomInputs
+                            type='text'
+                            placeholder='Şifre'
+                            value={formik.values.password}
+                            onBlur={formik.handleBlur("password")}
+                            onChangeText={formik.handleChange("password")}
+                            error={formik.errors.password}
+                            secureTextEntry
                         />
+
                         <Text className='font-medium text-sm font-poppins text-customOrange self-end'>{t("forgot-password")}</Text>
                     </View>
                 </View>
 
 
                 <View className='w-full '>
-                    <CustomButtons type='solid' label='Giriş Yap' onPress={handleSubmit(onSubmit)} theme='big' />
+                    <CustomButtons type='solid' label='Giriş Yap' onPress={formik.handleSubmit} theme='big' />
                 </View>
 
             </ScrollView>

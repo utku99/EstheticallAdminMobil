@@ -71,9 +71,8 @@ const UserStack = () => {
         headerLeftContainerStyle: { width: "14%", alignItems: "center" },
         headerTitleContainerStyle: { width: "100%", alignItems: "center" },
         headerRightContainerStyle: { alignItems: "center" },
-
+        headerStyle: { backgroundColor: "#FAFAFA" }
       }}>
-
 
       <Stack.Screen name='sharing' component={Sharings} />
       <Stack.Screen name='sharingcomments' component={SharingComments} />

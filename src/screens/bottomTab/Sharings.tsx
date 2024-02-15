@@ -19,7 +19,7 @@ const Sharings = () => {
 
 
     return (
-        <MenuWrapper title='Paylaşımlar' showAddBtn>
+        <MenuWrapper title='Paylaşımlar' type='sharing'>
 
 
 

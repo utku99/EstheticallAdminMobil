@@ -11,7 +11,7 @@ export class DrawerBar extends Component {
 
         return (
             <DrawerContentScrollView {...this.props} >
-                <DrawerItem label="Bildirimler" onPress={() => navigation.navigate("notification")} icon={() => <NotificationIcon />} activeTintColor='red' pressColor='blue' />
+                <DrawerItem label="Bildirimler" onPress={() => navigation.navigate("notification")} icon={() => <NotificationIcon fill={"#FF8170"} />} activeTintColor='red' pressColor='blue' />
                 <DrawerItem label="Ayarlar" onPress={() => navigation.navigate("settings")} icon={() => <SettingsIcon />} activeTintColor='red' pressColor='blue' />
                 <DrawerItem label="Çıkış Yap" onPress={() => navigation.navigate("logout")} icon={() => <LogOutIcon />} activeTintColor='red' pressColor='blue' />
             </DrawerContentScrollView>

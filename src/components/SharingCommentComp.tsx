@@ -12,19 +12,20 @@ const SharingCommentComp = () => {
         <View className={` border border-customLightGray rounded-xl bg-white p-[10px] space-y-2`} style={{ width: SIZES.width * 0.95 }}>
 
             <View className='flex-row justify-between items-center'>
-                <View className='w-[55px] h-[55px] overflow-hidden rounded-full border-[0.6px] border-customGray'>
-                    <Image source={{ uri: temp }} className='w-full h-full' resizeMode='cover' />
+                <View className='flex-row items-center gap-2  w-[50%]'>
+                    <View className='w-[55px] h-[55px] overflow-hidden rounded-full border-[0.6px] border-customGray'>
+                        <Image source={{ uri: temp }} className='w-full h-full' resizeMode='cover' />
+                    </View>
+                    <View >
+                        <Text className='text-customGray font-poppins text-xxs font-normal'>Lorem, ipsum.</Text>
+                        <Text className='text-customGray font-poppins text-xxs font-normal'>Lorem, ipsum.</Text>
+                        <Text className='text-customGray font-poppins text-xxs font-normal'>Lorem, ipsum.</Text>
+                    </View>
                 </View>
 
-                <View >
-                    <Text className='text-customGray font-poppins text-xxs font-normal'>Lorem, ipsum.</Text>
-                    <Text className='text-customGray font-poppins text-xxs font-normal'>Lorem, ipsum.</Text>
-                    <Text className='text-customGray font-poppins text-xxs font-normal'>Lorem, ipsum.</Text>
-                </View>
+                <Text numberOfLines={1} className='text-customGray font-poppins text-xxs font-normal'>Burun Estetiği</Text>
 
-                <Text className='text-customGray font-poppins text-xxs font-normal'>Lorem, ipsum.</Text>
-
-                <TouchableOpacity onPress={() => ""} className='flex-row items-center space-x-1'>
+                <TouchableOpacity onPress={() => ""} className='flex-row items-center gap-1'>
                     <View className='bg-customOrange items-center justify-center w-[24] h-[24] rounded-sm'>
                         <TrashIcon fill={"white"} />
                     </View>

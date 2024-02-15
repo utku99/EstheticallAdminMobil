@@ -7,13 +7,15 @@ import TrashIcon from '../assets/svg/firm/TrashIcon'
 
 
 
-const AddPhotoComp = ({ value, onChange, error }: any) => {
+const AddPhotoComp = ({ value, onChange, error, width, height }: any) => {
 
     const openGalery = () => {
         openPicker({
             cropping: false,
             includeBase64: true,
-            multiple: true
+            multiple: true,
+            width,
+            height
         }).then((image: any) => {
             let temp = image.map((img: any) => img.data)
             onChange(temp)
@@ -22,7 +24,7 @@ const AddPhotoComp = ({ value, onChange, error }: any) => {
 
 
     return (
-        <View className='space-y-5 mb-3'>
+        <View className={`space-y-5 mb-3`}>
             {
                 value?.length < 5 && (
                     <View>
@@ -48,7 +50,7 @@ const AddPhotoComp = ({ value, onChange, error }: any) => {
                                 onChange(updatedImages);
                             }}
                                 className='absolute bottom-2 right-2 bg-customOrange rounded-md w-[30px] h-[30px] items-center justify-center'>
-                                <TrashIcon />
+                                <TrashIcon fill={"white"} />
                             </Pressable>
                         </View>
                     )}
