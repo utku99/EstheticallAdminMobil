@@ -46,7 +46,7 @@ const CustomButtons: React.FC<props> = ({
   };
 
   const handleFontSize = () => {
-    if (theme == 'big') return 'text-[20px]';
+    if (theme == 'big') return 'text-xl';
     else if (theme == 'middle') return 'text-xs';
     else if (theme == 'small') return 'text-xxs';
   };

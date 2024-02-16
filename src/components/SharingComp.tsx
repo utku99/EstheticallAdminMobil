@@ -187,7 +187,9 @@ const SharingComp = ({
           Yorumları Gör
         </Text>
         <View className="flex-row space-x-3 mr-2">
-          <Switch thumbColor={'#FF8170'} value={false} onChange={() => ''} />
+          <View className="z-30">
+            <Switch thumbColor={'#FF8170'} value={false} onChange={() => ''} />
+          </View>
           <TouchableOpacity
             onPress={() => ''}
             className=" bg-customOrange rounded-md w-[23px] h-[23px] items-center justify-center">
