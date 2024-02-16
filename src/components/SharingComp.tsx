@@ -186,9 +186,14 @@ const SharingComp = ({
           className="font-poppinsRegular text-xs text-white flex-1">
           Yorumları Gör
         </Text>
-        <View className="flex-row space-x-3 mr-2">
+        <View className="flex-row items-center space-x-3 mr-2">
           <View className="z-30">
-            <Switch thumbColor={'#FF8170'} value={false} onChange={() => ''} />
+            <Switch
+              thumbColor={'#FF8170'}
+              trackColor={'red'}
+              value={false}
+              onChange={() => ''}
+            />
           </View>
           <TouchableOpacity
             onPress={() => ''}
