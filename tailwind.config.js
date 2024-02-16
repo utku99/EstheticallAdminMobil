@@ -11,7 +11,12 @@ module.exports = {
         background: "#FAFAFA"
       },
       fontFamily: {
-        poppins: ["Poppins"]
+        poppinsBold: ["Poppins-Bold"],
+        poppinsSemiBold: ["Poppins-SemiBold"],
+        poppinsBlack: ["Poppins-Black"],
+        poppinsItalic: ["Poppins-Italic"],
+        poppinsRegular: ["Poppins-Regular"],
+        poppinsMedium: ["Poppins-Medium"],
       },
       fontSize: {
         xxs: ["10px", "15px"]
