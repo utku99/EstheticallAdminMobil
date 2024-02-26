@@ -12,7 +12,7 @@ import {useFormik} from 'formik';
 import {useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
 
-const NewOffer = ({route}: any) => {
+const EditOffer = ({route}: any) => {
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
   const navigation = useNavigation();
@@ -22,12 +22,17 @@ const NewOffer = ({route}: any) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      doctor: '',
-      price: '',
-      currency: currencyTypes[0],
-      paymentRate: '',
-      date: '',
-      companyImages: [],
+      doctor:
+        doctors?.find((item: any) => item.label === offerInfo?.doctorName) ??
+        '',
+      price: offerInfo?.price ?? '',
+      currency:
+        currencyTypes.find(item => item?.value === offerInfo?.currencyType) ??
+        1,
+      paymentRate: offerInfo?.priceRate ?? '',
+      date: offerInfo?.date ?? '',
+      companyImages: offerInfo?.offerInfoSlider ?? [],
+      statu: offerStates.find(item => item.value === offerInfo?.status),
     },
     onSubmit: values => {
       Post(
@@ -75,7 +80,7 @@ const NewOffer = ({route}: any) => {
   }, []);
 
   return (
-    <MenuWrapper title="Yeni Teklif Ver">
+    <MenuWrapper title="Teklifi Güncelle">
       <View className="items-center">
         <View
           className={`h-fit border border-customLightGray rounded-xl bg-white `}
@@ -108,6 +113,16 @@ const NewOffer = ({route}: any) => {
           <View className="p-[10px] space-y-3">
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
+                Durum:
+              </Text>
+              <CustomInputs
+                type="dropdown"
+                dropdownData={offerStates}
+                value={formik.values.statu}
+              />
+            </View>
+            <View>
+              <Text className="text-customGray font-poppinsMedium text-sm mb-1">
                 Doktor:
               </Text>
               <CustomInputs
@@ -120,7 +135,12 @@ const NewOffer = ({route}: any) => {
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
                 Açıklama:
               </Text>
-              <CustomInputs type="textarea" />
+              <CustomInputs
+                type="textarea"
+                defaultValue={
+                  ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Exodio!'
+                }
+              />
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
@@ -179,7 +199,7 @@ const NewOffer = ({route}: any) => {
 
             <CustomButtons
               type="solid"
-              label="Teklifi Gönder"
+              label="Teklifi Güncelle"
               icon="question"
               style={{alignSelf: 'center'}}
               onPress={() => ''}
@@ -194,4 +214,4 @@ const NewOffer = ({route}: any) => {
   );
 };
 
-export default NewOffer;
+export default EditOffer;

@@ -40,6 +40,7 @@ interface props extends TextInputProps {
   isSearchable?: boolean;
   disable?: boolean;
   error?: any;
+  touched?: any;
   title?: string;
   style?: any;
 }
@@ -56,6 +57,7 @@ const CustomInputs: React.FC<props> = ({
   dropdownData,
   isSearchable,
   error,
+  touched,
   disable = false,
   title,
   style,
@@ -92,7 +94,9 @@ const CustomInputs: React.FC<props> = ({
               )}
             </View>
           </View>
-          {error && <Text className="text-red-400 text-xs "> {error}</Text>}
+          {error && touched && (
+            <Text className="text-red-400 text-xs "> {error}</Text>
+          )}
         </View>
       )}
       {type == 'textarea' && (

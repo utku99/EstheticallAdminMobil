@@ -9,13 +9,16 @@ interface props {
   children?: React.ReactNode;
   title?: string;
   type?: 'message' | 'sharing';
+  scrollEnabled?: boolean;
 }
 
-const MenuWrapper = ({children, title, type}: props) => {
+const MenuWrapper = ({children, title, type, scrollEnabled = true}: props) => {
   const navigation = useNavigation();
   return (
     <ScrollView
       className="bg-background "
+      nestedScrollEnabled
+      scrollEnabled={scrollEnabled}
       contentContainerStyle={{flexGrow: 1, paddingVertical: 10}}>
       <View className=" items-center  h-full">
         <View

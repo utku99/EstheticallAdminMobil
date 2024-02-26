@@ -4,7 +4,7 @@ import MenuWrapper from '../menu/MenuWrapper';
 import CustomInputs from '../../components/CustomInputs';
 import {SIZES} from '../../constants/constants';
 import CustomButtons from '../../components/CustomButtons';
-import OfferComp from '../../components/OfferComp';
+import OfferComp from '../../components/SentOfferComp';
 import HandleData from '../../components/HandleData';
 import {useNavigation} from '@react-navigation/native';
 import AppointmentComp from '../../components/AppointmentComp';

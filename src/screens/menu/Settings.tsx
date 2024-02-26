@@ -6,6 +6,7 @@ import HelpIcon from '../../assets/svg/userMenu/HelpIcon';
 import SecurityIcon from '../../assets/svg/userMenu/SecurityIcon';
 import AboutIcon from '../../assets/svg/userMenu/AboutIcon';
 import MenuWrapper from './MenuWrapper';
+import LangChoiceComp from '../../components/LangChoiceComp';
 
 const Settings = () => {
   return (
@@ -45,6 +46,7 @@ const Settings = () => {
           <Text className="font-poppinsMedium text-base text-customGray ">
             Dil Seçimi
           </Text>
+          <LangChoiceComp />
         </View>
       </View>
 

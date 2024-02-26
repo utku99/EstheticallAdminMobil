@@ -168,6 +168,10 @@ const AddSharing = () => {
           />
 
           <View className=" relative">
+            <View
+              style={{
+                height: formik.values.images.length == 5 ? 60 : 0,
+              }}></View>
             <AddPhotoComp
               value={formik.values.images}
               onChange={(e: any) => formik.setFieldValue('images', e)}
@@ -179,11 +183,13 @@ const AddSharing = () => {
                 {formik.values.statu ? 'Aktif' : 'Pasif'}
               </Text>
               <Switch
-                thumbColor={'#FF8170'}
                 value={formik.values.statu}
                 onChange={() =>
                   formik.setFieldValue('statu', !formik.values.statu)
                 }
+                thumbColor={'#FF8170'}
+                color="#E8E8E8"
+                ios_backgroundColor={'#E8E8E8'}
               />
             </View>
           </View>

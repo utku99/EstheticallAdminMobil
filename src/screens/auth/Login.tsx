@@ -88,7 +88,7 @@ const Login = () => {
 
           <View className="w-full ">
             <Text className="text-customGray font-poppinsMedium text-xl self-center mb-6">
-              Kurum Girişi
+              {t('company-login')}
             </Text>
             <View className="">
               <CustomInputs
@@ -98,6 +98,7 @@ const Login = () => {
                 onBlur={formik.handleBlur('email')}
                 onChangeText={formik.handleChange('email')}
                 error={formik.errors.email}
+                touched={formik.touched.email}
               />
 
               <CustomInputs
@@ -107,6 +108,7 @@ const Login = () => {
                 onBlur={formik.handleBlur('password')}
                 onChangeText={formik.handleChange('password')}
                 error={formik.errors.password}
+                touched={formik.touched.password}
                 secureTextEntry
               />
             </View>

@@ -6,7 +6,6 @@ import {
   NavigationContainer,
   useNavigation,
 } from '@react-navigation/native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import HeaderBackIcon from '../assets/svg/homepages/HeaderBackIcon';
 import EstheticLogo from '../assets/svg/common/EstheticLogo';
 import HeaderMenuIcon from '../assets/svg/homepages/HeaderMenuIcon';
@@ -26,8 +25,9 @@ import IncomingMessage from './bottomTab/IncomingMessage';
 import Message from './bottomTab/Message';
 import AddSharing from './bottomTab/AddSharing';
 import SharingComments from './bottomTab/SharingComments';
-import NewOffer from './bottomTab/NewOffer';
 import NewAppointment from './bottomTab/NewAppointment';
+import EditOffer from './bottomTab/EditOffer';
+import NewOffer from './bottomTab/NewOffer';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -46,7 +46,7 @@ function DrawerMenu() {
 function BottomTabs() {
   return (
     <Tab.Navigator
-      tabBar={props => <BottomTab {...props} />}
+      tabBar={props => <BottomTab />}
       screenOptions={{headerShown: false}}>
       <Tab.Screen name="home2" component={UserStack} />
     </Tab.Navigator>
@@ -89,6 +89,7 @@ const UserStack = () => {
       <Stack.Screen name="incomingmessage" component={IncomingMessage} />
       <Stack.Screen name="message" component={Message} />
       <Stack.Screen name="offer" component={Offer} />
+      <Stack.Screen name="editoffer" component={EditOffer} />
       <Stack.Screen name="newoffer" component={NewOffer} />
       <Stack.Screen name="appointment" component={Appointment} />
       <Stack.Screen name="newappointment" component={NewAppointment} />

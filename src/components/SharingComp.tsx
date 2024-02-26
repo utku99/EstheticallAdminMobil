@@ -1,26 +1,11 @@
-import {
-  View,
-  Text,
-  Image,
-  Pressable,
-  TextInput,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import CustomInputs from './CustomInputs';
-import LikeIcon from '../assets/svg/common/LikeIcon';
-import SharingMessageIcon from '../assets/svg/homepages/SharingMessageIcon';
-import SharingSaveIcon from '../assets/svg/homepages/SharingSaveIcon';
-import SharingShareIcon from '../assets/svg/homepages/SharingShareIcon';
-import SharingSendMessageIcon from '../assets/svg/homepages/SharingSendMessageIcon';
 
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import WebClient from '../utility/WebClient';
 import {SIZES, temp} from '../constants/constants';
-import HandleData from './HandleData';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
 import {Switch} from 'react-native-paper';
 import TrashIcon from '../assets/svg/firm/TrashIcon';
 import BlueTick from '../assets/svg/common/BlueTick';
@@ -128,7 +113,7 @@ const SharingComp = ({
       <View className="w-full aspect-[1.5]">
         <Carousel
           ref={isCarousel}
-          data={[temp]?.map((img: any) => ({imgUrl: img, title: ''}))}
+          data={[temp, temp]?.map((img: any) => ({imgUrl: img, title: ''}))}
           renderItem={({item}: any) => (
             <Image
               source={{uri: item?.imgUrl}}
@@ -143,7 +128,7 @@ const SharingComp = ({
           onSnapToItem={i => setIndex(i)}
         />
         <Pagination
-          dotsLength={item?.imagesList?.length ?? item?.files?.length}
+          dotsLength={2}
           activeDotIndex={index}
           carouselRef={isCarousel}
           dotStyle={{
@@ -186,13 +171,14 @@ const SharingComp = ({
           className="font-poppinsRegular text-xs text-white flex-1">
           Yorumları Gör
         </Text>
-        <View className="flex-row items-center space-x-3 mr-2">
+        <View className="flex-row items-center space-x-6 mr-4">
           <View className="z-30">
             <Switch
-              thumbColor={'#FF8170'}
-              trackColor={'red'}
               value={false}
               onChange={() => ''}
+              thumbColor={'#FF8170'}
+              color="#E8E8E8"
+              ios_backgroundColor={'#E8E8E8'}
             />
           </View>
           <TouchableOpacity
