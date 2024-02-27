@@ -157,43 +157,6 @@ const SentOfferComp = ({item}: any) => {
               <View className="h-[0.5px] bg-black/[.5] w-full self-center"></View>
             </View>
 
-            {/* <View className="flex-row items-center justify-between">
-              <View className=" flex-row items-center w-[70%] space-x-3">
-                <View className="w-[60px] h-[60px] overflow-hidden rounded-full border-[0.6px] border-customGray">
-                  <Image
-                    source={{uri: temp}}
-                    className="w-full h-full"
-                    resizeMode="cover"
-                  />
-                </View>
-                <View className="flex-shrink">
-                  <Text
-                    numberOfLines={1}
-                    className="text-customGray font-poppinsSemiBold text-xs ">
-                    Esteworld Doktor
-                  </Text>
-                  <Text
-                    numberOfLines={1}
-                    className="text-customGray font-poppinsRegular text-xs">
-                    Plastik Cerrah
-                  </Text>
-                  <Text
-                    numberOfLines={1}
-                    className="text-customGray font-poppinsRegular text-xs">
-                    TR,İstanbul,Ataşehir
-                  </Text>
-                </View>
-              </View>
-              <View className="items-center">
-                <Text className="text-customGray font-poppinsRegular text-xs">
-                  4.8/5
-                </Text>
-                <Text className="text-customGray font-poppinsRegular text-xs">
-                  Yorumlar
-                </Text>
-              </View>
-            </View> */}
-
             <View className="flex-row items-center justify-between">
               <View className="flex-1">
                 <Text className="text-customGray font-poppinsMedium text-sm">

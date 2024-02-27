@@ -1,4 +1,4 @@
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import MenuWrapper from '../menu/MenuWrapper';
 import CustomInputs from '../../components/CustomInputs';
@@ -8,6 +8,9 @@ import OfferComp from '../../components/SentOfferComp';
 import HandleData from '../../components/HandleData';
 import {useNavigation} from '@react-navigation/native';
 import AppointmentComp from '../../components/AppointmentComp';
+import WaitingAppointmentComp from '../../components/WaitingAppointmentComp';
+import AcceptedAppointmentComp from '../../components/AcceptedAppointmentComp';
+import RefusedAppointmentComp from '../../components/RefusedAppointmentComp';
 
 const Appointment = () => {
   const [tab, setTab] = useState(1);
@@ -15,33 +18,76 @@ const Appointment = () => {
 
   return (
     <MenuWrapper>
-      <View className="flex-row space-x-2 mb-4">
-        <CustomButtons
-          type={tab == 1 ? 'brownsolid' : 'brownoutlined'}
-          label="Randevularım"
-          onPress={() => setTab(1)}
-        />
-        <CustomButtons
-          type={tab == 2 ? 'brownsolid' : 'brownoutlined'}
-          label="Yeni Randevu"
-          onPress={() => setTab(2)}
-        />
+      <View className="h-[40px] ">
+        <ScrollView
+          horizontal
+          contentContainerStyle={{paddingHorizontal: 10, gap: 5}}>
+          <CustomButtons
+            type={tab == 1 ? 'brownsolid' : 'brownoutlined'}
+            label="Onay Bekleyenler"
+            onPress={() => setTab(1)}
+          />
+          <CustomButtons
+            type={tab == 2 ? 'brownsolid' : 'brownoutlined'}
+            label="Onaylananlar"
+            onPress={() => setTab(2)}
+          />
+          <CustomButtons
+            type={tab == 3 ? 'brownsolid' : 'brownoutlined'}
+            label="Reddedilenler"
+            onPress={() => setTab(3)}
+          />
+        </ScrollView>
       </View>
 
-      <HandleData data={['']} loading={false} title="Randevu Bulunmamaktadır">
-        <FlatList
-          contentContainerStyle={{display: 'flex', gap: 15, paddingBottom: 20}}
+      {tab == 1 && (
+        <HandleData
           data={['', '']}
-          renderItem={({item}) => <AppointmentComp />}
-        />
-
-        <CustomButtons
-          type="solid"
-          theme="big"
-          label="Randevu Oluştur"
-          onPress={() => navigation.navigate('newappointment')}
-        />
-      </HandleData>
+          loading={false}
+          title="Paylaşımınız Bulunmamaktadır">
+          <FlatList
+            contentContainerStyle={{
+              display: 'flex',
+              gap: 15,
+              paddingVertical: 20,
+            }}
+            data={['', '']}
+            renderItem={({item}) => <WaitingAppointmentComp item={item} />}
+          />
+        </HandleData>
+      )}
+      {tab == 2 && (
+        <HandleData
+          data={['', '']}
+          loading={false}
+          title="Paylaşımınız Bulunmamaktadır">
+          <FlatList
+            contentContainerStyle={{
+              display: 'flex',
+              gap: 15,
+              paddingVertical: 20,
+            }}
+            data={['', '']}
+            renderItem={({item}) => <AcceptedAppointmentComp item={item} />}
+          />
+        </HandleData>
+      )}
+      {tab == 3 && (
+        <HandleData
+          data={['', '']}
+          loading={false}
+          title="Paylaşımınız Bulunmamaktadır">
+          <FlatList
+            contentContainerStyle={{
+              display: 'flex',
+              gap: 15,
+              paddingVertical: 20,
+            }}
+            data={['', '']}
+            renderItem={({item}) => <RefusedAppointmentComp item={item} />}
+          />
+        </HandleData>
+      )}
     </MenuWrapper>
   );
 };

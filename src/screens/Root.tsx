@@ -25,9 +25,9 @@ import IncomingMessage from './bottomTab/IncomingMessage';
 import Message from './bottomTab/Message';
 import AddSharing from './bottomTab/AddSharing';
 import SharingComments from './bottomTab/SharingComments';
-import NewAppointment from './bottomTab/NewAppointment';
 import EditOffer from './bottomTab/EditOffer';
 import NewOffer from './bottomTab/NewOffer';
+import EditAppointment from './bottomTab/EditAppointment';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -92,7 +92,7 @@ const UserStack = () => {
       <Stack.Screen name="editoffer" component={EditOffer} />
       <Stack.Screen name="newoffer" component={NewOffer} />
       <Stack.Screen name="appointment" component={Appointment} />
-      <Stack.Screen name="newappointment" component={NewAppointment} />
+      <Stack.Screen name="editappointment" component={EditAppointment} />
 
       <Stack.Screen name="notification" component={Notification} />
       <Stack.Screen name="settings" component={Settings} />

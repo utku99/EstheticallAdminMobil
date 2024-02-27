@@ -11,43 +11,23 @@ import WebClient from '../utility/WebClient';
 import {useSelector} from 'react-redux';
 import {AnyObjectSchema} from 'yup';
 
-const AllOfferComp = ({item}: any) => {
+const WaitingAppointmentComp = ({item}: any) => {
   const [seeAll, setSeeAll] = useState(false);
   const [offerInfo, setOfferInfo] = useState<any>(null);
   const navigation = useNavigation();
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
 
-  useEffect(() => {
-    Post('/api/Offers/GetOfferInfo', {
-      offerID: item?.offerID,
-      companyID: user.companyId,
-      companyOfficeID: user.companyOfficeId,
-    }).then((res: any) => {
-      setOfferInfo(res.data.object);
-    });
-  }, []);
-
-  console.log(offerInfo, '--');
-
   return (
     <View className="items-center">
-      <View className="flex-row space-x-4 mt-4 mb-2">
-        <Text className="font-poppinsMedium  text-sm text-customGray ">
-          Teklif ID:{' '}
-          <Text className="font-poppinsRegular">{item?.offerID}</Text>
-        </Text>
-        <Text className="font-poppinsMedium  text-sm text-customGray ">
-          Oluşturulma Tarihi:{' '}
-          <Text className="font-poppinsRegular">{item?.offerCreatedDate}</Text>
-        </Text>
-      </View>
-
       <View
         className={`h-fit border border-customLightGray rounded-xl bg-white `}
         style={{width: SIZES.width * 0.95}}>
         {/* header */}
-        <View className="flex-row justify-between items-center p-[10px] ">
+        <View className=" p-[10px] space-y-1">
+          <Text className="font-poppinsRegular text-customGray text-xs">
+            04.03.2021
+          </Text>
           <View className="flex-row items-center space-x-2  w-[60%]">
             <View className="w-[62px] h-[62px] overflow-hidden rounded-full border-[0.6px] border-customGray">
               <Image
@@ -60,7 +40,7 @@ const AllOfferComp = ({item}: any) => {
               <Text
                 numberOfLines={1}
                 className="text-customGray text-sm font-poppinsSemiBold">
-                {item?.userFullName}
+                Berna Laçin
               </Text>
               <Text
                 numberOfLines={1}
@@ -73,12 +53,12 @@ const AllOfferComp = ({item}: any) => {
 
         <View className="flex-1 p-[10px] pt-0">
           <Text className="text-customGray font-poppinsMedium text-sm">
-            Operasyonlar:{' '}
+            Operasyon:{' '}
           </Text>
           <Text
             numberOfLines={1}
             className="text-customGray font-poppinsRegular text-sm">
-            {item?.service}
+            Burun Operasyonları, Burun Ucu Kaldırma
           </Text>
         </View>
 
@@ -86,7 +66,17 @@ const AllOfferComp = ({item}: any) => {
           <View className="p-[10px] space-y-3">
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Teklif Başlığı:{' '}
+                Doktor
+              </Text>
+              <Text
+                numberOfLines={1}
+                className="text-customGray font-poppinsRegular text-sm">
+                Esteworld Doktor 1
+              </Text>
+            </View>
+            <View>
+              <Text className="text-customGray font-poppinsMedium text-sm">
+                Randevu Başlığı:{' '}
               </Text>
               <Text
                 numberOfLines={2}
@@ -98,7 +88,7 @@ const AllOfferComp = ({item}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Teklif İçeriği:{' '}
+                Randevu İçeriği:{' '}
               </Text>
               <Text
                 numberOfLines={5}
@@ -117,62 +107,56 @@ const AllOfferComp = ({item}: any) => {
 
             <View>
               <Text className="text-customOrange font-poppinsMedium text-sm">
-                Teklif Tarih Aralığı:{' '}
+                Randevu Tarih Aralığı:{' '}
               </Text>
               <Text className="text-customOrange font-poppinsRegular text-sm">
                 15 Şubat 2024 - 15 Nisan 2024
               </Text>
             </View>
 
-            <View>
-              <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Özel Servisler:{' '}
+            <View className="flex-row mb-3">
+              <Text className="text-customGray font-poppinsMedium text-sm">
+                Randevu Bilgilerim:{'  '}
               </Text>
-              <View className="flex-row items-center justify-between ">
-                <CustomInputs
-                  type="checkbox"
-                  title="Ulaşım"
-                  readOnly
-                  value={true}
-                />
-                <CustomInputs
-                  type="checkbox"
-                  title="Konaklama"
-                  readOnly
-                  value={true}
-                />
-                <CustomInputs
-                  type="checkbox"
-                  title="Refakatçi"
-                  readOnly
-                  value={true}
-                />
-              </View>
+              <View className="h-[0.5px] bg-black/[.5] w-full self-center"></View>
             </View>
 
-            <View className="mb-3">
-              <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Kullanıcı Görselleri:{' '}
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1">
+                <Text className="text-customGray font-poppinsMedium text-sm">
+                  Durum:
+                </Text>
+                <Text className="text-customGray font-poppinsRegular text-sm">
+                  Onay Bekleyen
+                </Text>
+              </View>
+              <View className="flex-1">
+                <Text className="text-customOrange font-poppinsMedium text-sm">
+                  İşlem Tarihi:
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  className="text-customOrange font-poppinsRegular text-sm">
+                  Belirtilmedi
+                </Text>
+              </View>
+            </View>
+            <View className="flex-1">
+              <Text className="text-customGray font-poppinsMedium text-sm">
+                Açıklama:
               </Text>
-              <FlatList
-                horizontal
-                data={[temp, temp]}
-                contentContainerStyle={{gap: 15}}
-                renderItem={({item, index}) => (
-                  <View className="w-[130px] h-[130px] rounded-lg border border-customLightGray overflow-hidden">
-                    <Image source={{uri: item}} className="w-full h-full" />
-                  </View>
-                )}
-              />
+              <Text
+                numberOfLines={3}
+                className="text-customGray font-poppinsRegular text-sm">
+                Belirtilmedi
+              </Text>
             </View>
 
             <CustomButtons
               type="solid"
-              label="Teklif Ver"
+              label="Randevuyu Düzenle"
               style={{alignSelf: 'center', marginBottom: 10}}
-              onPress={() =>
-                navigation.navigate('newoffer', {offerId: item?.offerID})
-              }
+              onPress={() => navigation.navigate('editappointment')}
             />
           </View>
         )}
@@ -181,13 +165,27 @@ const AllOfferComp = ({item}: any) => {
         <Pressable
           onPress={() => setSeeAll(!seeAll)}
           className="bg-customBrown w-full h-[35px] rounded-b-lg flex-row items-center justify-between px-[10px]">
-          <View className="items-center justify-center flex-1">
+          {!seeAll && (
+            <Text
+              numberOfLines={1}
+              className="font-poppinsMedium text-sm text-white flex-1">
+              Randevu ID: <Text className="font-poppinsRegular">1005</Text>
+            </Text>
+          )}
+          <View
+            className="items-center justify-center "
+            style={seeAll ? {width: '100%'} : null}>
             {seeAll ? <DoctorArrowUpIcon /> : <DoctorArrowDownIcon />}
           </View>
+          {!seeAll && (
+            <Text className="font-poppinsBold text-sm text-white flex-1 text-right">
+              Detayları Gör
+            </Text>
+          )}
         </Pressable>
       </View>
     </View>
   );
 };
 
-export default AllOfferComp;
+export default WaitingAppointmentComp;
