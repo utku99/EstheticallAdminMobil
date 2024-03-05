@@ -9,6 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Switch} from 'react-native-paper';
 import TrashIcon from '../assets/svg/firm/TrashIcon';
 import BlueTick from '../assets/svg/common/BlueTick';
+import moment from 'moment';
 
 const CommentComp = ({item}: any) => {
   return (
@@ -40,13 +41,7 @@ const CommentComp = ({item}: any) => {
   );
 };
 
-const SharingComp = ({
-  item,
-  onClickable = false,
-}: {
-  item: any;
-  onClickable?: boolean;
-}) => {
+const SharingComp = ({item}: {item: any}) => {
   const [sharedDetail, setSharedDetail] = useState<any>(null);
   const [index, setIndex] = useState<any>(0);
   const {Post, loading} = WebClient();
@@ -66,54 +61,44 @@ const SharingComp = ({
       className={`h-fit border border-customLightGray rounded-xl bg-white `}
       style={{width: SIZES.width * 0.95}}>
       {/* header */}
-      <View className="flex-row justify-between items-center p-[10px]">
-        <TouchableOpacity
-          onPress={() =>
-            onClickable &&
-            navigation.navigate('firmprofile', {
-              companyId: item?.companyId,
-              companyOfficeId: item?.companyOfficeId,
-            })
-          }
-          className="flex-row items-center w-[70%] ">
-          <View className="relative">
-            <View className="w-[55px] h-[55px] overflow-hidden rounded-full border-[0.6px] border-customGray ">
-              <Image
-                source={{uri: temp}}
-                className="w-full h-full"
-                resizeMode="cover"
-              />
-            </View>
-            <View className="absolute right-0 bg-white rounded-full overflow-hidden">
-              <BlueTick />
-            </View>
+      <View className="flex-row  items-center p-[10px]">
+        <View className="relative">
+          <View className="w-[55px] h-[55px] overflow-hidden rounded-full border-[0.6px] border-customGray ">
+            <Image
+              source={{uri: item?.logoUrl}}
+              className="w-full h-full"
+              resizeMode="cover"
+            />
           </View>
-          <View className="pl-2 flex-shrink">
-            <Text
-              numberOfLines={1}
-              className="font-poppinsSemiBold text-xs text-customGray">
-              Lorem, ipsum.
-            </Text>
-            <Text
-              numberOfLines={1}
-              className="font-poppinsRegular text-xs text-customGray">
-              Lorem, ipsum.
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <View className="items-center">
+        </View>
+        <View className="pl-2 flex-shrink">
+          <Text
+            numberOfLines={1}
+            className="font-poppinsSemiBold text-xs text-customGray">
+            {item?.subject}
+          </Text>
+          <Text
+            numberOfLines={1}
+            className="font-poppinsRegular text-xs text-customGray">
+            {item?.serviceNameModel?.label}
+          </Text>
+        </View>
+        {/* <View className="items-center">
           <Text className="text-customGray font-poppinsRegular text-xxs">
             Yorumlar
           </Text>
           <CustomInputs type="rating" value={3} />
-        </View>
+        </View> */}
       </View>
 
       {/* carousel */}
       <View className="w-full aspect-[1.5]">
         <Carousel
           ref={isCarousel}
-          data={[temp, temp]?.map((img: any) => ({imgUrl: img, title: ''}))}
+          data={item?.images?.map((img: any) => ({
+            imgUrl: img.fileName,
+            title: '',
+          }))}
           renderItem={({item}: any) => (
             <Image
               source={{uri: item?.imgUrl}}
@@ -153,13 +138,14 @@ const SharingComp = ({
       {/* description */}
       <View className="px-[10px] py-3 space-y-1">
         <Text
-          numberOfLines={2}
+          numberOfLines={4}
           className="font-poppinsRegular text-xs text-customGray">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio illo,
-          possimus repellendus ex quae rerum ducimus iusto facilis porro veniam.
+          {item?.description}
         </Text>
         <Text className="font-poppinsRegular text-xxs text-customGray">
-          Lorem.
+          {moment(item?.createdDate, 'DD-MM.YYYY hh:mm').format(
+            'DD.MM.YYYY hh:mm',
+          )}
         </Text>
       </View>
 
@@ -167,15 +153,29 @@ const SharingComp = ({
       <View
         className={`bg-customBrown w-full h-[35px] px-[10px] rounded-b-xl flex-row items-center`}>
         <Text
-          onPress={() => navigation.navigate('sharingcomments')}
+          onPress={() =>
+            navigation.navigate('sharingcomments', {sharedId: item?.sharedId})
+          }
           className="font-poppinsRegular text-xs text-white flex-1">
           Yorumları Gör
         </Text>
         <View className="flex-row items-center space-x-6 mr-4">
           <View className="z-30">
             <Switch
-              value={false}
-              onChange={() => ''}
+              value={item?.isActive}
+              onChange={() => {
+                Post(
+                  '/api/Shared/SetSharedStateMobile',
+                  {
+                    sharedId: item?.sharedId,
+                    isActive: !item?.isActive,
+                  },
+                  true,
+                  true,
+                ).then(res => {
+                  console.log(res.data);
+                });
+              }}
               thumbColor={'#FF8170'}
               color="#E8E8E8"
               ios_backgroundColor={'#E8E8E8'}

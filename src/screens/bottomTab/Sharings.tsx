@@ -18,20 +18,20 @@ const Sharings = () => {
       companyOfficeId: user.companyOfficeId,
       companyTypeId: user.userRoleId === 4 ? 1 : 0, // institution :0 , office:1
     }).then(res => {
-      setSharings(res.data.object);
+      setSharings(res.data);
     });
   }, []);
 
   return (
     <MenuWrapper title="Paylaşımlar" type="sharing">
       <HandleData
-        data={['']}
+        data={sharings}
         loading={loading}
         title="Paylaşımınız Bulunmamaktadır">
         <FlatList
           contentContainerStyle={{display: 'flex', gap: 15, paddingBottom: 20}}
-          data={['', '']}
-          renderItem={({item}) => <SharingComp item={item} onClickable />}
+          data={sharings}
+          renderItem={({item}) => <SharingComp item={item} />}
         />
       </HandleData>
     </MenuWrapper>

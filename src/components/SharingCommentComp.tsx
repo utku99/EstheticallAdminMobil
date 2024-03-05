@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {SIZES, temp} from '../constants/constants';
 import TrashIcon from '../assets/svg/firm/TrashIcon';
 
-const SharingCommentComp = () => {
+const SharingCommentComp = ({item}: any) => {
   return (
     <View
       className={` border border-customLightGray rounded-xl bg-white p-[10px] space-y-2`}
@@ -12,17 +12,17 @@ const SharingCommentComp = () => {
         <View className="flex-row items-center gap-2  w-[50%]">
           <View className="w-[55px] h-[55px] overflow-hidden rounded-full border-[0.6px] border-customGray">
             <Image
-              source={{uri: temp}}
+              source={{uri: item?.logo}}
               className="w-full h-full"
               resizeMode="cover"
             />
           </View>
           <View>
             <Text className="text-customGray font-poppinsRegular text-xxs ">
-              Lorem, ipsum.
+              {item?.fullName}
             </Text>
             <Text className="text-customGray font-poppinsRegular text-xxs ">
-              Lorem, ipsum.
+              {item?.location}
             </Text>
             <Text className="text-customGray font-poppinsRegular text-xxs ">
               Lorem, ipsum.
@@ -33,7 +33,7 @@ const SharingCommentComp = () => {
         <Text
           numberOfLines={1}
           className="text-customGray font-poppinsRegular text-xxs ">
-          Burun Estetiği
+          {item?.serviceName}
         </Text>
 
         <TouchableOpacity
@@ -50,10 +50,7 @@ const SharingCommentComp = () => {
 
       <View>
         <Text className="text-customGray font-poppinsRegular text-xxs ">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-          Exercitationem sit rem aut inventore harum quasi, necessitatibus
-          aliquid ea sed maiores, iste doloremque assumenda, rerum ab asperiores
-          quibusdam iusto voluptatibus eos?
+          {item?.comment}
         </Text>
       </View>
     </View>

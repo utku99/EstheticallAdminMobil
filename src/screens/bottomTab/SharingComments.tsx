@@ -1,5 +1,5 @@
 import {View, Text, FlatList, Image} from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import MenuWrapper from '../menu/MenuWrapper';
 import HandleData from '../../components/HandleData';
 import {useSelector} from 'react-redux';
@@ -8,31 +8,39 @@ import {SIZES, temp} from '../../constants/constants';
 import SharingCommentComp from '../../components/SharingCommentComp';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 
-const SharingComments = () => {
+const SharingComments = ({route}: any) => {
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
   const [index, setIndex] = useState<any>(0);
+  const [comments, setComments] = useState<any>(0);
   const isCarousel = useRef(null);
+
+  console.log();
+
+  useEffect(() => {
+    Post('/api/Comment/ListCommentsMobile', {
+      sharedId: route.params?.sharedId,
+    }).then(res => {
+      setComments(res.data.object);
+    });
+  }, []);
 
   return (
     <MenuWrapper title="Paylaşımlar - Yorumlar">
-      <HandleData
-        data={['']}
-        loading={loading}
-        title="Paylaşımınız Bulunmamaktadır">
+      <HandleData loading={loading}>
         <View className="w-[95%]">
           <View className="bg-white rounded-xl overflow-hidden border border-customLightGray mb-[15]">
             {/* carousel */}
             <View className="w-full aspect-[1.5]">
               <Carousel
                 ref={isCarousel}
-                data={[temp, temp]?.map((img: any) => ({
-                  imgUrl: img,
+                data={comments?.header?.images?.map((img: any) => ({
+                  imgUrl: img.fileName,
                   title: '',
                 }))}
                 renderItem={({item}: any) => (
                   <Image
-                    source={{uri: item?.imgUrl}}
+                    source={{uri: item.imgUrl}}
                     className="w-full h-full"
                     resizeMode="cover"
                   />
@@ -69,12 +77,10 @@ const SharingComments = () => {
               <Text
                 numberOfLines={2}
                 className="font-poppinsRegular text-xs text-customGray">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio
-                illo, possimus repellendus ex quae rerum ducimus iusto facilis
-                porro veniam.
+                {comments?.header?.description}
               </Text>
               <Text className="font-poppinsRegular text-xxs text-customGray">
-                Lorem.
+                {comments?.header?.createdDate}
               </Text>
             </View>
           </View>
@@ -85,8 +91,10 @@ const SharingComments = () => {
               gap: 15,
               paddingBottom: 20,
             }}
-            data={['', '']}
-            renderItem={({item}) => <SharingCommentComp />}
+            data={comments?.comments}
+            renderItem={({item}) => (
+              <SharingCommentComp key={item.commentId} item={item} />
+            )}
           />
         </View>
       </HandleData>

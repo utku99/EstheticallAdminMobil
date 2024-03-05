@@ -39,7 +39,7 @@ const AllOfferComp = ({item}: any) => {
           <View className="flex-row items-center space-x-2  w-[60%]">
             <View className="w-[62px] h-[62px] overflow-hidden rounded-full border-[0.6px] border-customGray">
               <Image
-                source={{uri: ''}}
+                source={{uri: item?.userLogo}}
                 className="w-full h-full"
                 resizeMode="cover"
               />
