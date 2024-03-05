@@ -10,25 +10,11 @@ import {useNavigation} from '@react-navigation/native';
 import WebClient from '../utility/WebClient';
 import {useSelector} from 'react-redux';
 import {AnyObjectSchema} from 'yup';
+import moment from 'moment';
 
 const AllOfferComp = ({item}: any) => {
   const [seeAll, setSeeAll] = useState(false);
-  const [offerInfo, setOfferInfo] = useState<any>(null);
   const navigation = useNavigation();
-  const {Post, loading} = WebClient();
-  const {user} = useSelector((state: any) => state.user);
-
-  useEffect(() => {
-    Post('/api/Offers/GetOfferInfo', {
-      offerID: item?.offerID,
-      companyID: user.companyId,
-      companyOfficeID: user.companyOfficeId,
-    }).then((res: any) => {
-      setOfferInfo(res.data.object);
-    });
-  }, []);
-
-  console.log(offerInfo, '--');
 
   return (
     <View className="items-center">
@@ -39,7 +25,9 @@ const AllOfferComp = ({item}: any) => {
         </Text>
         <Text className="font-poppinsMedium  text-sm text-customGray ">
           Oluşturulma Tarihi:{' '}
-          <Text className="font-poppinsRegular">{item?.offerCreatedDate}</Text>
+          <Text className="font-poppinsRegular">
+            {moment(item?.offerCreatedDate, 'DD.MM.YYYY').format('DD.MM.YYYY')}
+          </Text>
         </Text>
       </View>
 
@@ -51,7 +39,7 @@ const AllOfferComp = ({item}: any) => {
           <View className="flex-row items-center space-x-2  w-[60%]">
             <View className="w-[62px] h-[62px] overflow-hidden rounded-full border-[0.6px] border-customGray">
               <Image
-                source={{uri: temp}}
+                source={{uri: ''}}
                 className="w-full h-full"
                 resizeMode="cover"
               />
@@ -65,7 +53,7 @@ const AllOfferComp = ({item}: any) => {
               <Text
                 numberOfLines={1}
                 className="text-customGray font-poppins text-xs font-poppinsRegular">
-                Turkey, ANKARA
+                {item?.location}
               </Text>
             </View>
           </View>
@@ -91,9 +79,7 @@ const AllOfferComp = ({item}: any) => {
               <Text
                 numberOfLines={2}
                 className="text-customGray font-poppinsRegular text-sm">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde
-                vel soluta laudantium reiciendis cumque, enim autem dicta
-                repudiandae quia eveniet.
+                {item?.subject}
               </Text>
             </View>
             <View>
@@ -103,15 +89,7 @@ const AllOfferComp = ({item}: any) => {
               <Text
                 numberOfLines={5}
                 className="text-customGray font-poppinsRegular text-sm">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quo
-                quis voluptatibus, molestias neque sequi mollitia amet possimus
-                ipsam enim dolor fugit nam, temporibus pariatur, excepturi
-                deleniti! Ipsam molestias voluptatibus autem, ratione nisi
-                distinctio vel earum qui quo aperiam quae illum. Odit sequi
-                beatae illo error ullam, deleniti sed aspernatur accusamus
-                blanditiis? Magnam perspiciatis dolores non quibusdam tempora
-                perferendis. Nobis cupiditate est veritatis, assumenda ratione
-                aliquam ullam accusamus nostrum pariatur quia!
+                {item?.content}
               </Text>
             </View>
 
@@ -120,7 +98,8 @@ const AllOfferComp = ({item}: any) => {
                 Teklif Tarih Aralığı:{' '}
               </Text>
               <Text className="text-customOrange font-poppinsRegular text-sm">
-                15 Şubat 2024 - 15 Nisan 2024
+                {moment(item?.startDate, 'DD.MM.YYYY').format('DD.MM.YYYY')} -{' '}
+                {moment(item?.endDate, 'DD.MM.YYYY').format('DD.MM.YYYY')}
               </Text>
             </View>
 
@@ -133,19 +112,19 @@ const AllOfferComp = ({item}: any) => {
                   type="checkbox"
                   title="Ulaşım"
                   readOnly
-                  value={true}
+                  value={item?.extraServices.some((item: number) => item === 1)}
                 />
                 <CustomInputs
                   type="checkbox"
                   title="Konaklama"
                   readOnly
-                  value={true}
+                  value={item?.extraServices.some((item: number) => item === 2)}
                 />
                 <CustomInputs
                   type="checkbox"
                   title="Refakatçi"
                   readOnly
-                  value={true}
+                  value={item?.extraServices.some((item: number) => item === 3)}
                 />
               </View>
             </View>
@@ -156,11 +135,16 @@ const AllOfferComp = ({item}: any) => {
               </Text>
               <FlatList
                 horizontal
-                data={[temp, temp]}
+                data={item?.sliders ?? []}
                 contentContainerStyle={{gap: 15}}
-                renderItem={({item, index}) => (
-                  <View className="w-[130px] h-[130px] rounded-lg border border-customLightGray overflow-hidden">
-                    <Image source={{uri: item}} className="w-full h-full" />
+                renderItem={({item}) => (
+                  <View
+                    key={item.sliderID}
+                    className="w-[130px] h-[130px] rounded-lg border border-customLightGray overflow-hidden">
+                    <Image
+                      source={{uri: item?.fileName}}
+                      className="w-full h-full"
+                    />
                   </View>
                 )}
               />

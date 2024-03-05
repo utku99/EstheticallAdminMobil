@@ -1,13 +1,11 @@
-import {View, Text, Image, Pressable, FlatList} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {View, Text, Image} from 'react-native';
+import React from 'react';
 import {SIZES, temp} from '../constants/constants';
 import CustomButtons from './CustomButtons';
-import {useNavigation} from '@react-navigation/native';
 import WebClient from '../utility/WebClient';
+import moment from 'moment';
 
 const CompletedOfferComp = ({item}: any) => {
-  const [seeAll, setSeeAll] = useState(false);
-  const navigation = useNavigation();
   const {Post} = WebClient();
 
   return (
@@ -19,7 +17,9 @@ const CompletedOfferComp = ({item}: any) => {
         </Text>
         <Text className="font-poppinsMedium  text-sm text-customGray ">
           Kabul Tarihi:{' '}
-          <Text className="font-poppinsRegular">{item?.offerCreatedDate}</Text>
+          <Text className="font-poppinsRegular">
+            {moment(item?.offerCreatedDate, 'DD.MM.YYYY').format('DD.MM.YYYY')}
+          </Text>
         </Text>
       </View>
 
@@ -27,13 +27,11 @@ const CompletedOfferComp = ({item}: any) => {
         className={`h-fit border border-customLightGray rounded-xl bg-white `}
         style={{width: SIZES.width * 0.95}}>
         {/* header */}
-        <View
-          className="flex-row justify-between items-center p-[10px] "
-          style={{paddingBottom: seeAll ? 0 : 10}}>
+        <View className="flex-row justify-between items-center p-[10px] ">
           <View className="flex-row items-center space-x-2  w-[60%]">
             <View className="w-[62px] h-[62px] overflow-hidden rounded-full border-[0.6px] border-customGray">
               <Image
-                source={{uri: temp}}
+                source={{uri: ''}}
                 className="w-full h-full"
                 resizeMode="cover"
               />
@@ -47,7 +45,7 @@ const CompletedOfferComp = ({item}: any) => {
               <Text
                 numberOfLines={1}
                 className="text-customGray font-poppins text-xs font-poppinsRegular">
-                Turkey, ANKARA
+                {item?.location}
               </Text>
             </View>
           </View>
@@ -66,11 +64,33 @@ const CompletedOfferComp = ({item}: any) => {
           </View>
 
           <View>
+            <Text className="text-customGray font-poppinsMedium text-sm">
+              Teklif Başlığı:{' '}
+            </Text>
+            <Text
+              numberOfLines={2}
+              className="text-customGray font-poppinsRegular text-sm">
+              {item?.subject}
+            </Text>
+          </View>
+          <View>
+            <Text className="text-customGray font-poppinsMedium text-sm">
+              Teklif İçeriği:{' '}
+            </Text>
+            <Text
+              numberOfLines={5}
+              className="text-customGray font-poppinsRegular text-sm">
+              {item?.content}
+            </Text>
+          </View>
+
+          <View>
             <Text className="text-customOrange font-poppinsMedium text-sm">
               Teklif Tarih Aralığı:{' '}
             </Text>
             <Text className="text-customOrange font-poppinsRegular text-sm">
-              {item?.startDate} - {item?.endDate}
+              {moment(item?.startDate, 'DD.MM.YYYY').format('DD.MM.YYYY')} -{' '}
+              {moment(item?.endDate, 'DD.MM.YYYY').format('DD.MM.YYYY')}
             </Text>
           </View>
 

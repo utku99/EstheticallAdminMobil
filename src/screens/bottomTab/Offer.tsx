@@ -12,29 +12,29 @@ import CompletedOfferComp from '../../components/CompletedOfferComp';
 
 const Offer = () => {
   const [tab, setTab] = useState(1);
-  const [allOffers, setAllOffers] = useState<any>([]);
-  const [sentOffers, setSentOffers] = useState<any>([]);
-  const [completedOffers, setCompletedOffers] = useState<any>([]);
-  const navigation = useNavigation();
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
 
+  const [allOffers, setAllOffers] = useState<any>([]);
+  const [sentOffers, setSentOffers] = useState<any>([]);
+  const [completedOffers, setCompletedOffers] = useState<any>([]);
+
   useEffect(() => {
-    Post('/api/Offers/IncomingOffers', {
+    Post('/api/Offers/IncomingOffersMobile', {
       companyID: user.companyId,
       companyOfficeID: user.companyOfficeId,
     }).then((res: any) => {
       setAllOffers(res.data.object);
     });
 
-    Post('/api/Offers/SentOffersAdmin', {
+    Post('/api/Offers/SentOffersMobile', {
       companyID: user.companyId,
       companyOfficeID: user.companyOfficeId,
     }).then((res: any) => {
       setSentOffers(res.data.object);
     });
 
-    Post('/api/Offers/CompletedOffersPanel', {
+    Post('/api/Offers/CompletedOffersPanelMobile', {
       companyID: user.companyId,
       companyOfficeID: user.companyOfficeId,
     }).then((res: any) => {
@@ -70,7 +70,7 @@ const Offer = () => {
         <HandleData
           data={allOffers}
           loading={loading}
-          title="Paylaşımınız Bulunmamaktadır">
+          title="Gelen Teklif Bulunmamaktadır">
           <FlatList
             contentContainerStyle={{
               display: 'flex',
@@ -86,7 +86,7 @@ const Offer = () => {
         <HandleData
           data={sentOffers}
           loading={loading}
-          title="Paylaşımınız Bulunmamaktadır">
+          title="Gönderilen Teklif Bulunmamaktadır">
           <FlatList
             contentContainerStyle={{
               display: 'flex',
@@ -102,7 +102,7 @@ const Offer = () => {
         <HandleData
           data={completedOffers}
           loading={loading}
-          title="Paylaşımınız Bulunmamaktadır">
+          title="Tamamlanmış Teklif Bulunmamaktadır">
           <FlatList
             contentContainerStyle={{
               display: 'flex',

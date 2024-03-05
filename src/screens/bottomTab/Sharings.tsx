@@ -10,6 +10,17 @@ import CustomButtons from '../../components/CustomButtons';
 const Sharings = () => {
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
+  const [sharings, setSharings] = useState([]);
+
+  useEffect(() => {
+    Post('/api/Shared/ListCompanySharedsMobile', {
+      companyId: user.companyId,
+      companyOfficeId: user.companyOfficeId,
+      companyTypeId: user.userRoleId === 4 ? 1 : 0, // institution :0 , office:1
+    }).then(res => {
+      setSharings(res.data.object);
+    });
+  }, []);
 
   return (
     <MenuWrapper title="Paylaşımlar" type="sharing">

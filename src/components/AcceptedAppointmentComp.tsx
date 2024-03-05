@@ -1,22 +1,16 @@
-import {View, Text, Image, Pressable, FlatList} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {SIZES, temp} from '../constants/constants';
+import {View, Text, Image, Pressable} from 'react-native';
+import React, {useState} from 'react';
+import {SIZES} from '../constants/constants';
 import DoctorArrowUpIcon from '../assets/svg/firm/DoctorArrowUpIcon';
 import DoctorArrowDownIcon from '../assets/svg/firm/DoctorArrowDownIcon';
 import CustomButtons from './CustomButtons';
-import LikeIcon from '../assets/svg/common/LikeIcon';
-import CustomInputs from './CustomInputs';
 import {useNavigation} from '@react-navigation/native';
-import WebClient from '../utility/WebClient';
-import {useSelector} from 'react-redux';
-import {AnyObjectSchema} from 'yup';
+import moment from 'moment';
+import {appointmentOperationStates} from '../constants/Enum';
 
 const AcceptedAppointmentComp = ({item}: any) => {
   const [seeAll, setSeeAll] = useState(false);
-  const [offerInfo, setOfferInfo] = useState<any>(null);
   const navigation = useNavigation();
-  const {Post, loading} = WebClient();
-  const {user} = useSelector((state: any) => state.user);
 
   return (
     <View className="items-center">
@@ -26,12 +20,12 @@ const AcceptedAppointmentComp = ({item}: any) => {
         {/* header */}
         <View className=" p-[10px] space-y-1">
           <Text className="font-poppinsRegular text-customGray text-xs">
-            04.03.2021
+            {moment(item?.createdDate, 'YYYY-MM-DD').format('DD.MM.YYYY')}
           </Text>
           <View className="flex-row items-center space-x-2  w-[60%]">
             <View className="w-[62px] h-[62px] overflow-hidden rounded-full border-[0.6px] border-customGray">
               <Image
-                source={{uri: temp}}
+                source={{uri: ''}}
                 className="w-full h-full"
                 resizeMode="cover"
               />
@@ -40,12 +34,12 @@ const AcceptedAppointmentComp = ({item}: any) => {
               <Text
                 numberOfLines={1}
                 className="text-customGray text-sm font-poppinsSemiBold">
-                Berna Laçin
+                {item?.userName}
               </Text>
               <Text
                 numberOfLines={1}
                 className="text-customGray font-poppins text-xs font-poppinsRegular">
-                Turkey, ANKARA
+                {item?.userAdress}
               </Text>
             </View>
           </View>
@@ -58,7 +52,7 @@ const AcceptedAppointmentComp = ({item}: any) => {
           <Text
             numberOfLines={1}
             className="text-customGray font-poppinsRegular text-sm">
-            Burun Operasyonları, Burun Ucu Kaldırma
+            {item?.serviceName}
           </Text>
         </View>
 
@@ -71,7 +65,7 @@ const AcceptedAppointmentComp = ({item}: any) => {
               <Text
                 numberOfLines={1}
                 className="text-customGray font-poppinsRegular text-sm">
-                Esteworld Doktor 1
+                {item?.doctorModel?.label}
               </Text>
             </View>
             <View>
@@ -81,9 +75,7 @@ const AcceptedAppointmentComp = ({item}: any) => {
               <Text
                 numberOfLines={2}
                 className="text-customGray font-poppinsRegular text-sm">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde
-                vel soluta laudantium reiciendis cumque, enim autem dicta
-                repudiandae quia eveniet.
+                {item?.title}
               </Text>
             </View>
             <View>
@@ -93,15 +85,7 @@ const AcceptedAppointmentComp = ({item}: any) => {
               <Text
                 numberOfLines={5}
                 className="text-customGray font-poppinsRegular text-sm">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quo
-                quis voluptatibus, molestias neque sequi mollitia amet possimus
-                ipsam enim dolor fugit nam, temporibus pariatur, excepturi
-                deleniti! Ipsam molestias voluptatibus autem, ratione nisi
-                distinctio vel earum qui quo aperiam quae illum. Odit sequi
-                beatae illo error ullam, deleniti sed aspernatur accusamus
-                blanditiis? Magnam perspiciatis dolores non quibusdam tempora
-                perferendis. Nobis cupiditate est veritatis, assumenda ratione
-                aliquam ullam accusamus nostrum pariatur quia!
+                {item?.content}
               </Text>
             </View>
 
@@ -110,7 +94,8 @@ const AcceptedAppointmentComp = ({item}: any) => {
                 Randevu Tarih Aralığı:{' '}
               </Text>
               <Text className="text-customOrange font-poppinsRegular text-sm">
-                15 Şubat 2024 - 15 Nisan 2024
+                {moment(item?.startDate, 'YYYY.MM.DD').format('DD.MM.YYYY')} -
+                {moment(item?.endDate, 'YYYY.MM.DD').format('DD.MM.YYYY')}
               </Text>
             </View>
 
@@ -127,7 +112,11 @@ const AcceptedAppointmentComp = ({item}: any) => {
                   Durum:
                 </Text>
                 <Text className="text-customGray font-poppinsRegular text-sm">
-                  Onaylandı
+                  {
+                    appointmentOperationStates.find(
+                      tmp => tmp.value == item?.operationState,
+                    )?.label
+                  }{' '}
                 </Text>
               </View>
               <View className="flex-1">
@@ -137,7 +126,11 @@ const AcceptedAppointmentComp = ({item}: any) => {
                 <Text
                   numberOfLines={1}
                   className="text-customOrange font-poppinsRegular text-sm">
-                  12.02.2024
+                  {item?.confirmDate
+                    ? moment(item?.confirmDate, 'YYYY-MM-DD').format(
+                        'DD.MM.YYYY',
+                      )
+                    : 'Belirtilmedi'}
                 </Text>
               </View>
             </View>
@@ -148,7 +141,7 @@ const AcceptedAppointmentComp = ({item}: any) => {
               <Text
                 numberOfLines={3}
                 className="text-customGray font-poppinsRegular text-sm">
-                Açıklama
+                ????
               </Text>
             </View>
 
@@ -156,7 +149,11 @@ const AcceptedAppointmentComp = ({item}: any) => {
               type="solid"
               label="Randevuyu Düzenle"
               style={{alignSelf: 'center', marginBottom: 10}}
-              onPress={() => navigation.navigate('editappointment')}
+              onPress={() =>
+                navigation.navigate('editappointment', {
+                  appointmentId: item?.appointmentID,
+                })
+              }
             />
           </View>
         )}
@@ -169,7 +166,8 @@ const AcceptedAppointmentComp = ({item}: any) => {
             <Text
               numberOfLines={1}
               className="font-poppinsMedium text-sm text-white flex-1">
-              Randevu ID: <Text className="font-poppinsRegular">1005</Text>
+              Randevu ID:{' '}
+              <Text className="font-poppinsRegular">{item?.appointmentID}</Text>
             </Text>
           )}
           <View

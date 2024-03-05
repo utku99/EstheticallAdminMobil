@@ -7,6 +7,8 @@ import CustomButtons from './CustomButtons';
 import LikeIcon from '../assets/svg/common/LikeIcon';
 import CustomInputs from './CustomInputs';
 import {useNavigation} from '@react-navigation/native';
+import {currencyTypes, offerStates} from '../constants/Enum';
+import moment from 'moment';
 
 const SentOfferComp = ({item}: any) => {
   const [seeAll, setSeeAll] = useState(false);
@@ -21,7 +23,9 @@ const SentOfferComp = ({item}: any) => {
         </Text>
         <Text className="font-poppinsMedium  text-sm text-customGray ">
           Kabul Tarihi:{' '}
-          <Text className="font-poppinsRegular">{item?.offerCreatedDate}</Text>
+          <Text className="font-poppinsRegular">
+            {moment(item?.offerCreatedDate, 'YYYY-MM.DD').format('DD.MM.YYYY')}
+          </Text>
         </Text>
       </View>
 
@@ -35,7 +39,7 @@ const SentOfferComp = ({item}: any) => {
           <View className="flex-row items-center space-x-2  w-[60%]">
             <View className="w-[62px] h-[62px] overflow-hidden rounded-full border-[0.6px] border-customGray">
               <Image
-                source={{uri: temp}}
+                source={{uri: ''}}
                 className="w-full h-full"
                 resizeMode="cover"
               />
@@ -44,12 +48,12 @@ const SentOfferComp = ({item}: any) => {
               <Text
                 numberOfLines={1}
                 className="text-customGray text-sm font-poppinsSemiBold">
-                Berna Laçin
+                {item?.userFullName}
               </Text>
               <Text
                 numberOfLines={1}
                 className="text-customGray font-poppins text-xs font-poppinsRegular">
-                Turkey, ANKARA
+                {item?.location}
               </Text>
             </View>
           </View>
@@ -64,7 +68,7 @@ const SentOfferComp = ({item}: any) => {
               <Text
                 numberOfLines={1}
                 className="text-customGray font-poppinsRegular text-sm">
-                Cilt Bakımı, Klasik Cilt Bakımı
+                {item?.service}
               </Text>
             </View>
 
@@ -75,9 +79,7 @@ const SentOfferComp = ({item}: any) => {
               <Text
                 numberOfLines={2}
                 className="text-customGray font-poppinsRegular text-sm">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde
-                vel soluta laudantium reiciendis cumque, enim autem dicta
-                repudiandae quia eveniet.
+                {item?.subject}
               </Text>
             </View>
             <View>
@@ -87,15 +89,7 @@ const SentOfferComp = ({item}: any) => {
               <Text
                 numberOfLines={5}
                 className="text-customGray font-poppinsRegular text-sm">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quo
-                quis voluptatibus, molestias neque sequi mollitia amet possimus
-                ipsam enim dolor fugit nam, temporibus pariatur, excepturi
-                deleniti! Ipsam molestias voluptatibus autem, ratione nisi
-                distinctio vel earum qui quo aperiam quae illum. Odit sequi
-                beatae illo error ullam, deleniti sed aspernatur accusamus
-                blanditiis? Magnam perspiciatis dolores non quibusdam tempora
-                perferendis. Nobis cupiditate est veritatis, assumenda ratione
-                aliquam ullam accusamus nostrum pariatur quia!
+                {item?.content}
               </Text>
             </View>
 
@@ -104,7 +98,8 @@ const SentOfferComp = ({item}: any) => {
                 Teklif Tarih Aralığı:{' '}
               </Text>
               <Text className="text-customOrange font-poppinsRegular text-sm">
-                15 Şubat 2024 - 15 Nisan 2024
+                {moment(item?.startDate, 'YYYY-MM.DD').format('DD.MM.YYYY')} -{' '}
+                {moment(item?.endDate, 'YYYY-MM.DD').format('DD.MM.YYYY')}
               </Text>
             </View>
 
@@ -117,19 +112,19 @@ const SentOfferComp = ({item}: any) => {
                   type="checkbox"
                   title="Ulaşım"
                   readOnly
-                  value={true}
+                  value={item?.extraServices.some((item: number) => item === 1)}
                 />
                 <CustomInputs
                   type="checkbox"
                   title="Konaklama"
                   readOnly
-                  value={true}
+                  value={item?.extraServices.some((item: number) => item === 2)}
                 />
                 <CustomInputs
                   type="checkbox"
                   title="Refakatçi"
                   readOnly
-                  value={true}
+                  value={item?.extraServices.some((item: number) => item === 3)}
                 />
               </View>
             </View>
@@ -140,11 +135,16 @@ const SentOfferComp = ({item}: any) => {
               </Text>
               <FlatList
                 horizontal
-                data={[temp, temp]}
+                data={item?.sliders ?? []}
                 contentContainerStyle={{gap: 15}}
-                renderItem={({item, index}) => (
-                  <View className="w-[130px] h-[130px] rounded-lg border border-customLightGray overflow-hidden">
-                    <Image source={{uri: item}} className="w-full h-full" />
+                renderItem={({item}) => (
+                  <View
+                    key={item.sliderID}
+                    className="w-[130px] h-[130px] rounded-lg border border-customLightGray overflow-hidden">
+                    <Image
+                      source={{uri: item?.fileName}}
+                      className="w-full h-full"
+                    />
                   </View>
                 )}
               />
@@ -163,7 +163,7 @@ const SentOfferComp = ({item}: any) => {
                   Durum:
                 </Text>
                 <Text className="text-customGray font-poppinsRegular text-sm">
-                  Bekleyen
+                  {offerStates.find(state => state.value == item.status)?.label}
                 </Text>
               </View>
               <View className="flex-1">
@@ -173,7 +173,7 @@ const SentOfferComp = ({item}: any) => {
                 <Text
                   numberOfLines={1}
                   className="text-customGray font-poppinsRegular text-sm">
-                  Esteworld Doktor 1
+                  {item?.doctorName}
                 </Text>
               </View>
             </View>
@@ -184,8 +184,7 @@ const SentOfferComp = ({item}: any) => {
               <Text
                 numberOfLines={3}
                 className="text-customGray font-poppinsRegular text-sm">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex,
-                odio!
+                ?????
               </Text>
             </View>
             <View className="flex-row items-center justify-between">
@@ -196,7 +195,7 @@ const SentOfferComp = ({item}: any) => {
                 <Text
                   numberOfLines={1}
                   className="text-customGray font-poppinsRegular text-sm">
-                  %13
+                  %{item?.priceRate}
                 </Text>
               </View>
               <View className="flex-1">
@@ -206,7 +205,7 @@ const SentOfferComp = ({item}: any) => {
                 <Text
                   numberOfLines={1}
                   className="text-customOrange font-poppinsRegular text-sm">
-                  12.03.2024
+                  {moment(item?.date, 'DD.MM.YYYY').format('DD.MM.YYYY')}
                 </Text>
               </View>
             </View>
@@ -217,11 +216,16 @@ const SentOfferComp = ({item}: any) => {
               </Text>
               <FlatList
                 horizontal
-                data={[temp, temp, temp, temp, temp]}
+                data={item?.offerInfoSlider ?? []}
                 contentContainerStyle={{gap: 15}}
-                renderItem={({item, index}) => (
-                  <View className="w-[130px] h-[130px] rounded-lg border border-customLightGray overflow-hidden">
-                    <Image source={{uri: item}} className="w-full h-full" />
+                renderItem={({item}) => (
+                  <View
+                    key={item?.sliderID}
+                    className="w-[130px] h-[130px] rounded-lg border border-customLightGray overflow-hidden">
+                    <Image
+                      source={{uri: item?.fileName}}
+                      className="w-full h-full"
+                    />
                   </View>
                 )}
               />
@@ -246,7 +250,8 @@ const SentOfferComp = ({item}: any) => {
             <Text
               numberOfLines={1}
               className="font-poppinsRegular text-sm text-white flex-1">
-              Teklif Fiyatı: 1000₺
+              Teklif Fiyatı: {item?.price}
+              {currencyTypes.find(cur => cur.value == item?.currencyType)?.icon}
             </Text>
           )}
           <View
