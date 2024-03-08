@@ -1,5 +1,5 @@
 import {Pressable} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
   DrawerActions,
@@ -14,7 +14,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import BottomTab from '../components/BottomTab';
 import DrawerBar from '../components/DrawerBar';
 import Login from './auth/Login';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Notification from './menu/Notification';
 import Settings from './menu/Settings';
 import LogOut from './menu/LogOut';
@@ -28,6 +28,13 @@ import SharingComments from './bottomTab/SharingComments';
 import EditOffer from './bottomTab/EditOffer';
 import NewOffer from './bottomTab/NewOffer';
 import EditAppointment from './bottomTab/EditAppointment';
+import * as signalR from '@microsoft/signalr';
+import {
+  setConnection,
+  setConnectionId,
+  setMessage,
+  setTotalUsers,
+} from '../redux/slices/hubConnection';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -111,6 +118,53 @@ const AuthStack = () => {
 
 const Root = () => {
   const {isLoggedIn} = useSelector((state: any) => state.user);
+  const dispatch = useDispatch();
+
+  const temp = new signalR.HubConnectionBuilder()
+    .withUrl(`https://estheticallv2-api.ranna.com.tr/chathub`)
+    .configureLogging(signalR.LogLevel.None)
+    .build();
+
+  dispatch(setConnection(temp));
+
+  temp.on('forceDisconnect', message => {
+    temp.stop();
+  });
+
+  temp.on('GetConnectionId', message => {
+    dispatch(setConnectionId(message));
+    console.log(message);
+  });
+
+  temp.on('MessageReceived', message => {
+    const now = new Date();
+    const createdDate = `${now.getHours()}:${
+      (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
+    }`;
+    if (message.includes('https://estheticallv2-api.ranna.com.tr/wwwroot')) {
+      dispatch(
+        setMessage({
+          message: '',
+          createdDate: createdDate,
+          imageUrl: message,
+        }),
+      );
+    } else {
+      dispatch(
+        setMessage({
+          message: message,
+          createdDate: createdDate,
+          imageUrl: null,
+        }),
+      );
+    }
+  });
+
+  temp.on('updateTotals', data => {
+    dispatch(setTotalUsers(data));
+  });
+
+  temp.start();
 
   const handleAuth = () => {
     if (isLoggedIn) {

@@ -6,7 +6,14 @@ import {Swipeable} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import TrashIcon from '../assets/svg/firm/TrashIcon';
 
-const MessageComp = () => {
+const messagesType: any = [
+  {value: 1, label: 'Randevu'},
+  {value: 2, label: 'Teklif'},
+  {value: 3, label: 'Paket'},
+  {value: 4, label: 'Genel'},
+];
+
+const MessageComp = ({item}: any) => {
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
 
@@ -27,34 +34,41 @@ const MessageComp = () => {
       onSwipeableClose={() => setOpen(false)}>
       <View className={`${open ? 'bg-customOrange' : 'bg-white'}`}>
         <Pressable
-          onPress={() => navigation.navigate('message')}
+          onPress={() => navigation.navigate('message', {selectedUser: item})}
           className={` border border-customLightGray rounded-xl bg-white p-[10px] flex-row items-center space-x-3`}
           style={{width: SIZES.width * 0.95}}>
-          <View className="w-[80px] h-[80px] overflow-hidden rounded-full border-[0.6px] border-customGray">
+          <View className="relative">
             <Image
-              source={require('../assets/images/authBg/auth.jpg')}
-              className="w-full h-full"
+              source={{uri: item?.correspondentLogo ?? ''}}
+              className=" w-[80px] h-[80px] rounded-full border-[0.6px] border-customGray"
               resizeMode="cover"
             />
           </View>
-
-          <View className=" flex-1 space-y-1">
-            <View className="flex-row items-center  justify-between">
-              <View>
-                <Text className="text-customGray font-poppinsSemiBold text-sm ">
-                  Ayşe Örnekadam
-                </Text>
-                <Text className="text-customGray font-poppinsRegular text-sm">
-                  TR, İstanbul, Ataşehir
-                </Text>
-              </View>
-              {/* <NotificationIcon fill={"#D9D9D9"} /> */}
-              <NotificationIcon fill={'#FF8170'} />
-            </View>
-            <Text className="text-customGray font-poppinsRegular text-xs self-end">
-              04.03.2021 - 15:00
+          <View className="flex-1">
+            <Text className="text-customGray font-poppinsSemiBold text-sm ">
+              {item?.correspondentName}
+            </Text>
+            <Text
+              numberOfLines={1}
+              className="text-customGray font-poppinsSemiBold text-sm ">
+              Mesaj Tipi:{' '}
+              <Text className="font-poppinsMedium">
+                {
+                  messagesType.find(
+                    (type: any) => type.value == item.messagesType,
+                  ).label
+                }
+              </Text>
+            </Text>
+            <Text
+              numberOfLines={1}
+              className="text-customGray font-poppinsRegular text-sm">
+              {item?.message}
             </Text>
           </View>
+          <Text className="text-customGray font-medium text-sm ">
+            {item?.createdDate}
+          </Text>
         </Pressable>
       </View>
     </Swipeable>
