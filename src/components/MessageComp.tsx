@@ -5,6 +5,7 @@ import NotificationIcon from '../assets/svg/userMenu/NotificationIcon';
 import {Swipeable} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import TrashIcon from '../assets/svg/firm/TrashIcon';
+import {useSelector} from 'react-redux';
 
 const messagesType: any = [
   {value: 1, label: 'Randevu'},
@@ -16,6 +17,8 @@ const messagesType: any = [
 const MessageComp = ({item}: any) => {
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
+  const {connection} = useSelector((state: any) => state.hub);
+  const {user} = useSelector((state: any) => state.user);
 
   return (
     <Swipeable
@@ -34,7 +37,20 @@ const MessageComp = ({item}: any) => {
       onSwipeableClose={() => setOpen(false)}>
       <View className={`${open ? 'bg-customOrange' : 'bg-white'}`}>
         <Pressable
-          onPress={() => navigation.navigate('message', {selectedUser: item})}
+          onPress={() => {
+            connection.invoke('LeaveRoom');
+            connection.invoke('JoinRoom', {
+              RoomID: item.roomID,
+              sender_id: item.correspondentID,
+              sender_type: item.correspondentType,
+              receiver_id:
+                user.companyOfficeId == 0
+                  ? user.companyId
+                  : user.companyOfficeId,
+              receiver_type: user.companyOfficeId == 0 ? 2 : 3,
+            });
+            navigation.navigate('message', {selectedUser: item});
+          }}
           className={` border border-customLightGray rounded-xl bg-white p-[10px] flex-row items-center space-x-3`}
           style={{width: SIZES.width * 0.95}}>
           <View className="relative">

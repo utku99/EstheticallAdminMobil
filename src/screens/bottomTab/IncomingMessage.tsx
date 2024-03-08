@@ -17,22 +17,21 @@ const IncomingMessage = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    if (true) {
-      Post('/api/Chatting/GetUserMessageSenders', {
+    if (connectionId) {
+      Post('/api/Chatting/GetCompanyMessageSenders', {
         roomID: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        companyID: 0,
-        companyOfficeID: 0,
+        companyID: user?.companyOfficeId == 0 ? user?.companyId : 0,
+        companyOfficeID: user?.companyOfficeId,
         userID: 0,
       }).then(res => setUsers(res.data.object));
 
-      connection.invoke('LoginMessageHub', {UserID: user?.id, TypeID: 1});
+      connection.invoke('LoginMessageHub', {
+        UserID: user?.companyId,
+        TypeID: user?.companyOfficeId == 0 ? 2 : 3,
+      });
     } else {
       navigation.navigate('sharing');
     }
-
-    return () => {
-      connection.invoke('LeaveRoom');
-    };
   }, []);
 
   return (

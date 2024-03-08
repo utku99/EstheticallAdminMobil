@@ -30,6 +30,7 @@ import NewOffer from './bottomTab/NewOffer';
 import EditAppointment from './bottomTab/EditAppointment';
 import * as signalR from '@microsoft/signalr';
 import {
+  addMessage,
   setConnection,
   setConnectionId,
   setMessage,
@@ -133,17 +134,18 @@ const Root = () => {
 
   temp.on('GetConnectionId', message => {
     dispatch(setConnectionId(message));
-    console.log(message);
   });
 
   temp.on('MessageReceived', message => {
+    console.log(message);
+
     const now = new Date();
     const createdDate = `${now.getHours()}:${
       (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
     }`;
     if (message.includes('https://estheticallv2-api.ranna.com.tr/wwwroot')) {
       dispatch(
-        setMessage({
+        addMessage({
           message: '',
           createdDate: createdDate,
           imageUrl: message,
@@ -151,7 +153,7 @@ const Root = () => {
       );
     } else {
       dispatch(
-        setMessage({
+        addMessage({
           message: message,
           createdDate: createdDate,
           imageUrl: null,
