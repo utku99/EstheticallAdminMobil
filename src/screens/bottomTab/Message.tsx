@@ -7,7 +7,7 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {openPicker} from 'react-native-image-crop-picker';
 import MenuWrapper from '../menu/MenuWrapper';
 import HandleData from '../../components/HandleData';
@@ -22,6 +22,8 @@ import {useFormik} from 'formik';
 import {addMessage, setMessage} from '../../redux/slices/hubConnection';
 
 const Message = ({route}: any) => {
+  const scrollRef = useRef<any>(null);
+
   const [images, setImages] = useState<any>([]);
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
@@ -120,16 +122,22 @@ const Message = ({route}: any) => {
   }, []);
 
   return (
-    <MenuWrapper title="Mesajlar" scrollEnabled={true}>
+    <MenuWrapper title="Mesajlar" scrollEnabled={false}>
       <HandleData
         title={'Mesajınız Bulunmamaktadır'}
         loading={loading}
         data={message}>
-        <View className="flex-1" style={{width: SIZES.width * 0.95}}>
+        <View
+          className=" "
+          style={{width: SIZES.width * 0.95, height: SIZES.height * 0.69}}>
           <FlatList
-            className="mb-5 "
-            contentContainerStyle={{gap: 15}}
+            ref={scrollRef}
+            onContentSizeChange={() =>
+              scrollRef.current?.scrollToEnd({animated: false})
+            }
             data={message}
+            className="mb-5"
+            contentContainerStyle={{gap: 15}}
             renderItem={({item}) => <DoctorMessageComp item={item} />}
           />
           <View className="space-y-1">
