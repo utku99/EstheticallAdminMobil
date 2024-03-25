@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import SharingComp from '../../components/SharingComp';
 import WebClient from '../../utility/WebClient';
 import {useDispatch, useSelector} from 'react-redux';
-import {FlatList, View} from 'react-native';
+import {FlatList, SafeAreaView, View} from 'react-native';
 import HandleData from '../../components/HandleData';
 import MenuWrapper from '../menu/MenuWrapper';
 import CustomButtons from '../../components/CustomButtons';
@@ -29,7 +29,11 @@ const Sharings = () => {
         loading={loading}
         title="Paylaşımınız Bulunmamaktadır">
         <FlatList
-          contentContainerStyle={{display: 'flex', gap: 15, paddingBottom: 20}}
+          contentContainerStyle={{
+            display: 'flex',
+            gap: 15,
+            paddingBottom: 20,
+          }}
           data={sharings}
           renderItem={({item}) => <SharingComp item={item} />}
         />
