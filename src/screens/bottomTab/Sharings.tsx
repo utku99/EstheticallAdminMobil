@@ -6,11 +6,20 @@ import {FlatList, SafeAreaView, View} from 'react-native';
 import HandleData from '../../components/HandleData';
 import MenuWrapper from '../menu/MenuWrapper';
 import CustomButtons from '../../components/CustomButtons';
+import {OneSignal} from 'react-native-onesignal';
 
 const Sharings = () => {
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
   const [sharings, setSharings] = useState([]);
+
+  OneSignal.initialize('36ba4e67-6a5f-4bae-9269-4ccdededab2d');
+
+  OneSignal.Notifications.requestPermission(true);
+
+  OneSignal.Notifications.addEventListener('click', event => {
+    console.log('OneSignal: notification clicked:', event);
+  });
 
   useEffect(() => {
     Post('/api/Shared/ListCompanySharedsMobile', {
@@ -20,7 +29,23 @@ const Sharings = () => {
     }).then(res => {
       setSharings(res.data);
     });
-  }, []);
+
+    if (OneSignal.User.pushSubscription.getPushSubscriptionId()) {
+      Post('/api/Notification/SendOneSignalID', {
+        oneSignalID: OneSignal.User.pushSubscription.getPushSubscriptionId(),
+        userID: user?.id,
+        languageId: 1,
+        companyID: user?.companyOfficeId == 0 ? user?.companyId : 0,
+        companyOfficeID: user?.companyOfficeId == 0 ? 0 : user?.companyOfficeId,
+      }).then(res => {
+        if (res.data.resultCode == '100') {
+          console.log('player id sended');
+        } else {
+          console.log('no player id');
+        }
+      });
+    }
+  }, [OneSignal.User.pushSubscription.getPushSubscriptionId()]);
 
   return (
     <MenuWrapper title="Paylaşımlar" type="sharing">
