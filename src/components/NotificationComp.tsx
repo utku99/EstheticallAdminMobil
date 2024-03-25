@@ -21,21 +21,25 @@ const NotificationComp: React.FC<props> = ({item, setClicked}) => {
     <>
       {item?.companyID == 0 ? (
         <View
-          className={` border border-customLightGray rounded-xl bg-white p-[10px] flex-row items-center justify-between`}
+          className={` border border-customLightGray rounded-xl bg-white p-[10px] flex-row items-center justify-between space-x-4`}
           style={{width: SIZES.width * 0.95}}>
-          <View className=" max-w-[50%]">
-            <Text className="text-customGray font-poppins text-sm font-bold">
-              {item?.title}
-            </Text>
+          <View className=" flex-1">
+            <View className="flex-row justify-between items-center">
+              <Text
+                numberOfLines={1}
+                className="text-customGray font-poppins text-sm font-bold flex-shrink">
+                {item?.title}
+              </Text>
+              <Text className="text-customGray font-poppins text-xs">
+                {moment(item?.createdDate, 'DD.MM.YYYY hh:mm:ss').format(
+                  'DD.MM.YYYY hh:mm',
+                )}
+              </Text>
+            </View>
             <Text className="text-customGray font-poppins text-sm">
               {item?.content}
             </Text>
           </View>
-          <Text className="text-customGray font-poppins text-xs">
-            {moment(item?.createdDate, 'DD.MM.YYYY hh:mm:ss').format(
-              'DD.MM.YYYY hh:mm',
-            )}
-          </Text>
           <TouchableOpacity
             onPress={() => {
               Post('/api/Notification/RemoveUserPushMessage', {
