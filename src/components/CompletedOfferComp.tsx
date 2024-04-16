@@ -4,6 +4,7 @@ import {SIZES, temp} from '../constants/constants';
 import CustomButtons from './CustomButtons';
 import WebClient from '../utility/WebClient';
 import moment from 'moment';
+import IntLabel from './IntLabel';
 
 const CompletedOfferComp = ({item}: any) => {
   const {Post} = WebClient();
@@ -12,11 +13,11 @@ const CompletedOfferComp = ({item}: any) => {
     <View className="items-center">
       <View className="flex-row space-x-4 mt-4 mb-2">
         <Text className="font-poppinsMedium  text-sm text-customGray ">
-          Teklif ID:{' '}
+          {IntLabel('offer_id')}:{' '}
           <Text className="font-poppinsRegular">{item?.offerID}</Text>
         </Text>
         <Text className="font-poppinsMedium  text-sm text-customGray ">
-          Kabul Tarihi:{' '}
+          {IntLabel('approval_date')}:{' '}
           <Text className="font-poppinsRegular">
             {moment(item?.offerCreatedDate, 'DD.MM.YYYY').format('DD.MM.YYYY')}
           </Text>
@@ -54,7 +55,7 @@ const CompletedOfferComp = ({item}: any) => {
         <View className="p-[10px] space-y-3">
           <View className="flex-1">
             <Text className="text-customGray font-poppinsMedium text-sm">
-              Operasyonlar:{' '}
+              {IntLabel('service')}:{' '}
             </Text>
             <Text
               numberOfLines={2}
@@ -65,7 +66,7 @@ const CompletedOfferComp = ({item}: any) => {
 
           <View>
             <Text className="text-customGray font-poppinsMedium text-sm">
-              Teklif Başlığı:{' '}
+              {IntLabel('offer_title')}:{' '}
             </Text>
             <Text
               numberOfLines={2}
@@ -75,7 +76,7 @@ const CompletedOfferComp = ({item}: any) => {
           </View>
           <View>
             <Text className="text-customGray font-poppinsMedium text-sm">
-              Teklif İçeriği:{' '}
+              {IntLabel('offer_content')}:{' '}
             </Text>
             <Text
               numberOfLines={5}
@@ -86,7 +87,7 @@ const CompletedOfferComp = ({item}: any) => {
 
           <View>
             <Text className="text-customOrange font-poppinsMedium text-sm">
-              Teklif Tarih Aralığı:{' '}
+              {IntLabel('offer_date_range')}:{' '}
             </Text>
             <Text className="text-customOrange font-poppinsRegular text-sm">
               {moment(item?.startDate, 'DD.MM.YYYY').format('DD.MM.YYYY')} -{' '}
@@ -96,7 +97,7 @@ const CompletedOfferComp = ({item}: any) => {
 
           <CustomButtons
             type="solid"
-            label="Teklifi Sil"
+            label={IntLabel('delete')}
             style={{alignSelf: 'center', marginBottom: 10}}
             onPress={() => {
               Post(

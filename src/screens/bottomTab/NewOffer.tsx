@@ -11,6 +11,7 @@ import {currencyTypes, offerStates} from '../../constants/Enum';
 import {useFormik} from 'formik';
 import {useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
+import IntLabel from '../../components/IntLabel';
 
 const NewOffer = ({route}: any) => {
   const {Post, loading} = WebClient();
@@ -75,7 +76,7 @@ const NewOffer = ({route}: any) => {
   }, []);
 
   return (
-    <MenuWrapper title="Yeni Teklif Ver">
+    <MenuWrapper title={IntLabel('give_new_offer')}>
       <View className="items-center">
         <View
           className={`h-fit border border-customLightGray rounded-xl bg-white `}
@@ -108,7 +109,7 @@ const NewOffer = ({route}: any) => {
           <View className="p-[10px] space-y-3">
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Doktor:
+                {IntLabel('doctor')}:
               </Text>
               <CustomInputs
                 type="dropdown"
@@ -118,13 +119,13 @@ const NewOffer = ({route}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Açıklama:
+                {IntLabel('desc')}:
               </Text>
               <CustomInputs type="textarea" />
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Fiyat:
+                {IntLabel('price')}:
               </Text>
               <View className="h-[40px] flex-1 bg-white rounded-lg border border-customGray px-2 flex-row items-center">
                 <TextInput
@@ -152,7 +153,7 @@ const NewOffer = ({route}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Ön Ödeme Oranı (%):
+                {IntLabel('payment_rate')} (%):
               </Text>
               <CustomInputs
                 type="text"
@@ -161,14 +162,14 @@ const NewOffer = ({route}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                İşlem Tarihi:
+                {IntLabel('transaction_date')}:
               </Text>
               <CustomInputs type="date" value={formik.values.date} />
             </View>
 
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Kurum Görselleri (600 x 450):{' '}
+                {IntLabel('company_images')} (600 x 450):{' '}
               </Text>
               <AddPhotoComp
                 value={formik.values.companyImages}
@@ -179,7 +180,7 @@ const NewOffer = ({route}: any) => {
 
             <CustomButtons
               type="solid"
-              label="Teklifi Gönder"
+              label={IntLabel('send')}
               icon="question"
               style={{alignSelf: 'center'}}
               onPress={() => ''}

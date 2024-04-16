@@ -10,6 +10,7 @@ import {Switch} from 'react-native-paper';
 import TrashIcon from '../assets/svg/firm/TrashIcon';
 import BlueTick from '../assets/svg/common/BlueTick';
 import moment from 'moment';
+import IntLabel from './IntLabel';
 
 const CommentComp = ({item}: any) => {
   return (
@@ -157,7 +158,7 @@ const SharingComp = ({item}: {item: any}) => {
             navigation.navigate('sharingcomments', {sharedId: item?.sharedId})
           }
           className="font-poppinsRegular text-xs text-white flex-1">
-          Yorumları Gör
+          {IntLabel('see_comments')}
         </Text>
         <View className="flex-row items-center space-x-6 mr-4">
           <View className="z-30">

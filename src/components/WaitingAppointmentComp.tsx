@@ -7,6 +7,7 @@ import CustomButtons from './CustomButtons';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import {appointmentOperationStates} from '../constants/Enum';
+import IntLabel from './IntLabel';
 
 const WaitingAppointmentComp = ({item}: any) => {
   const [seeAll, setSeeAll] = useState(false);
@@ -47,7 +48,7 @@ const WaitingAppointmentComp = ({item}: any) => {
 
         <View className="flex-1 p-[10px] pt-0">
           <Text className="text-customGray font-poppinsMedium text-sm">
-            Operasyon:{' '}
+            {IntLabel('service')}:{' '}
           </Text>
           <Text
             numberOfLines={1}
@@ -60,7 +61,7 @@ const WaitingAppointmentComp = ({item}: any) => {
           <View className="p-[10px] space-y-3">
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Doktor
+                {IntLabel('doctor')}
               </Text>
               <Text
                 numberOfLines={1}
@@ -70,7 +71,7 @@ const WaitingAppointmentComp = ({item}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Randevu Başlığı:{' '}
+                {IntLabel('appointment_title')}:{' '}
               </Text>
               <Text
                 numberOfLines={2}
@@ -80,7 +81,7 @@ const WaitingAppointmentComp = ({item}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Randevu İçeriği:{' '}
+                {IntLabel('appointment_content')}:{' '}
               </Text>
               <Text
                 numberOfLines={5}
@@ -91,7 +92,7 @@ const WaitingAppointmentComp = ({item}: any) => {
 
             <View>
               <Text className="text-customOrange font-poppinsMedium text-sm">
-                Randevu Tarih Aralığı:{' '}
+                {IntLabel('appointment_date_range')}:{' '}
               </Text>
               <Text className="text-customOrange font-poppinsRegular text-sm">
                 {moment(item?.startDate, 'YYYY.MM.DD').format('DD.MM.YYYY')} -
@@ -101,7 +102,7 @@ const WaitingAppointmentComp = ({item}: any) => {
 
             <View className="flex-row mb-3">
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Randevu Bilgilerim:{'  '}
+                {IntLabel('my_appointment_infos')}:{'  '}
               </Text>
               <View className="h-[0.5px] bg-black/[.5] w-full self-center"></View>
             </View>
@@ -109,7 +110,7 @@ const WaitingAppointmentComp = ({item}: any) => {
             <View className="flex-row items-center justify-between">
               <View className="flex-1">
                 <Text className="text-customGray font-poppinsMedium text-sm">
-                  Durum:
+                  {IntLabel('state')}:
                 </Text>
                 <Text className="text-customGray font-poppinsRegular text-sm">
                   {
@@ -121,18 +122,18 @@ const WaitingAppointmentComp = ({item}: any) => {
               </View>
               <View className="flex-1">
                 <Text className="text-customOrange font-poppinsMedium text-sm">
-                  İşlem Tarihi:
+                  {IntLabel('transaction_date')}:
                 </Text>
                 <Text
                   numberOfLines={1}
                   className="text-customOrange font-poppinsRegular text-sm">
-                  {item?.confirmDate ?? 'Belirtilmedi'}
+                  {item?.confirmDate ?? IntLabel('undefined')}
                 </Text>
               </View>
             </View>
             <View className="flex-1">
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Açıklama:
+                {IntLabel('desc')}:
               </Text>
               <Text
                 numberOfLines={3}
@@ -143,7 +144,7 @@ const WaitingAppointmentComp = ({item}: any) => {
 
             <CustomButtons
               type="solid"
-              label="Randevuyu Düzenle"
+              label={IntLabel('edit')}
               style={{alignSelf: 'center', marginBottom: 10}}
               onPress={() =>
                 navigation.navigate('editappointment', {
@@ -162,7 +163,7 @@ const WaitingAppointmentComp = ({item}: any) => {
             <Text
               numberOfLines={1}
               className="font-poppinsMedium text-sm text-white flex-1">
-              Randevu ID:{' '}
+              {IntLabel('appointment_id')}:{' '}
               <Text className="font-poppinsRegular">{item?.appointmentID}</Text>
             </Text>
           )}
@@ -173,7 +174,7 @@ const WaitingAppointmentComp = ({item}: any) => {
           </View>
           {!seeAll && (
             <Text className="font-poppinsBold text-sm text-white flex-1 text-right">
-              Detayları Gör
+              {IntLabel('see_details')}
             </Text>
           )}
         </Pressable>

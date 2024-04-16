@@ -6,19 +6,20 @@ import {Swipeable} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import TrashIcon from '../assets/svg/firm/TrashIcon';
 import {useSelector} from 'react-redux';
-
-const messagesType: any = [
-  {value: 1, label: 'Randevu'},
-  {value: 2, label: 'Teklif'},
-  {value: 3, label: 'Paket'},
-  {value: 4, label: 'Genel'},
-];
+import IntLabel from './IntLabel';
 
 const MessageComp = ({item}: any) => {
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
   const {connection} = useSelector((state: any) => state.hub);
   const {user} = useSelector((state: any) => state.user);
+
+  const messagesType: any = [
+    {value: 1, label: IntLabel('appointment')},
+    {value: 2, label: IntLabel('offer')},
+    {value: 3, label: IntLabel('packet')},
+    {value: 4, label: IntLabel('general')},
+  ];
 
   return (
     <Swipeable

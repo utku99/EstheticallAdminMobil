@@ -15,16 +15,16 @@ import DoctorMessageComp from '../../components/DoctorMessageComp';
 import TrashIcon from '../../assets/svg/firm/TrashIcon';
 import AddPhotoIcon from '../../assets/svg/userMenu/AddPhotoIcon';
 import SharingSendMessageIcon from '../../assets/svg/homepages/SharingSendMessageIcon';
-import WebClient from '../../utility/WebClient';
+import WebClient, {toast} from '../../utility/WebClient';
 import {useDispatch, useSelector} from 'react-redux';
 import {SIZES} from '../../constants/constants';
 import {useFormik} from 'formik';
 import {addMessage, setMessage} from '../../redux/slices/hubConnection';
+import IntLabel from '../../components/IntLabel';
 
 const Message = ({route}: any) => {
   const scrollRef = useRef<any>(null);
 
-  const [images, setImages] = useState<any>([]);
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
   const {connection, message} = useSelector((state: any) => state.hub);
@@ -38,7 +38,7 @@ const Message = ({route}: any) => {
       maxFiles: 5,
     }).then((image: any) => {
       let temp = image.map((img: any) => img.data);
-      setImages(temp);
+      formik.setFieldValue('images', temp);
     });
   };
 
@@ -51,54 +51,42 @@ const Message = ({route}: any) => {
       message: string;
     },
     onSubmit: (values, {resetForm, setFieldValue}) => {
-      if (values.images.length == 0) {
-        Post(
-          '/api/Chatting/SendMessage',
-          {
-            roomID: route.params?.selectedUser?.roomID,
-            senderId:
-              user.companyOfficeId == 0 ? user.companyId : user.companyOfficeId,
-            senderType: user.companyOfficeId == 0 ? 2 : 3,
-            message: values.message,
-            messagesType: route.params?.selectedUser?.messagesType,
-            receiverId: route.params?.selectedUser?.correspondentID,
-            receiverType: route.params?.selectedUser?.correspondentType,
-            serviceID: message[0]?.serviceID,
-          },
-          false,
-          false,
-        ).then(res => {
-          if (res.data.code == '100') {
-            resetForm();
-            setFieldValue('images', []);
-            dispatch(addMessage(res.data.object));
-          }
-        });
-      } else {
-        Post(
-          '/api/Chatting/SendMessage',
-          {
-            roomID: route.params?.selectedUser?.roomID,
-            senderId:
-              user.companyOfficeId == 0 ? user.companyId : user.companyOfficeId,
-            senderType: user.companyOfficeId == 0 ? 2 : 3,
-            message: '',
-            image: values.images[0].split(',')[1],
-            messagesType: route.params?.selectedUser?.messagesType,
-            receiverId: route.params?.selectedUser?.correspondentID,
-            receiverType: route.params?.selectedUser?.correspondentType,
-            serviceID: message[0]?.serviceID,
-          },
-          false,
-          false,
-        ).then(res => {
-          if (res.data.code == '100') {
-            resetForm();
-            setFieldValue('images', []);
-            dispatch(addMessage(res.data.object));
-          }
-        });
-      }
+      Post('/api/Chatting/SendMessage', {
+        roomID: route.params?.selectedUser?.roomID,
+        senderId:
+          user.companyOfficeId == 0 ? user.companyId : user.companyOfficeId,
+        senderType: user.companyOfficeId == 0 ? 2 : 3,
+        message: values.message,
+        images: values.images,
+        messagesType: route.params?.selectedUser?.messagesType,
+        receiverId: route.params?.selectedUser?.correspondentID,
+        receiverType: route.params?.selectedUser?.correspondentType,
+        serviceID: message[0]?.serviceID,
+      }).then(res => {
+        console.log(res.data, '---');
+
+        if (res.data.code == '100') {
+          resetForm();
+          setFieldValue('images', []);
+
+          const now = new Date();
+          const createdDate = `${now.getHours()}:${
+            (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
+          }`;
+          dispatch(
+            addMessage({
+              message: res.data.object.message,
+              createdDate: createdDate,
+              senderId: res.data.object.senderID,
+              image0: res.data.object.image,
+              image1: res.data.object.image2,
+              image2: res.data.object.image3,
+              image3: res.data.object.image4,
+              image4: res.data.object.image5,
+            }),
+          );
+        }
+      });
     },
   });
 
@@ -122,9 +110,9 @@ const Message = ({route}: any) => {
   }, []);
 
   return (
-    <MenuWrapper title="Mesajlar" scrollEnabled={false}>
+    <MenuWrapper title={IntLabel('messages')} scrollEnabled={false}>
       <HandleData
-        title={'Mesajınız Bulunmamaktadır'}
+        title={IntLabel('warning_no_active_record')}
         loading={loading}
         data={message}>
         <View
@@ -141,11 +129,11 @@ const Message = ({route}: any) => {
             renderItem={({item}) => <DoctorMessageComp item={item} />}
           />
           <View className="space-y-1">
-            {images?.length !== 0 && (
+            {formik.values.images?.length !== 0 && (
               <View>
                 <FlatList
                   horizontal
-                  data={images}
+                  data={formik.values.images}
                   contentContainerStyle={{gap: 10}}
                   renderItem={({item, index}) => (
                     <View className="relative">
@@ -157,13 +145,13 @@ const Message = ({route}: any) => {
                       </View>
                       <Pressable
                         onPress={() => {
-                          const updatedImages = images.filter(
+                          const updatedImages = formik.values.images.filter(
                             (_: any, i: number) => i !== index,
                           );
-                          setImages(updatedImages);
+                          formik.setFieldValue('images', updatedImages);
                         }}
                         className="absolute bottom-1 right-1 bg-customOrange rounded-md w-[24px] h-[24px] items-center justify-center">
-                        <TrashIcon width={14} height={17} />
+                        <TrashIcon width={14} height={17} fill="white" />
                       </Pressable>
                     </View>
                   )}
@@ -181,10 +169,20 @@ const Message = ({route}: any) => {
                   value={formik.values.message}
                   onChangeText={formik.handleChange('message')}
                   className=" flex-1 pl-2 text-sm text-customGray font-poppinsRegular"
-                  placeholder="Yorumunuzu Yazın..."
+                  placeholder={IntLabel('write_message')}
                   placeholderTextColor={'#4D4A48'}
                 />
-                <TouchableOpacity onPress={() => formik.handleSubmit()}>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (
+                      formik.values.images.length == 0 &&
+                      formik.values.message == ''
+                    ) {
+                      toast('lütfen mesaj girin');
+                    } else {
+                      formik.handleSubmit();
+                    }
+                  }}>
                   <SharingSendMessageIcon />
                 </TouchableOpacity>
               </View>

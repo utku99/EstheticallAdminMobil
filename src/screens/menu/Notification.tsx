@@ -6,6 +6,7 @@ import MenuWrapper from './MenuWrapper';
 import {useSelector} from 'react-redux';
 import WebClient from '../../utility/WebClient';
 import HandleData from '../../components/HandleData';
+import IntLabel from '../../components/IntLabel';
 
 const Notification = () => {
   const {user} = useSelector((state: any) => state.user);
@@ -25,10 +26,10 @@ const Notification = () => {
   }, [clicked]);
 
   return (
-    <MenuWrapper title="Bildirimler">
+    <MenuWrapper title={IntLabel('notifications')}>
       <HandleData
         data={notifications}
-        title={'Bildiriminiz Bulunmamaktadır'}
+        title={IntLabel('warning_no_active_record')}
         loading={loading}>
         <FlatList
           contentContainerStyle={{display: 'flex', gap: 15}}

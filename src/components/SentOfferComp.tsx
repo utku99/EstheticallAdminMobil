@@ -9,6 +9,7 @@ import CustomInputs from './CustomInputs';
 import {useNavigation} from '@react-navigation/native';
 import {currencyTypes, offerStates} from '../constants/Enum';
 import moment from 'moment';
+import IntLabel from './IntLabel';
 
 const SentOfferComp = ({item}: any) => {
   const [seeAll, setSeeAll] = useState(false);
@@ -18,11 +19,11 @@ const SentOfferComp = ({item}: any) => {
     <View className="items-center">
       <View className="flex-row space-x-4 mt-4 mb-2">
         <Text className="font-poppinsMedium  text-sm text-customGray ">
-          Teklif ID:{' '}
+          {IntLabel('offer_id')}:{' '}
           <Text className="font-poppinsRegular">{item?.offerID}</Text>
         </Text>
         <Text className="font-poppinsMedium  text-sm text-customGray ">
-          Kabul Tarihi:{' '}
+          {IntLabel('approval_date')}:{' '}
           <Text className="font-poppinsRegular">
             {moment(item?.offerCreatedDate, 'YYYY-MM.DD').format('DD.MM.YYYY')}
           </Text>
@@ -63,7 +64,7 @@ const SentOfferComp = ({item}: any) => {
           <View className="p-[10px] space-y-3">
             <View className="flex-1">
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Operasyonlar:{' '}
+                {IntLabel('service')}:{' '}
               </Text>
               <Text
                 numberOfLines={1}
@@ -74,7 +75,7 @@ const SentOfferComp = ({item}: any) => {
 
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Teklif Başlığı:{' '}
+                {IntLabel('offer_title')}:{' '}
               </Text>
               <Text
                 numberOfLines={2}
@@ -84,7 +85,7 @@ const SentOfferComp = ({item}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Teklif İçeriği:{' '}
+                {IntLabel('offer_content')}:{' '}
               </Text>
               <Text
                 numberOfLines={5}
@@ -95,7 +96,7 @@ const SentOfferComp = ({item}: any) => {
 
             <View>
               <Text className="text-customOrange font-poppinsMedium text-sm">
-                Teklif Tarih Aralığı:{' '}
+                {IntLabel('offer_date_range')}:{' '}
               </Text>
               <Text className="text-customOrange font-poppinsRegular text-sm">
                 {moment(item?.startDate, 'YYYY-MM.DD').format('DD.MM.YYYY')} -{' '}
@@ -105,24 +106,24 @@ const SentOfferComp = ({item}: any) => {
 
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Özel Servisler:{' '}
+                {IntLabel('extra_services')}:{' '}
               </Text>
               <View className="flex-row items-center justify-between ">
                 <CustomInputs
                   type="checkbox"
-                  title="Ulaşım"
+                  title={IntLabel('transport')}
                   readOnly
                   value={item?.extraServices.some((item: number) => item === 1)}
                 />
                 <CustomInputs
                   type="checkbox"
-                  title="Konaklama"
+                  title={IntLabel('accomodation')}
                   readOnly
                   value={item?.extraServices.some((item: number) => item === 2)}
                 />
                 <CustomInputs
                   type="checkbox"
-                  title="Refakatçi"
+                  title={IntLabel('companion')}
                   readOnly
                   value={item?.extraServices.some((item: number) => item === 3)}
                 />
@@ -131,7 +132,7 @@ const SentOfferComp = ({item}: any) => {
 
             <View className="mb-3">
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Kullanıcı Görselleri:{' '}
+                {IntLabel('user_images')}:{' '}
               </Text>
               <FlatList
                 horizontal
@@ -152,7 +153,7 @@ const SentOfferComp = ({item}: any) => {
 
             <View className="flex-row mb-3">
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Teklif Bilgilerim:{'  '}
+                {IntLabel('my_offer_infos')}:{' '}
               </Text>
               <View className="h-[0.5px] bg-black/[.5] w-full self-center"></View>
             </View>
@@ -160,7 +161,7 @@ const SentOfferComp = ({item}: any) => {
             <View className="flex-row items-center justify-between">
               <View className="flex-1">
                 <Text className="text-customGray font-poppinsMedium text-sm">
-                  Durum:
+                  {IntLabel('state')}
                 </Text>
                 <Text className="text-customGray font-poppinsRegular text-sm">
                   {offerStates.find(state => state.value == item.status)?.label}
@@ -168,7 +169,7 @@ const SentOfferComp = ({item}: any) => {
               </View>
               <View className="flex-1">
                 <Text className="text-customGray font-poppinsMedium text-sm">
-                  Doktor:
+                  {IntLabel('doctor')}:
                 </Text>
                 <Text
                   numberOfLines={1}
@@ -179,7 +180,7 @@ const SentOfferComp = ({item}: any) => {
             </View>
             <View className="flex-1">
               <Text className="text-customGray font-poppinsMedium text-sm">
-                Açıklama:
+                {IntLabel('desc')}:
               </Text>
               <Text
                 numberOfLines={3}
@@ -190,7 +191,7 @@ const SentOfferComp = ({item}: any) => {
             <View className="flex-row items-center justify-between">
               <View className="flex-1">
                 <Text className="text-customGray font-poppinsMedium text-sm">
-                  Ön Ödeme Oranı:
+                  {IntLabel('payment_rate')}:
                 </Text>
                 <Text
                   numberOfLines={1}
@@ -200,7 +201,7 @@ const SentOfferComp = ({item}: any) => {
               </View>
               <View className="flex-1">
                 <Text className="text-customOrange font-poppinsMedium text-sm">
-                  İşlem Tarihi:
+                  {IntLabel('transaction_date')}:
                 </Text>
                 <Text
                   numberOfLines={1}
@@ -212,7 +213,7 @@ const SentOfferComp = ({item}: any) => {
 
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Teklif Görselleri:
+                {IntLabel('offer_images')}:
               </Text>
               <FlatList
                 horizontal
@@ -233,7 +234,7 @@ const SentOfferComp = ({item}: any) => {
 
             <CustomButtons
               type="solid"
-              label="Teklifi Güncelle"
+              label={IntLabel('edit')}
               style={{alignSelf: 'center', marginBottom: 10}}
               onPress={() =>
                 navigation.navigate('editoffer', {offerId: item?.offerID})
@@ -250,7 +251,7 @@ const SentOfferComp = ({item}: any) => {
             <Text
               numberOfLines={1}
               className="font-poppinsRegular text-sm text-white flex-1">
-              Teklif Fiyatı: {item?.price}
+              {IntLabel('offer_price')}: {item?.price}
               {currencyTypes.find(cur => cur.value == item?.currencyType)?.icon}
             </Text>
           )}
@@ -261,7 +262,7 @@ const SentOfferComp = ({item}: any) => {
           </View>
           {!seeAll && (
             <Text className="font-poppinsBold text-sm text-white flex-1 text-right">
-              Detayları Gör
+              {IntLabel('see_details')}
             </Text>
           )}
         </Pressable>

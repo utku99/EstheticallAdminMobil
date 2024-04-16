@@ -11,6 +11,7 @@ import {currencyTypes, offerStates} from '../../constants/Enum';
 import {useFormik} from 'formik';
 import {useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
+import IntLabel from '../../components/IntLabel';
 
 const EditOffer = ({route}: any) => {
   const {Post, loading} = WebClient();
@@ -80,7 +81,7 @@ const EditOffer = ({route}: any) => {
   }, []);
 
   return (
-    <MenuWrapper title="Teklifi Güncelle">
+    <MenuWrapper title={IntLabel('edit')}>
       <View className="items-center">
         <View
           className={`h-fit border border-customLightGray rounded-xl bg-white `}
@@ -113,7 +114,7 @@ const EditOffer = ({route}: any) => {
           <View className="p-[10px] space-y-3">
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Durum:
+                {IntLabel('state')}:
               </Text>
               <CustomInputs
                 type="dropdown"
@@ -123,7 +124,7 @@ const EditOffer = ({route}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Doktor:
+                {IntLabel('doctor')}:
               </Text>
               <CustomInputs
                 type="dropdown"
@@ -133,7 +134,7 @@ const EditOffer = ({route}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Açıklama:
+                {IntLabel('desc')}:
               </Text>
               <CustomInputs
                 type="textarea"
@@ -144,7 +145,7 @@ const EditOffer = ({route}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Fiyat:
+                {IntLabel('price')}:
               </Text>
               <View className="h-[40px] flex-1 bg-white rounded-lg border border-customGray px-2 flex-row items-center">
                 <TextInput
@@ -172,7 +173,7 @@ const EditOffer = ({route}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Ön Ödeme Oranı (%):
+                {IntLabel('payment_rate')}: (%):
               </Text>
               <CustomInputs
                 type="text"
@@ -181,14 +182,14 @@ const EditOffer = ({route}: any) => {
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                İşlem Tarihi:
+                {IntLabel('transaction_date')}:
               </Text>
               <CustomInputs type="date" value={formik.values.date} />
             </View>
 
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Kurum Görselleri (600 x 450):{' '}
+                {IntLabel('company_images')}: (600 x 450):{' '}
               </Text>
               <AddPhotoComp
                 value={formik.values.companyImages}
@@ -199,7 +200,7 @@ const EditOffer = ({route}: any) => {
 
             <CustomButtons
               type="solid"
-              label="Teklifi Güncelle"
+              label={IntLabel('edit')}
               icon="question"
               style={{alignSelf: 'center'}}
               onPress={() => ''}

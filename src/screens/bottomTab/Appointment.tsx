@@ -1,18 +1,14 @@
 import {View, Text, FlatList, ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import MenuWrapper from '../menu/MenuWrapper';
-import CustomInputs from '../../components/CustomInputs';
-import {SIZES} from '../../constants/constants';
 import CustomButtons from '../../components/CustomButtons';
-import OfferComp from '../../components/SentOfferComp';
 import HandleData from '../../components/HandleData';
-import {useNavigation} from '@react-navigation/native';
-import AppointmentComp from '../../components/AppointmentComp';
 import WaitingAppointmentComp from '../../components/WaitingAppointmentComp';
 import AcceptedAppointmentComp from '../../components/AcceptedAppointmentComp';
 import RefusedAppointmentComp from '../../components/RefusedAppointmentComp';
 import WebClient from '../../utility/WebClient';
 import {useSelector} from 'react-redux';
+import IntLabel from '../../components/IntLabel';
 
 const Appointment = () => {
   const [tab, setTab] = useState(1);
@@ -54,17 +50,17 @@ const Appointment = () => {
           contentContainerStyle={{paddingHorizontal: 10, gap: 5}}>
           <CustomButtons
             type={tab == 1 ? 'brownsolid' : 'brownoutlined'}
-            label="Onay Bekleyenler"
+            label={IntLabel('waiting')}
             onPress={() => setTab(1)}
           />
           <CustomButtons
             type={tab == 2 ? 'brownsolid' : 'brownoutlined'}
-            label="Onaylananlar"
+            label={IntLabel('accepted')}
             onPress={() => setTab(2)}
           />
           <CustomButtons
             type={tab == 3 ? 'brownsolid' : 'brownoutlined'}
-            label="Reddedilenler"
+            label={IntLabel('refused')}
             onPress={() => setTab(3)}
           />
         </ScrollView>
@@ -74,7 +70,7 @@ const Appointment = () => {
         <HandleData
           data={waitingAppointments}
           loading={loading}
-          title="Onay Bekleyen Randevu Bulunmamaktadır">
+          title={IntLabel('warning_no_active_record')}>
           <FlatList
             contentContainerStyle={{
               display: 'flex',
@@ -90,7 +86,7 @@ const Appointment = () => {
         <HandleData
           data={acceptedAppointments}
           loading={loading}
-          title="Onaylanan Randevu Bulunmamaktadır">
+          title={IntLabel('warning_no_active_record')}>
           <FlatList
             contentContainerStyle={{
               display: 'flex',
@@ -106,7 +102,7 @@ const Appointment = () => {
         <HandleData
           data={refusedAppointments}
           loading={loading}
-          title="Reddedilen Randevu Bulunmamaktadır">
+          title={IntLabel('warning_no_active_record')}>
           <FlatList
             contentContainerStyle={{
               display: 'flex',

@@ -4,6 +4,7 @@ import CustomButtons from '../../components/CustomButtons';
 import {SIZES} from '../../constants/constants';
 import {useNavigation} from '@react-navigation/native';
 import NotificationIcon from '../../assets/svg/userMenu/NotificationIcon';
+import IntLabel from '../../components/IntLabel';
 
 interface props {
   children?: React.ReactNode;
@@ -34,7 +35,7 @@ const MenuWrapper = ({children, title, type, scrollEnabled = true}: props) => {
               <CustomButtons
                 onPress={() => navigation.navigate('addsharing')}
                 type="iconsolid"
-                label="Ekle"
+                label={IntLabel('add')}
                 theme="big"
                 icon="pluss"
                 style={{height: 40}}

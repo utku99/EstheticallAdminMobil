@@ -9,6 +9,7 @@ import {useSelector} from 'react-redux';
 import SentOfferComp from '../../components/SentOfferComp';
 import AllOfferComp from '../../components/AllOfferComp';
 import CompletedOfferComp from '../../components/CompletedOfferComp';
+import IntLabel from '../../components/IntLabel';
 
 const Offer = () => {
   const [tab, setTab] = useState(1);
@@ -50,17 +51,17 @@ const Offer = () => {
           contentContainerStyle={{paddingHorizontal: 10, gap: 5}}>
           <CustomButtons
             type={tab == 1 ? 'brownsolid' : 'brownoutlined'}
-            label="Tüm Teklifler"
+            label={IntLabel('all_offers')}
             onPress={() => setTab(1)}
           />
           <CustomButtons
             type={tab == 2 ? 'brownsolid' : 'brownoutlined'}
-            label="Teklif Verdiklerim"
+            label={IntLabel('sent_offers')}
             onPress={() => setTab(2)}
           />
           <CustomButtons
             type={tab == 3 ? 'brownsolid' : 'brownoutlined'}
-            label="Tamamlanmış Teklifler"
+            label={IntLabel('complete_offers')}
             onPress={() => setTab(3)}
           />
         </ScrollView>
@@ -70,7 +71,7 @@ const Offer = () => {
         <HandleData
           data={allOffers}
           loading={loading}
-          title="Gelen Teklif Bulunmamaktadır">
+          title={IntLabel('warning_no_active_record')}>
           <FlatList
             contentContainerStyle={{
               display: 'flex',
@@ -86,7 +87,7 @@ const Offer = () => {
         <HandleData
           data={sentOffers}
           loading={loading}
-          title="Gönderilen Teklif Bulunmamaktadır">
+          title={IntLabel('warning_no_active_record')}>
           <FlatList
             contentContainerStyle={{
               display: 'flex',
@@ -102,7 +103,7 @@ const Offer = () => {
         <HandleData
           data={completedOffers}
           loading={loading}
-          title="Tamamlanmış Teklif Bulunmamaktadır">
+          title={IntLabel('warning_no_active_record')}>
           <FlatList
             contentContainerStyle={{
               display: 'flex',

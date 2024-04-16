@@ -2,6 +2,7 @@ import {View, Text, Image, Pressable, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import {SIZES, temp} from '../constants/constants';
 import TrashIcon from '../assets/svg/firm/TrashIcon';
+import IntLabel from './IntLabel';
 
 const SharingCommentComp = ({item}: any) => {
   return (
@@ -24,9 +25,9 @@ const SharingCommentComp = ({item}: any) => {
             <Text className="text-customGray font-poppinsRegular text-xxs ">
               {item?.location}
             </Text>
-            <Text className="text-customGray font-poppinsRegular text-xxs ">
+            {/* <Text className="text-customGray font-poppinsRegular text-xxs ">
               Lorem, ipsum.
-            </Text>
+            </Text> */}
           </View>
         </View>
 
@@ -43,7 +44,7 @@ const SharingCommentComp = ({item}: any) => {
             <TrashIcon fill={'white'} />
           </View>
           <Text className="text-customGray font-poppinsRegular text-base ">
-            Sil
+            {IntLabel('delete')}
           </Text>
         </TouchableOpacity>
       </View>

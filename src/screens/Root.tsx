@@ -36,6 +36,7 @@ import {
   setMessage,
   setTotalUsers,
 } from '../redux/slices/hubConnection';
+import VideoPlayer from './auth/VideoPlayer';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -112,6 +113,7 @@ const UserStack = () => {
 const AuthStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="video" component={VideoPlayer} />
       <Stack.Screen name="login" component={Login} />
     </Stack.Navigator>
   );
@@ -137,29 +139,21 @@ const Root = () => {
   });
 
   temp.on('MessageReceived', message => {
-    console.log(message);
-
     const now = new Date();
     const createdDate = `${now.getHours()}:${
       (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
     }`;
-    if (message.includes('https://estheticallv2-api.ranna.com.tr/wwwroot')) {
-      dispatch(
-        addMessage({
-          message: '',
-          createdDate: createdDate,
-          imageUrl: message,
-        }),
-      );
-    } else {
-      dispatch(
-        addMessage({
-          message: message,
-          createdDate: createdDate,
-          imageUrl: null,
-        }),
-      );
-    }
+    dispatch(
+      addMessage({
+        message: message.message,
+        createdDate: createdDate,
+        image0: message.images[0],
+        image1: message.images[1],
+        image2: message.images[2],
+        image3: message.images[3],
+        image4: message.images[4],
+      }),
+    );
   });
 
   temp.on('updateTotals', data => {

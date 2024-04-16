@@ -7,6 +7,7 @@ import WebClient from '../../utility/WebClient';
 import {SIZES, temp} from '../../constants/constants';
 import SharingCommentComp from '../../components/SharingCommentComp';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
+import IntLabel from '../../components/IntLabel';
 
 const SharingComments = ({route}: any) => {
   const {Post, loading} = WebClient();
@@ -26,7 +27,7 @@ const SharingComments = ({route}: any) => {
   }, []);
 
   return (
-    <MenuWrapper title="Paylaşımlar - Yorumlar">
+    <MenuWrapper title={IntLabel('sharings') + ' - ' + IntLabel('comments')}>
       <HandleData loading={loading}>
         <View className="w-[95%]">
           <View className="bg-white rounded-xl overflow-hidden border border-customLightGray mb-[15]">

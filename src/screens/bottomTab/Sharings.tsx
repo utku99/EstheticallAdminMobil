@@ -7,6 +7,7 @@ import HandleData from '../../components/HandleData';
 import MenuWrapper from '../menu/MenuWrapper';
 import CustomButtons from '../../components/CustomButtons';
 import {OneSignal} from 'react-native-onesignal';
+import IntLabel from '../../components/IntLabel';
 
 const Sharings = () => {
   const {Post, loading} = WebClient();
@@ -48,11 +49,11 @@ const Sharings = () => {
   }, [OneSignal.User.pushSubscription.getPushSubscriptionId()]);
 
   return (
-    <MenuWrapper title="Paylaşımlar" type="sharing">
+    <MenuWrapper title={IntLabel('sharings')} type="sharing">
       <HandleData
         data={sharings}
         loading={loading}
-        title="Paylaşımınız Bulunmamaktadır">
+        title={IntLabel('warning_no_active_record')}>
         <FlatList
           contentContainerStyle={{
             display: 'flex',

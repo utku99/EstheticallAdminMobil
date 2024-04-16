@@ -6,6 +6,7 @@ import CalendarIcon from '../assets/svg/bottomTab/CalendarIcon';
 import OfferIcon from '../assets/svg/bottomTab/OfferIcon';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
+import IntLabel from './IntLabel';
 
 const BottomTab = () => {
   const navigation = useNavigation();
@@ -20,7 +21,7 @@ const BottomTab = () => {
         onPress={() => navigation.navigate('sharing')}>
         <SharingIcon />
         <Text className="font-poppinsMedium text-xxs text-customGray">
-          Paylaşımlar
+          {IntLabel('sharings')}
         </Text>
       </Pressable>
       <Pressable
@@ -28,7 +29,7 @@ const BottomTab = () => {
         onPress={() => navigation.navigate('incomingmessage')}>
         <MessageIcon />
         <Text className="font-poppinsMedium text-xxs text-customGray">
-          Mesajlar
+          {IntLabel('messages')}
         </Text>
       </Pressable>
       <Pressable
@@ -36,7 +37,7 @@ const BottomTab = () => {
         onPress={() => navigation.navigate('appointment')}>
         <CalendarIcon />
         <Text className="font-poppinsMedium text-xxs text-customGray">
-          Randevular
+          {IntLabel('appointments')}
         </Text>
       </Pressable>
       <Pressable
@@ -44,7 +45,7 @@ const BottomTab = () => {
         onPress={() => navigation.navigate('offer')}>
         <OfferIcon />
         <Text className="font-poppinsMedium text-xxs text-customGray">
-          Teklifler
+          {IntLabel('offers')}
         </Text>
       </Pressable>
     </View>

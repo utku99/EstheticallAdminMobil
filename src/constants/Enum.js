@@ -15,7 +15,7 @@ export const appointmentOperationStates = [
 ]
 
 export const currencyTypes = [
-    { value: 1, label: "Türk Lirası",icon:"₺" },
+    { value: 1, label: "TL",icon:"₺" },
     { value: 2, label: "Dolar",icon:"$" },
     { value: 3, label: "Euro" ,icon:"€"},
 ]

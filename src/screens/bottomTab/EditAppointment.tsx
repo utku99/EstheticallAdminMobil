@@ -11,6 +11,7 @@ import {currencyTypes, offerStates} from '../../constants/Enum';
 import {useFormik} from 'formik';
 import {useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
+import IntLabel from '../../components/IntLabel';
 
 const EditAppointment = () => {
   const {Post, loading} = WebClient();
@@ -59,7 +60,7 @@ const EditAppointment = () => {
   });
 
   return (
-    <MenuWrapper title="Randevuyu Düzenle">
+    <MenuWrapper title={IntLabel('edit_appointment')}>
       <View className="items-center">
         <View
           className={`h-fit border border-customLightGray rounded-xl bg-white `}
@@ -92,7 +93,7 @@ const EditAppointment = () => {
           <View className="p-[10px] space-y-3">
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Durum:
+                {IntLabel('state')}:
               </Text>
               <CustomInputs
                 type="dropdown"
@@ -112,28 +113,28 @@ const EditAppointment = () => {
             </View> */}
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Açıklama:
+                {IntLabel('desc')}:
               </Text>
               <CustomInputs type="textarea" />
             </View>
 
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Meeting Link:
+                {IntLabel('meeting_link')}:
               </Text>
               <CustomInputs type="text" />
             </View>
 
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                İşlem Tarihi:
+                {IntLabel('transaction_date')}:
               </Text>
               <CustomInputs type="date" value={formik.values.date} />
             </View>
 
             <CustomButtons
               type="solid"
-              label="Kaydet"
+              label={IntLabel('save')}
               style={{alignSelf: 'center'}}
               onPress={() => ''}
             />

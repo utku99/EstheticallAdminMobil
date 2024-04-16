@@ -6,6 +6,7 @@ import MessageComp from '../../components/MessageComp';
 import {useSelector} from 'react-redux';
 import WebClient from '../../utility/WebClient';
 import {useNavigation} from '@react-navigation/native';
+import IntLabel from '../../components/IntLabel';
 
 const IncomingMessage = () => {
   const {connection, message, connectionId, totalUsers} = useSelector(
@@ -35,10 +36,10 @@ const IncomingMessage = () => {
   }, []);
 
   return (
-    <MenuWrapper title="Mesajlar" type="message">
+    <MenuWrapper title={IntLabel('messages')} type="message">
       <HandleData
         data={users}
-        title={'Mesajınız Bulunmamaktadır'}
+        title={IntLabel('warning_no_active_record')}
         loading={loading}>
         <FlatList
           contentContainerStyle={{display: 'flex', gap: 15}}

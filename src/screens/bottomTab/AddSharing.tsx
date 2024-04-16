@@ -10,6 +10,7 @@ import AddPhotoComp from '../../components/AddPhotoComp';
 import CustomButtons from '../../components/CustomButtons';
 import {Switch} from 'react-native-paper';
 import {useFormik} from 'formik';
+import IntLabel from '../../components/IntLabel';
 
 const AddSharing = () => {
   const {Post, loading} = WebClient();
@@ -102,15 +103,15 @@ const AddSharing = () => {
   }, [formik.values.office]);
 
   return (
-    <MenuWrapper title="Paylaşım Ekle">
+    <MenuWrapper title={IntLabel('add_sharing')}>
       <HandleData
         data={['']}
         loading={loading}
-        title="Paylaşımınız Bulunmamaktadır">
+        title={IntLabel('warning_no_active_record')}>
         <View style={{width: SIZES.width * 0.9, flex: 1}}>
           <CustomInputs
             type="dropdown"
-            placeholder="Şube"
+            placeholder={IntLabel('office')}
             dropdownData={companyOffice}
             value={formik.values.office}
             onChange={(e: any) => formik.setFieldValue('office', e)}
@@ -118,7 +119,7 @@ const AddSharing = () => {
 
           <CustomInputs
             type="dropdown"
-            placeholder="Hizmet"
+            placeholder={IntLabel('service')}
             dropdownData={services}
             value={formik.values.service}
             onChange={(e: any) => formik.setFieldValue('service', e)}
@@ -126,7 +127,7 @@ const AddSharing = () => {
 
           <CustomInputs
             type="dropdown"
-            placeholder="Alt Hizmet"
+            placeholder={IntLabel('sub_service')}
             dropdownData={services
               .find(
                 (item: any) => item.serviceId === formik.values.service?.value,
@@ -141,21 +142,21 @@ const AddSharing = () => {
 
           <CustomInputs
             type="text"
-            placeholder="Başlık"
+            placeholder={IntLabel('title')}
             value={formik.values.title}
             onChangeText={formik.handleChange('title')}
           />
 
           <CustomInputs
             type="textarea"
-            placeholder="İçerik"
+            placeholder={IntLabel('content')}
             value={formik.values.content}
             onChangeText={formik.handleChange('content')}
           />
 
           <CustomInputs
             type="text"
-            placeholder="Dış Link"
+            placeholder={IntLabel('external_link')}
             value={formik.values.externalLink}
             onChangeText={formik.handleChange('externalLink')}
           />
@@ -180,7 +181,7 @@ const AddSharing = () => {
             />
             <View className="flex-row items-center space-x-3 absolute right-0 top-4">
               <Text className="text-base font-poppinsMedium text-customGray ">
-                {formik.values.statu ? 'Aktif' : 'Pasif'}
+                {formik.values.statu ? IntLabel('active') : IntLabel('passive')}
               </Text>
               <Switch
                 value={formik.values.statu}
@@ -198,7 +199,7 @@ const AddSharing = () => {
 
           <CustomButtons
             type="solid"
-            label="Paylaşım Yap"
+            label={IntLabel('add')}
             theme="big"
             onPress={formik.handleSubmit}
           />
