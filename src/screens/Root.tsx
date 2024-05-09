@@ -1,4 +1,4 @@
-import {Pressable} from 'react-native';
+import {Pressable, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
@@ -68,11 +68,14 @@ const UserStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerLeft: () => (
-          <Pressable onPress={() => navigation.goBack()}>
-            <HeaderBackIcon />
-          </Pressable>
-        ),
+        headerLeft: ({canGoBack}) =>
+          canGoBack ? (
+            <Pressable onPress={() => navigation.goBack()}>
+              <HeaderBackIcon />
+            </Pressable>
+          ) : (
+            <View></View>
+          ),
         headerTitle: () => (
           <Pressable onPress={() => navigation.navigate('sharing')}>
             <EstheticLogo width={133} height={38} />
@@ -123,44 +126,46 @@ const Root = () => {
   const {isLoggedIn} = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
 
-  const temp = new signalR.HubConnectionBuilder()
-    .withUrl(`https://estheticallv2-api.ranna.com.tr/chathub`)
-    .configureLogging(signalR.LogLevel.None)
-    .build();
+  useEffect(() => {
+    const temp = new signalR.HubConnectionBuilder()
+      .withUrl(`https://estheticallv2-api.ranna.com.tr/chathub`)
+      .configureLogging(signalR.LogLevel.None)
+      .build();
 
-  dispatch(setConnection(temp));
+    dispatch(setConnection(temp));
 
-  temp.on('forceDisconnect', message => {
-    temp.stop();
-  });
+    temp.on('forceDisconnect', message => {
+      temp.stop();
+    });
 
-  temp.on('GetConnectionId', message => {
-    dispatch(setConnectionId(message));
-  });
+    temp.on('GetConnectionId', message => {
+      dispatch(setConnectionId(message));
+    });
 
-  temp.on('MessageReceived', message => {
-    const now = new Date();
-    const createdDate = `${now.getHours()}:${
-      (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
-    }`;
-    dispatch(
-      addMessage({
-        message: message.message,
-        createdDate: createdDate,
-        image0: message.images[0],
-        image1: message.images[1],
-        image2: message.images[2],
-        image3: message.images[3],
-        image4: message.images[4],
-      }),
-    );
-  });
+    temp.on('MessageReceived', message => {
+      const now = new Date();
+      const createdDate = `${now.getHours()}:${
+        (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
+      }`;
+      dispatch(
+        setMessage({
+          message: message.message,
+          createdDate: createdDate,
+          image0: message.images[0],
+          image1: message.images[1],
+          image2: message.images[2],
+          image3: message.images[3],
+          image4: message.images[4],
+        }),
+      );
+    });
 
-  temp.on('updateTotals', data => {
-    dispatch(setTotalUsers(data));
-  });
+    temp.on('updateTotals', data => {
+      dispatch(setTotalUsers(data));
+    });
 
-  temp.start();
+    temp.start();
+  }, []);
 
   const handleAuth = () => {
     if (isLoggedIn) {

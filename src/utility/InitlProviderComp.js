@@ -3,6 +3,7 @@ import { IntlProvider } from "react-intl"
 import { useDispatch, useSelector } from 'react-redux'
 import WebClient from './WebClient'
 import { setLanguage, setLanguages } from '../redux/slices/user'
+import { deviceLanguage } from '../constants/constants'
 
 
 
@@ -15,7 +16,7 @@ const InitlProviderComp = ({ children }) => {
     useEffect(() => {
         const func = async () => {
             await Post("/api/Language/Languages", {}).then(res => {
-                if (res.data.code === "100") {
+                if (res.data.code === "100"  ) {
                     let temp1 = res.data.object.map(item=>(
                         {...item,
                         value:item.id,
@@ -23,12 +24,9 @@ const InitlProviderComp = ({ children }) => {
                         type: item.flag_code == "tr" ? 1 : 2,
                         }
                     ))
-                    let temp2 = res.data.object.find(item => language?.id== item.id)
+                    let temp2 = res.data.object.find(item => language ? (language?.id== item.id) : item.language_code=="tr" )
                     setAppParameter(JSON.parse(temp2.cms_translates))
                     dispatch(setLanguages(temp1))
-                }
-                if(!language){
-                    dispatch(setLanguage(temp2.find(item=>item.type==1)))
                 }
             })
         }
@@ -38,8 +36,8 @@ const InitlProviderComp = ({ children }) => {
 
 
     return (
-        <IntlProvider locale={language?.flag_code ?? "tr"} messages={appParameter} defaultLocale='tr' >
-            {children}
+        <IntlProvider locale={language?.language_code ?? deviceLanguage} messages={appParameter} defaultLocale={deviceLanguage} >
+            {appParameter ? children : ""}
         </IntlProvider>
     )
 }

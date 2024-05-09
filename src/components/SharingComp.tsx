@@ -12,36 +12,6 @@ import BlueTick from '../assets/svg/common/BlueTick';
 import moment from 'moment';
 import IntLabel from './IntLabel';
 
-const CommentComp = ({item}: any) => {
-  return (
-    <View className="space-y-2 ">
-      <View className="flex-row items-center space-x-3">
-        <View className="w-[55px] h-[55px] overflow-hidden rounded-full border-[0.6px] border-customGray">
-          <Image
-            source={{uri: item?.image}}
-            className="w-full h-full"
-            resizeMode="cover"
-          />
-        </View>
-        <View>
-          <Text className="text-customGray font-poppins text-xs font-bold">
-            {item?.fullName}
-          </Text>
-          <Text className="text-customGray font-poppins text-xs">
-            {item?.location}
-          </Text>
-        </View>
-      </View>
-      <Text className="text-xs text-customGray font-poppins">
-        {item?.comment}
-      </Text>
-      <Text className="text-xxs text-customGray font-poppins">
-        {item?.createdDate}
-      </Text>
-    </View>
-  );
-};
-
 const SharingComp = ({item}: {item: any}) => {
   const [sharedDetail, setSharedDetail] = useState<any>(null);
   const [index, setIndex] = useState<any>(0);
@@ -59,41 +29,9 @@ const SharingComp = ({item}: {item: any}) => {
 
   return (
     <View
-      className={`h-fit border border-customLightGray rounded-xl bg-white `}
+      className={`h-fit border border-customLightGray rounded-xl bg-white overflow-hidden`}
       style={{width: SIZES.width * 0.95}}>
-      {/* header */}
-      <View className="flex-row  items-center p-[10px]">
-        <View className="relative">
-          <View className="w-[55px] h-[55px] overflow-hidden rounded-full border-[0.6px] border-customGray ">
-            <Image
-              source={{uri: item?.logoUrl}}
-              className="w-full h-full"
-              resizeMode="cover"
-            />
-          </View>
-        </View>
-        <View className="pl-2 flex-shrink">
-          <Text
-            numberOfLines={1}
-            className="font-poppinsSemiBold text-xs text-customGray">
-            {item?.subject}
-          </Text>
-          <Text
-            numberOfLines={1}
-            className="font-poppinsRegular text-xs text-customGray">
-            {item?.serviceNameModel?.label}
-          </Text>
-        </View>
-        {/* <View className="items-center">
-          <Text className="text-customGray font-poppinsRegular text-xxs">
-            Yorumlar
-          </Text>
-          <CustomInputs type="rating" value={3} />
-        </View> */}
-      </View>
-
-      {/* carousel */}
-      <View className="w-full aspect-[1.5]">
+      <View className="w-full aspect-[1.3]">
         <Carousel
           ref={isCarousel}
           data={item?.images?.map((img: any) => ({
@@ -136,8 +74,17 @@ const SharingComp = ({item}: {item: any}) => {
         />
       </View>
 
-      {/* description */}
-      <View className="px-[10px] py-3 space-y-1">
+      <View className="p-[10px] space-y-1">
+        <Text
+          numberOfLines={1}
+          className="font-poppinsRegular text-xs text-customGray">
+          {item?.serviceNameModel?.label}
+        </Text>
+        <Text
+          numberOfLines={1}
+          className="font-poppinsSemiBold text-xs text-customGray">
+          {item?.subject}
+        </Text>
         <Text
           numberOfLines={4}
           className="font-poppinsRegular text-xs text-customGray">

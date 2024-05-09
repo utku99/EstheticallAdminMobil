@@ -1,5 +1,5 @@
 import {View, Text, Image} from 'react-native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {SIZES} from '../constants/constants';
 import {useSelector} from 'react-redux';
 
@@ -9,70 +9,145 @@ const DoctorMessageComp = ({item}: any) => {
   return (
     <>
       {item.senderId == user.companyId ? (
-        <View className={`  flex-row items-center self-end max-w-[70%]`}>
-          <View className="space-y-[10px]">
-            {[...Array(5).keys()].map(index => {
-              const imageKey = `image${index}`;
-              const imageValue = item[imageKey];
-              if (
-                imageValue &&
-                imageValue !== 'NoImage' &&
-                !imageValue.includes('trno') &&
-                imageValue !== 'no image'
-              ) {
-                return (
-                  <View key={imageKey} className="w-[150px] h-[150px] self-end">
-                    <Image
-                      source={{uri: imageValue}}
-                      className="w-full h-full"
-                      resizeMode="cover"
-                    />
-                  </View>
-                );
-              }
-            })}
-            {item?.message != '' && (
-              <Text className="text-customGray font-poppinsRegular text-xs border border-customLightGray bg-white rounded-xl rounded-tr-none  p-[10px] ">
-                {item?.message}
-              </Text>
-            )}
-            <Text className="text-customGray font-poppinsRegular text-xxs self-end">
-              {item?.createdDate}
-            </Text>
+        <View
+          className={`flex-col items-end self-end max-w-[70%] w-fit space-y-1`}>
+          <View className="space-y-1">
+            {item?.image0 &&
+              item?.image0 != 'NoImage' &&
+              !item?.image0.includes('trno') && (
+                <View className="w-[100px] h-[100px] self-end">
+                  <Image
+                    source={{uri: item?.image0}}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+            {item?.image1 &&
+              item?.image1 != 'NoImage' &&
+              !item?.image1.includes('trno') && (
+                <View className="w-[100px] h-[100px] self-end">
+                  <Image
+                    source={{uri: item?.image1}}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+            {item?.image2 &&
+              item?.image2 != 'NoImage' &&
+              !item?.image2.includes('trno') && (
+                <View className="w-[100px] h-[100px] self-end">
+                  <Image
+                    source={{uri: item?.image2}}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+            {item?.image3 &&
+              item?.image3 != 'NoImage' &&
+              !item?.image3.includes('trno') && (
+                <View className="w-[100px] h-[100px] self-end">
+                  <Image
+                    source={{uri: item?.image3}}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+            {item?.image4 &&
+              item?.image4 != 'NoImage' &&
+              !item?.image4.includes('trno') && (
+                <View className="w-[100px] h-[100px] self-end">
+                  <Image
+                    source={{uri: item?.image4}}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
           </View>
+
+          {item?.message != '' && (
+            <Text className="text-customGray font-poppinsRegular text-xs break-all border border-customLightGray bg-white rounded-lg rounded-tr-none  py-2 px-4 ">
+              {item?.message}
+            </Text>
+          )}
+          <Text className="text-customGray font-poppinsRegular text-xxs self-end">
+            {item?.createdDate}
+          </Text>
         </View>
       ) : (
-        <View className={` flex-row items-center self-start max-w-[70%]`}>
-          <View className="space-y-[10px]">
-            {[...Array(5).keys()].map(index => {
-              const imageKey = `image${index}`;
-              const imageValue = item[imageKey];
-              if (
-                imageValue &&
-                imageValue !== 'NoImage' &&
-                !imageValue.includes('trno') &&
-                imageValue !== 'no image'
-              ) {
-                return (
-                  <View key={imageKey} className="w-[150px] h-[150px] self-end">
-                    <Image
-                      source={{uri: imageValue}}
-                      className="w-full h-full"
-                      resizeMode="cover"
-                    />
-                  </View>
-                );
-              }
-            })}
-            {item?.message != '' && (
-              <Text className="text-customGray font-poppinsRegular text-xs border border-customLightGray bg-white rounded-xl rounded-tl-none  p-[10px] ">
-                {item?.message}
-              </Text>
-            )}
-            <Text className="text-customGray font-poppinsRegular text-xxs ">
-              {item?.createdDate}
-            </Text>
+        <View
+          className={`flex-col items-end self-start max-w-[70%] w-fit space-y-1`}>
+          <View className="space-y-1">
+            {item?.image0 &&
+              item?.image0 != 'NoImage' &&
+              !item?.image0.includes('trno') && (
+                <View className="w-[100px] h-[100px] self-end">
+                  <Image
+                    source={{uri: item?.image0}}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+            {item?.image1 &&
+              item?.image1 != 'NoImage' &&
+              !item?.image1.includes('trno') && (
+                <View className="w-[100px] h-[100px] self-end">
+                  <Image
+                    source={{uri: item?.image1}}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+            {item?.image2 &&
+              item?.image2 != 'NoImage' &&
+              !item?.image2.includes('trno') && (
+                <View className="w-[100px] h-[100px] self-end">
+                  <Image
+                    source={{uri: item?.image2}}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+            {item?.image3 &&
+              item?.image3 != 'NoImage' &&
+              !item?.image3.includes('trno') && (
+                <View className="w-[100px] h-[100px] self-end">
+                  <Image
+                    source={{uri: item?.image3}}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+            {item?.image4 &&
+              item?.image4 != 'NoImage' &&
+              !item?.image4.includes('trno') && (
+                <View className="w-[100px] h-[100px] self-end">
+                  <Image
+                    source={{uri: item?.image4}}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
           </View>
+
+          {item?.message != '' && (
+            <Text className="text-customGray font-poppinsRegular text-xs self-start break-all border border-customLightGray bg-white rounded-lg rounded-tr-none  py-2 px-4 ">
+              {item?.message}
+            </Text>
+          )}
+
+          <Text className="text-customGray font-poppinsRegular text-xxs ">
+            {item?.createdDate}
+          </Text>
         </View>
       )}
     </>

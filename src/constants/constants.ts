@@ -1,4 +1,5 @@
-import { Dimensions } from "react-native";
+import { useEffect, useState } from "react";
+import { Dimensions, NativeModules, Platform, StatusBar } from "react-native";
 import DeviceInfo from "react-native-device-info";
 
 
@@ -19,5 +20,17 @@ export const SIZES = {
     isSmall: Dimensions.get('window').width <= 375 ? true : false,
 };
 
+export const deviceLanguage =
+Platform.OS === 'ios'
+  ? NativeModules.SettingsManager.settings.AppleLocale ||
+    NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
+  : NativeModules.I18nManager.localeIdentifier.split("_")[0]
+
+  export const viewedType = {
+    package :0,
+    company:1,
+    office:2,
+    sharing:4
+}
 
 export const temp = "https://images.unsplash.com/photo-1683009686716-ac2096a5a73b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8"

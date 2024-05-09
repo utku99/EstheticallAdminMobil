@@ -19,15 +19,15 @@ import WebClient, {toast} from '../../utility/WebClient';
 import {useDispatch, useSelector} from 'react-redux';
 import {SIZES} from '../../constants/constants';
 import {useFormik} from 'formik';
-import {addMessage, setMessage} from '../../redux/slices/hubConnection';
+import {setMessage} from '../../redux/slices/hubConnection';
 import IntLabel from '../../components/IntLabel';
 
 const Message = ({route}: any) => {
   const scrollRef = useRef<any>(null);
-
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
   const {connection, message} = useSelector((state: any) => state.hub);
+  const [messages, setMessages] = useState<any>([]);
   const dispatch = useDispatch();
 
   const openGalery = () => {
@@ -35,7 +35,6 @@ const Message = ({route}: any) => {
       cropping: false,
       includeBase64: true,
       multiple: true,
-      maxFiles: 5,
     }).then((image: any) => {
       let temp = image.map((img: any) => img.data);
       formik.setFieldValue('images', temp);
@@ -51,20 +50,23 @@ const Message = ({route}: any) => {
       message: string;
     },
     onSubmit: (values, {resetForm, setFieldValue}) => {
-      Post('/api/Chatting/SendMessage', {
-        roomID: route.params?.selectedUser?.roomID,
-        senderId:
-          user.companyOfficeId == 0 ? user.companyId : user.companyOfficeId,
-        senderType: user.companyOfficeId == 0 ? 2 : 3,
-        message: values.message,
-        images: values.images,
-        messagesType: route.params?.selectedUser?.messagesType,
-        receiverId: route.params?.selectedUser?.correspondentID,
-        receiverType: route.params?.selectedUser?.correspondentType,
-        serviceID: message[0]?.serviceID,
-      }).then(res => {
-        console.log(res.data, '---');
-
+      Post(
+        '/api/Chatting/SendMessage',
+        {
+          roomID: route.params?.selectedUser?.roomID,
+          senderId:
+            user.companyOfficeId == 0 ? user.companyId : user.companyOfficeId,
+          senderType: user.companyOfficeId == 0 ? 2 : 3,
+          message: values.message,
+          images: values.images,
+          messagesType: route.params?.selectedUser?.messagesType,
+          receiverId: route.params?.selectedUser?.correspondentID,
+          receiverType: route.params?.selectedUser?.correspondentType,
+          serviceID: message[0]?.serviceID,
+        },
+        false,
+        false,
+      ).then(res => {
         if (res.data.code == '100') {
           resetForm();
           setFieldValue('images', []);
@@ -73,18 +75,19 @@ const Message = ({route}: any) => {
           const createdDate = `${now.getHours()}:${
             (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
           }`;
-          dispatch(
-            addMessage({
-              message: res.data.object.message,
-              createdDate: createdDate,
-              senderId: res.data.object.senderID,
-              image0: res.data.object.image,
-              image1: res.data.object.image2,
-              image2: res.data.object.image3,
-              image3: res.data.object.image4,
-              image4: res.data.object.image5,
-            }),
-          );
+
+          let temp = messages;
+          temp.push({
+            message: res.data.object.message,
+            createdDate: createdDate,
+            senderId: res.data.object.senderID,
+            image0: res.data.object.image,
+            image1: res.data.object.image2,
+            image2: res.data.object.image3,
+            image3: res.data.object.image4,
+            image4: res.data.object.image5,
+          });
+          setMessages(temp);
         }
       });
     },
@@ -102,32 +105,37 @@ const Message = ({route}: any) => {
       false,
       false,
     ).then((res: any) => {
-      dispatch(setMessage(res.data.object));
+      setMessages(res.data.object);
     });
     return () => {
       connection.invoke('LeaveRoom');
     };
   }, []);
 
+  useEffect(() => {
+    message && setMessages([...messages, message]);
+  }, [message]);
+
   return (
     <MenuWrapper title={IntLabel('messages')} scrollEnabled={false}>
       <HandleData
         title={IntLabel('warning_no_active_record')}
         loading={loading}
-        data={message}>
+        data={messages}>
         <View
-          className=" "
+          className="flex-1"
           style={{width: SIZES.width * 0.95, height: SIZES.height * 0.69}}>
           <FlatList
             ref={scrollRef}
             onContentSizeChange={() =>
               scrollRef.current?.scrollToEnd({animated: false})
             }
-            data={message}
-            className="mb-5"
+            className="mb-5 "
             contentContainerStyle={{gap: 15}}
+            data={messages}
             renderItem={({item}) => <DoctorMessageComp item={item} />}
           />
+
           <View className="space-y-1">
             {formik.values.images?.length !== 0 && (
               <View>
@@ -145,13 +153,12 @@ const Message = ({route}: any) => {
                       </View>
                       <Pressable
                         onPress={() => {
-                          const updatedImages = formik.values.images.filter(
-                            (_: any, i: number) => i !== index,
-                          );
-                          formik.setFieldValue('images', updatedImages);
+                          let a = formik.values.images;
+                          a.splice(index, 1);
+                          formik.setFieldValue('images', a);
                         }}
                         className="absolute bottom-1 right-1 bg-customOrange rounded-md w-[24px] h-[24px] items-center justify-center">
-                        <TrashIcon width={14} height={17} fill="white" />
+                        <TrashIcon width={14} height={17} />
                       </Pressable>
                     </View>
                   )}
@@ -168,7 +175,7 @@ const Message = ({route}: any) => {
                 <TextInput
                   value={formik.values.message}
                   onChangeText={formik.handleChange('message')}
-                  className=" flex-1 pl-2 text-sm text-customGray font-poppinsRegular"
+                  className=" flex-1 text-sm text-customGray font-poppinsRegular  p-0 pl-2 h-full"
                   placeholder={IntLabel('write_message')}
                   placeholderTextColor={'#4D4A48'}
                 />

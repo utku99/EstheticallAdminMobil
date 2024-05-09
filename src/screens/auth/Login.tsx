@@ -50,7 +50,7 @@ const Login = () => {
   return (
     <ImageBackground
       className="flex-1 justify-center"
-      source={require('../../assets/images/authBg/auth2.jpg')}
+      source={require('../../assets/images/authBg/auth.jpg')}
       resizeMode="cover">
       <SafeAreaView className="flex-1">
         <ScrollView
@@ -68,7 +68,7 @@ const Login = () => {
               <LangChoiceComp />
             </View>
             <View className="">
-              <EstheticLogo />
+              <EstheticLogo width={165} height={47} />
             </View>
           </View>
 

@@ -25,14 +25,13 @@ const IncomingMessage = () => {
         companyOfficeID: user?.companyOfficeId,
         userID: 0,
       }).then(res => setUsers(res.data.object));
-
-      connection.invoke('LoginMessageHub', {
-        UserID: user?.companyId,
-        TypeID: user?.companyOfficeId == 0 ? 2 : 3,
-      });
     } else {
       navigation.navigate('sharing');
     }
+
+    return () => {
+      connection.invoke('LeaveRoom');
+    };
   }, []);
 
   return (

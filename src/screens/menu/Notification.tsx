@@ -9,7 +9,7 @@ import HandleData from '../../components/HandleData';
 import IntLabel from '../../components/IntLabel';
 
 const Notification = () => {
-  const {user} = useSelector((state: any) => state.user);
+  const {user, language} = useSelector((state: any) => state.user);
   const {Post, loading} = WebClient();
   const [notifications, setNotifications] = useState<any>();
   const [clicked, setClicked] = useState<any>(false);
@@ -17,7 +17,7 @@ const Notification = () => {
   useEffect(() => {
     Post('/api/Notification/GetNotificationsByUserID', {
       userID: user?.id,
-      languageId: 1,
+      languageId: language?.type,
     }).then(res => {
       setNotifications(res.data.object);
     });

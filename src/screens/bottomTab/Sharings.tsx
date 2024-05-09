@@ -11,8 +11,9 @@ import IntLabel from '../../components/IntLabel';
 
 const Sharings = () => {
   const {Post, loading} = WebClient();
-  const {user} = useSelector((state: any) => state.user);
+  const {user, language} = useSelector((state: any) => state.user);
   const [sharings, setSharings] = useState([]);
+  const {connection, connectionId} = useSelector((state: any) => state.hub);
 
   OneSignal.initialize('36ba4e67-6a5f-4bae-9269-4ccdededab2d');
 
@@ -35,7 +36,7 @@ const Sharings = () => {
       Post('/api/Notification/SendOneSignalID', {
         oneSignalID: OneSignal.User.pushSubscription.getPushSubscriptionId(),
         userID: user?.id,
-        languageId: 1,
+        languageId: language?.type,
         companyID: user?.companyOfficeId == 0 ? user?.companyId : 0,
         companyOfficeID: user?.companyOfficeId == 0 ? 0 : user?.companyOfficeId,
       }).then(res => {
@@ -44,6 +45,13 @@ const Sharings = () => {
         } else {
           console.log('no player id');
         }
+      });
+    }
+
+    if (user && connection) {
+      connection.invoke('LoginMessageHub', {
+        UserID: user?.companyId,
+        TypeID: user?.companyOfficeId == 0 ? 2 : 3,
       });
     }
   }, [OneSignal.User.pushSubscription.getPushSubscriptionId()]);
@@ -60,6 +68,7 @@ const Sharings = () => {
             gap: 15,
             paddingBottom: 20,
           }}
+          initialNumToRender={4}
           data={sharings}
           renderItem={({item}) => <SharingComp item={item} />}
         />
