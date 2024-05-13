@@ -8,9 +8,14 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import IntLabel from './IntLabel';
 
-const BottomTab = () => {
+const BottomTab = ({props}: any) => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+
+  let routeName =
+    props?.state?.routes[0]?.state?.routes[
+      props.state.routes[0].state.routes.length - 1
+    ]?.name ?? 'sharing';
 
   return (
     <View
@@ -19,32 +24,50 @@ const BottomTab = () => {
       <Pressable
         className="items-center space-y-1"
         onPress={() => navigation.navigate('sharing')}>
-        <SharingIcon />
-        <Text className="font-poppinsMedium text-xxs text-customGray">
+        <SharingIcon fill={routeName == 'sharing' ? '#FF8170' : '#4D4A48'} />
+        <Text
+          className={`${
+            routeName == 'sharing' ? 'text-customOrange' : 'text-customGray'
+          } font-poppinsMedium text-xxs `}>
           {IntLabel('sharings')}
         </Text>
       </Pressable>
       <Pressable
         className="items-center space-y-1"
         onPress={() => navigation.navigate('incomingmessage')}>
-        <MessageIcon />
-        <Text className="font-poppinsMedium text-xxs text-customGray">
+        <MessageIcon
+          fill={routeName == 'incomingmessage' ? '#FF8170' : '#4D4A48'}
+        />
+        <Text
+          className={`${
+            routeName == 'incomingmessage'
+              ? 'text-customOrange'
+              : 'text-customGray'
+          } font-poppinsMedium text-xxs `}>
           {IntLabel('messages')}
         </Text>
       </Pressable>
       <Pressable
         className="items-center space-y-1"
         onPress={() => navigation.navigate('appointment')}>
-        <CalendarIcon />
-        <Text className="font-poppinsMedium text-xxs text-customGray">
+        <CalendarIcon
+          fill={routeName == 'appointment' ? '#FF8170' : '#4D4A48'}
+        />
+        <Text
+          className={`${
+            routeName == 'appointment' ? 'text-customOrange' : 'text-customGray'
+          } font-poppinsMedium text-xxs `}>
           {IntLabel('appointments')}
         </Text>
       </Pressable>
       <Pressable
         className="items-center space-y-1"
         onPress={() => navigation.navigate('offer')}>
-        <OfferIcon />
-        <Text className="font-poppinsMedium text-xxs text-customGray">
+        <OfferIcon fill={routeName == 'offer' ? '#FF8170' : '#4D4A48'} />
+        <Text
+          className={`${
+            routeName == 'offer' ? 'text-customOrange' : 'text-customGray'
+          } font-poppinsMedium text-xxs `}>
           {IntLabel('offers')}
         </Text>
       </Pressable>

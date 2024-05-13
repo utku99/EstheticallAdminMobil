@@ -30,7 +30,6 @@ import NewOffer from './bottomTab/NewOffer';
 import EditAppointment from './bottomTab/EditAppointment';
 import * as signalR from '@microsoft/signalr';
 import {
-  addMessage,
   setConnection,
   setConnectionId,
   setMessage,
@@ -55,7 +54,7 @@ function DrawerMenu() {
 function BottomTabs() {
   return (
     <Tab.Navigator
-      tabBar={props => <BottomTab />}
+      tabBar={props => <BottomTab props={props} />}
       screenOptions={{headerShown: false}}>
       <Tab.Screen name="home2" component={UserStack} />
     </Tab.Navigator>

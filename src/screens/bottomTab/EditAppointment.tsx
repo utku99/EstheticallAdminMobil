@@ -120,16 +120,14 @@ const EditAppointment = () => {
 
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                {IntLabel('meeting_link')}:
-              </Text>
-              <CustomInputs type="text" />
-            </View>
-
-            <View>
-              <Text className="text-customGray font-poppinsMedium text-sm mb-1">
                 {IntLabel('transaction_date')}:
               </Text>
-              <CustomInputs type="date" value={formik.values.date} />
+              <CustomInputs
+                type="date"
+                value={formik.values.date}
+                onChange={(e: any) => formik.setFieldValue('date', e)}
+                error={formik.errors.date}
+              />
             </View>
 
             <CustomButtons

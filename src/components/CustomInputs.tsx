@@ -7,11 +7,7 @@ import {
   TextInputProps,
   TextInput,
 } from 'react-native';
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
 import {Dropdown} from 'react-native-element-dropdown';
-
 import CalendarIcon from '../assets/svg/common/CalendarIcon';
 import DropdownRightDownIcon from '../assets/svg/common/DropdownRightDownIcon';
 import DropdownRightUpIcon from '../assets/svg/common/DropdownRightUpIcon';
@@ -19,6 +15,9 @@ import EyeOpen from '../assets/svg/auth/EyeOpen';
 import {Rating} from 'react-native-ratings';
 import Tick from '../assets/svg/common/Tick';
 import IntLabel from './IntLabel';
+import {FormattedDate} from 'react-intl';
+import {useSelector} from 'react-redux';
+import DatePicker from 'react-native-date-picker';
 
 interface props extends TextInputProps {
   type:
@@ -66,6 +65,7 @@ const CustomInputs: React.FC<props> = ({
   const [isFocusDropdown, setIsFocusDropdown] = useState(false);
   const [showDateModal, setShowDateModal] = useState(false);
   const [showSecure, setShowSecure] = useState(secureTextEntry);
+  const {language} = useSelector((state: any) => state.user);
 
   return (
     <>
@@ -158,31 +158,36 @@ const CustomInputs: React.FC<props> = ({
       )}
       {type == 'date' && (
         <View className=" mb-3 w-full" style={style}>
-          <Pressable
-            onPress={() => setShowDateModal(!showDateModal)}
-            className="h-[40px] bg-white rounded-lg border border-customGray px-1 placeholder:text-customGray/[.5] flex-row items-center">
-            <TextInput
-              value={value}
-              placeholder={placeholder}
-              editable={false}
-              className="flex-1 text-customGray text-sm"
-            />
-            {showDateModal && (
-              <DateTimePicker
-                value={value}
-                onChange={(event: DateTimePickerEvent, date: any) =>
-                  onChange(date)
-                }
-                dateFormat="day month year"
-              />
-            )}
-            <TouchableOpacity onPress={() => setShowDateModal(!showDateModal)}>
-              <CalendarIcon />
-            </TouchableOpacity>
-          </Pressable>
-          {error && (
-            <Text className="text-red-400 text-xs ">{error?.message}</Text>
-          )}
+          <TouchableOpacity
+            className="h-[40px] bg-white rounded-lg border border-customGray px-2 placeholder:text-customGray/[.5] flex-row items-center"
+            onPress={() => setShowDateModal(true)}>
+            <Text
+              className={`flex-1 text-customGray ${
+                value != '' ? 'opacity-100' : 'opacity-50'
+              }  text-xs font-poppinsRegular `}>
+              {value != '' ? <FormattedDate value={value} /> : placeholder}
+            </Text>
+            <CalendarIcon />
+          </TouchableOpacity>
+          <DatePicker
+            modal
+            mode="date"
+            open={showDateModal}
+            date={value == '' ? new Date() : value}
+            locale={language?.flag_code ?? 'tr'}
+            onConfirm={date => {
+              setShowDateModal(false);
+              onChange(date);
+            }}
+            onCancel={() => {
+              setShowDateModal(false);
+            }}
+            title={IntLabel('select_date')}
+            confirmText={IntLabel('confirm')}
+            cancelText={IntLabel('cancel')}
+            className="w-10 bg-red-400"
+          />
+          {error && <Text className="text-red-400 text-xs ">{error}</Text>}
         </View>
       )}
       {type == 'dropdown' && (

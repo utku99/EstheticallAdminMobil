@@ -6,7 +6,7 @@ import LogOutIcon from '../assets/svg/userMenu/LogOutIcon';
 import {useNavigation} from '@react-navigation/native';
 import IntLabel from './IntLabel';
 
-const DrawerBar = () => {
+const DrawerBar = ({props}: any) => {
   const navigation = useNavigation();
   return (
     <DrawerContentScrollView>
@@ -14,8 +14,7 @@ const DrawerBar = () => {
         label={IntLabel('notifications')}
         onPress={() => navigation.navigate('notification')}
         icon={() => <NotificationIcon fill={'#FF8170'} />}
-        activeTintColor="red"
-        pressColor="blue"
+        pressColor="#8F7A6C"
         labelStyle={{
           fontFamily: 'Poppins-SemiBold',
           color: '#4D4A48',
@@ -26,8 +25,7 @@ const DrawerBar = () => {
         label={IntLabel('settings')}
         onPress={() => navigation.navigate('settings')}
         icon={() => <SettingsIcon />}
-        activeTintColor="red"
-        pressColor="blue"
+        pressColor="#8F7A6C"
         labelStyle={{
           fontFamily: 'Poppins-SemiBold',
           color: '#4D4A48',
@@ -38,8 +36,7 @@ const DrawerBar = () => {
         label={IntLabel('exit')}
         onPress={() => navigation.navigate('logout')}
         icon={() => <LogOutIcon />}
-        activeTintColor="red"
-        pressColor="blue"
+        pressColor="#8F7A6C"
         labelStyle={{
           fontFamily: 'Poppins-SemiBold',
           color: '#4D4A48',

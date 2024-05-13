@@ -5,12 +5,13 @@ import CustomInputs from './CustomInputs';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import WebClient from '../utility/WebClient';
 import {SIZES, temp} from '../constants/constants';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {Switch} from 'react-native-paper';
 import TrashIcon from '../assets/svg/firm/TrashIcon';
 import BlueTick from '../assets/svg/common/BlueTick';
 import moment from 'moment';
 import IntLabel from './IntLabel';
+import Video from 'react-native-video';
 
 const SharingComp = ({item}: {item: any}) => {
   const [sharedDetail, setSharedDetail] = useState<any>(null);
@@ -18,6 +19,7 @@ const SharingComp = ({item}: {item: any}) => {
   const {Post, loading} = WebClient();
   const isCarousel = useRef(null);
   const navigation = useNavigation();
+  const screenIsFocused = useIsFocused();
 
   useEffect(() => {
     Post('/api/Shared/ListCompanySharedsById', {
@@ -38,13 +40,26 @@ const SharingComp = ({item}: {item: any}) => {
             imgUrl: img.fileName,
             title: '',
           }))}
-          renderItem={({item}: any) => (
-            <Image
-              source={{uri: item?.imgUrl}}
-              className="w-full h-full"
-              resizeMode="cover"
-            />
-          )}
+          renderItem={({item}: any) =>
+            item?.imgUrl?.includes('mp4') ? (
+              <Video
+                source={{uri: item?.imgUrl}}
+                controls
+                repeat={false}
+                playInBackground={false}
+                paused={!screenIsFocused}
+                playWhenInactive={false}
+                resizeMode="cover"
+                className="w-full h-full "
+              />
+            ) : (
+              <Image
+                source={{uri: item?.imgUrl}}
+                className="w-full h-full"
+                resizeMode="cover"
+              />
+            )
+          }
           sliderWidth={SIZES.width * 0.95}
           itemWidth={SIZES.width * 0.95}
           loop={true}

@@ -62,11 +62,13 @@ const Message = ({route}: any) => {
           messagesType: route.params?.selectedUser?.messagesType,
           receiverId: route.params?.selectedUser?.correspondentID,
           receiverType: route.params?.selectedUser?.correspondentType,
-          serviceID: message[0]?.serviceID,
+          serviceID: messages[0]?.serviceID,
         },
         false,
         false,
       ).then(res => {
+        console.log(res.data);
+
         if (res.data.code == '100') {
           resetForm();
           setFieldValue('images', []);
