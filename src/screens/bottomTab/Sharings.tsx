@@ -36,7 +36,7 @@ const Sharings = () => {
       Post('/api/Notification/SendOneSignalID', {
         oneSignalID: OneSignal.User.pushSubscription.getPushSubscriptionId(),
         userID: user?.id,
-        languageId: language?.type,
+        languageId: language?.type ?? 1,
         companyID: user?.companyOfficeId == 0 ? user?.companyId : 0,
         companyOfficeID: user?.companyOfficeId == 0 ? 0 : user?.companyOfficeId,
       }).then(res => {

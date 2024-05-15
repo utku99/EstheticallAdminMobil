@@ -17,7 +17,7 @@ const Notification = () => {
   useEffect(() => {
     Post('/api/Notification/GetNotificationsByUserID', {
       userID: user?.id,
-      languageId: language?.type,
+      languageId: language?.type ?? 1,
     }).then(res => {
       setNotifications(res.data.object);
     });

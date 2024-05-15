@@ -119,7 +119,7 @@ const Message = ({route}: any) => {
   }, [message]);
 
   return (
-    <MenuWrapper title={IntLabel('messages')} scrollEnabled={false}>
+    <MenuWrapper title={IntLabel('messages')}>
       <HandleData
         title={IntLabel('warning_no_active_record')}
         loading={loading}
