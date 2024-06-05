@@ -40,6 +40,7 @@ import TermsOfUse from './menu/legalTexts/TermsOfUse';
 import Help from './menu/legalTexts/Help';
 import PrivacyPolicy from './menu/legalTexts/PrivacyPolicy';
 import AboutUs from './menu/legalTexts/AboutUs';
+import SocialMediaSharings from './bottomTab/SocialMediaSharings';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -99,6 +100,10 @@ const UserStack = () => {
         },
       }}>
       <Stack.Screen name="sharing" component={Sharings} />
+      <Stack.Screen
+        name="socialmediasharings"
+        component={SocialMediaSharings}
+      />
       <Stack.Screen name="sharingcomments" component={SharingComments} />
       <Stack.Screen name="addsharing" component={AddSharing} />
       <Stack.Screen name="incomingmessage" component={IncomingMessage} />

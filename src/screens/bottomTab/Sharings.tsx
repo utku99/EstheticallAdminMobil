@@ -8,12 +8,16 @@ import MenuWrapper from '../menu/MenuWrapper';
 import CustomButtons from '../../components/CustomButtons';
 import {OneSignal} from 'react-native-onesignal';
 import IntLabel from '../../components/IntLabel';
+import {useIntl} from 'react-intl';
+import {useNavigation} from '@react-navigation/native';
 
 const Sharings = () => {
   const {Post, loading} = WebClient();
   const {user, language} = useSelector((state: any) => state.user);
   const [sharings, setSharings] = useState([]);
   const {connection, connectionId} = useSelector((state: any) => state.hub);
+  const intl = useIntl();
+  const navigation = useNavigation<any>();
 
   OneSignal.initialize('36ba4e67-6a5f-4bae-9269-4ccdededab2d');
 
@@ -73,6 +77,17 @@ const Sharings = () => {
           renderItem={({item}) => <SharingComp item={item} />}
         />
       </HandleData>
+      <View className="fixed bottom-0">
+        <CustomButtons
+          type="solid"
+          theme="big"
+          label={intl.formatMessage({
+            id: 'social_media_sharings',
+            defaultMessage: 'social_media_sharings',
+          })}
+          onPress={() => navigation.navigate('socialmediasharings')}
+        />
+      </View>
     </MenuWrapper>
   );
 };
