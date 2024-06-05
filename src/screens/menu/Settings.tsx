@@ -1,47 +1,133 @@
-import {View, Text, Switch} from 'react-native';
-import React from 'react';
+import {View, Text, Switch, Pressable} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import UserWrapper from './UserWrapper';
 import DocumentIcon from '../../assets/svg/userMenu/DocumentIcon';
 import HelpIcon from '../../assets/svg/userMenu/HelpIcon';
 import SecurityIcon from '../../assets/svg/userMenu/SecurityIcon';
 import AboutIcon from '../../assets/svg/userMenu/AboutIcon';
-import MenuWrapper from './MenuWrapper';
 import LangChoiceComp from '../../components/LangChoiceComp';
 import IntLabel from '../../components/IntLabel';
+import {useNavigation} from '@react-navigation/native';
+import WebClient from '../../utility/WebClient';
+import {useSelector} from 'react-redux';
+import MenuWrapper from './MenuWrapper';
 
-const Settings = () => {
+const UserSettings = () => {
+  const {user} = useSelector((state: any) => state.user);
+  const {Post, loading} = WebClient();
+  const [settings, setSettings] = useState<any>();
+  const navigation = useNavigation<any>();
+  const [clicked, setClicked] = useState(false);
+
+  useEffect(() => {
+    Post('/api/User/UserNotificationsSettings', {
+      userId: user?.id,
+    }).then((res: any) => {
+      setSettings(res.data.object);
+    });
+
+    setClicked(false);
+  }, [clicked]);
+
   return (
     <MenuWrapper title={IntLabel('settings')}>
-      <View className=" w-[60%] space-y-8">
+      <View className="space-y-8  w-[75%]">
+        <Text className="font-poppinsMedium  text-center text-base text-customGray">
+          {IntLabel('notifications')}
+        </Text>
+
+        <View className="flex-row items-center justify-between ">
+          <Text className="font-poppinsMedium text-base text-customGray">
+            {IntLabel('messages')}
+          </Text>
+          <Switch
+            thumbColor={'#FF8170'}
+            value={settings?.notificationMessage}
+            onChange={() => {
+              if (user) {
+                Post('/api/User/ChangeNotificationSettings', {
+                  userId: user?.id,
+                  notificationOffer: settings?.notificationOffer,
+                  notificationMessage: !settings?.notificationMessage,
+                  notificationAppointment: settings?.notificationAppointment,
+                  notificationFavorites: settings?.notificationFavorites,
+                }).then(res => {
+                  setClicked(true);
+                });
+              }
+            }}
+          />
+        </View>
+
         <View className="flex-row items-center justify-between ">
           <Text className="font-poppinsMedium text-base text-customGray ">
-            {IntLabel('message')}
+            {IntLabel('offers')}
           </Text>
-          <Switch thumbColor={'#FF8170'} value={false} onChange={() => ''} />
+          <Switch
+            thumbColor={'#FF8170'}
+            value={settings?.notificationOffer}
+            onChange={() => {
+              if (user) {
+                Post('/api/User/ChangeNotificationSettings', {
+                  userId: user?.id,
+                  notificationOffer: !settings?.notificationOffer,
+                  notificationMessage: settings?.notificationMessage,
+                  notificationAppointment: settings?.notificationAppointment,
+                  notificationFavorites: settings?.notificationFavorites,
+                }).then(res => {
+                  setClicked(true);
+                });
+              }
+            }}
+          />
         </View>
+
         <View className="flex-row items-center justify-between ">
           <Text className="font-poppinsMedium text-base text-customGray ">
-            {IntLabel('offer')}
+            {IntLabel('appointments')}
           </Text>
-          <Switch thumbColor={'#FF8170'} value={false} onChange={() => ''} />
+          <Switch
+            thumbColor={'#FF8170'}
+            value={settings?.notificationAppointment}
+            onChange={() => {
+              if (user) {
+                Post('/api/User/ChangeNotificationSettings', {
+                  userId: user?.id,
+                  notificationOffer: settings?.notificationOffer,
+                  notificationMessage: settings?.notificationMessage,
+                  notificationAppointment: !settings?.notificationAppointment,
+                  notificationFavorites: settings?.notificationFavorites,
+                }).then(res => {
+                  setClicked(true);
+                });
+              }
+            }}
+          />
         </View>
+
         <View className="flex-row items-center justify-between ">
           <Text className="font-poppinsMedium text-base text-customGray ">
-            {IntLabel('appointment')}
+            {IntLabel('favorites')}
           </Text>
-          <Switch thumbColor={'#FF8170'} value={false} onChange={() => ''} />
+          <Switch
+            thumbColor={'#FF8170'}
+            value={settings?.notificationFavorites}
+            onChange={() => {
+              if (user) {
+                Post('/api/User/ChangeNotificationSettings', {
+                  userId: user?.id,
+                  notificationOffer: settings?.notificationOffer,
+                  notificationMessage: settings?.notificationMessage,
+                  notificationAppointment: settings?.notificationAppointment,
+                  notificationFavorites: !settings?.notificationFavorites,
+                }).then(res => {
+                  setClicked(true);
+                });
+              }
+            }}
+          />
         </View>
-        {/* <View className="flex-row items-center justify-between">
-          <Text className="font-poppinsMedium text-base text-customGray ">
-            Satın Alma Bildirimleri
-          </Text>
-          <Switch thumbColor={'#FF8170'} value={false} onChange={() => ''} />
-        </View> */}
-        <View className="flex-row items-center justify-between ">
-          <Text className="font-poppinsMedium text-base text-customGray ">
-            {IntLabel('favorite')}
-          </Text>
-          <Switch thumbColor={'#FF8170'} value={false} onChange={() => ''} />
-        </View>
+
         <View className="flex-row items-center justify-between ">
           <Text className="font-poppinsMedium text-base text-customGray ">
             {IntLabel('lang_choice')}
@@ -50,40 +136,48 @@ const Settings = () => {
         </View>
       </View>
 
-      <View className="flex-row items-center space-x-4 mt-8">
+      <View className="flex-row items-center space-x-4 mt-8 ">
         <View className="space-y-4">
-          <View className="flex-row items-center space-x-2">
+          <Pressable
+            onPress={() => navigation.navigate('termsofuse')}
+            className="flex-row items-center space-x-2">
             <DocumentIcon />
-            <Text className=" text-base text-customGray font-sans font-normal">
-              {IntLabel('terms_of_use')}
+            <Text className=" text-base text-customGray font-sans ">
+              {IntLabel('terms_of_use')}{' '}
             </Text>
-          </View>
+          </Pressable>
 
-          <View className="flex-row items-center space-x-2">
+          <Pressable
+            onPress={() => navigation.navigate('privacypolicy')}
+            className="flex-row items-center space-x-2">
             <SecurityIcon />
-            <Text className=" text-base text-customGray font-sans font-normal">
-              {IntLabel('privacy_policy')}
+            <Text className=" text-base text-customGray font-sans">
+              {IntLabel('privacy_policy')}{' '}
             </Text>
-          </View>
+          </Pressable>
         </View>
 
         <View className="space-y-4">
-          <View className="flex-row items-center space-x-2">
+          <Pressable
+            onPress={() => navigation.navigate('help')}
+            className="flex-row items-center space-x-2">
             <HelpIcon />
-            <Text className=" text-base text-customGray font-sans font-normal">
-              {IntLabel('help')}
+            <Text className=" text-base text-customGray font-sans">
+              {IntLabel('help')}{' '}
             </Text>
-          </View>
-          <View className="flex-row items-center space-x-2">
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate('aboutus')}
+            className="flex-row items-center space-x-2">
             <AboutIcon />
-            <Text className=" text-base text-customGray font-sans font-normal">
-              {IntLabel('about_us')}
+            <Text className=" text-base text-customGray font-sans">
+              {IntLabel('about_us')}{' '}
             </Text>
-          </View>
+          </Pressable>
         </View>
       </View>
     </MenuWrapper>
   );
 };
 
-export default Settings;
+export default UserSettings;

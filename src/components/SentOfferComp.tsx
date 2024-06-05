@@ -13,7 +13,7 @@ import IntLabel from './IntLabel';
 
 const SentOfferComp = ({item}: any) => {
   const [seeAll, setSeeAll] = useState(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   return (
     <View className="items-center">

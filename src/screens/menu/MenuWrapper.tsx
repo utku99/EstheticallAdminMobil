@@ -15,7 +15,7 @@ interface props {
 const MenuWrapper = ({children, title, type}: props) => {
   const navigation = useNavigation();
   return (
-    <View className=" items-center  h-full py-3 bg-[#FAFAFA]">
+    <View className=" items-center  h-full py-3 bg-[#FAFAFA] ">
       <View
         className="flex-row items-center justify-center mb-[20px] relative"
         style={{width: SIZES.width * 0.9}}>
@@ -48,7 +48,11 @@ const MenuWrapper = ({children, title, type}: props) => {
         )}
       </View>
 
-      {children}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{flexGrow: 1}}>
+        {children}
+      </ScrollView>
     </View>
   );
 };

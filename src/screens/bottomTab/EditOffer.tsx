@@ -12,29 +12,47 @@ import {useFormik} from 'formik';
 import {useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
 import IntLabel from '../../components/IntLabel';
+import * as Yup from 'yup';
+import moment from 'moment';
 
-const EditOffer = ({route}: any) => {
+const NewOffer = ({route}: any) => {
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
   const navigation = useNavigation();
-  const [offerInfo, setOfferofferInfo] = useState<any>(null);
-  const [doctors, setDoctors] = useState<any>(null);
+  const [offerInfo, setOfferInfo] = useState<any>(null);
+  const [doctors, setDoctors] = useState<any>([]);
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       doctor:
-        doctors?.find((item: any) => item.label === offerInfo?.doctorName) ??
-        '',
+        doctors?.find((tmp: any) => tmp.value == offerInfo?.doctorID) ?? '',
       price: offerInfo?.price ?? '',
       currency:
-        currencyTypes.find(item => item?.value === offerInfo?.currencyType) ??
-        1,
+        currencyTypes.find(tmp => tmp.value == offerInfo?.currencyType) ?? '',
       paymentRate: offerInfo?.priceRate ?? '',
-      date: offerInfo?.date ?? '',
-      companyImages: offerInfo?.offerInfoSlider ?? [],
-      statu: offerStates.find(item => item.value === offerInfo?.status),
-    },
+      date: '',
+      companyImages: offerInfo?.offerInfoSlider ?? '',
+      desc: offerInfo?.content ?? '',
+    } as any,
+    validationSchema: Yup.object().shape({
+      price: Yup.string().required(
+        IntLabel('validation_message_this_field_is_required'),
+      ),
+      paymentRate: Yup.string().required(
+        IntLabel('validation_message_this_field_is_required'),
+      ),
+      date: Yup.string().required(
+        IntLabel('validation_message_this_field_is_required'),
+      ),
+      desc: Yup.string().required(
+        IntLabel('validation_message_this_field_is_required'),
+      ),
+      companyImages: Yup.array().min(
+        1,
+        IntLabel('validation_message_this_field_is_required'),
+      ),
+    }),
     onSubmit: values => {
       Post(
         '/api/Offers/EditOfferInfo',
@@ -44,10 +62,11 @@ const EditOffer = ({route}: any) => {
           companyID: user?.companyId,
           companyOfficeID: user?.companyOfficeId,
           doctorID: values.doctor.value,
-          price: values.price,
+          price: Number(values.price),
           currencyType: values.currency.value,
-          priceRate: values.paymentRate,
-          date: '2023-12-05T07:32',
+          priceRate: Number(values.paymentRate),
+          date: values.date,
+          description: values.desc,
         },
         true,
         true,
@@ -65,7 +84,7 @@ const EditOffer = ({route}: any) => {
       companyID: user?.companyId,
       companyOfficeID: user?.companyOfficeId,
     }).then(res => {
-      setOfferofferInfo(res.data.object);
+      setOfferInfo(res.data.object);
     });
 
     Post('/api/CompanyDoctor/CompanyDoctorList', {
@@ -112,98 +131,114 @@ const EditOffer = ({route}: any) => {
           </View>
 
           <View className="p-[10px] space-y-3">
-            <View>
-              <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                {IntLabel('state')}:
-              </Text>
-              <CustomInputs
-                type="dropdown"
-                dropdownData={offerStates}
-                value={formik.values.statu}
-              />
-            </View>
-            <View>
-              <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                {IntLabel('doctor')}:
-              </Text>
-              <CustomInputs
-                type="dropdown"
-                dropdownData={doctors}
-                value={formik.values.doctor}
-              />
-            </View>
+            {doctors?.length != 0 && (
+              <View>
+                <Text className="text-customGray font-poppinsMedium text-sm mb-1">
+                  {IntLabel('doctor')}:
+                </Text>
+                <CustomInputs
+                  type="dropdown"
+                  dropdownData={doctors}
+                  value={formik.values.doctor}
+                  onChange={(e: any) => formik.setFieldValue('doctor', e)}
+                />
+              </View>
+            )}
+
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
                 {IntLabel('desc')}:
               </Text>
               <CustomInputs
                 type="textarea"
-                defaultValue={
-                  ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Exodio!'
-                }
+                value={formik.values.desc}
+                onChangeText={formik.handleChange('desc')}
+                error={formik.errors.desc}
               />
             </View>
+
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
                 {IntLabel('price')}:
               </Text>
-              <View className="h-[40px] flex-1 bg-white rounded-lg border border-customGray px-2 flex-row items-center">
-                <TextInput
-                  defaultValue={formik.values.price.toString()}
-                  placeholderTextColor={'rgba(77, 74, 72, 0.5)'}
-                  className="flex-1 text-customGray text-xs p-0 font-poppinsRegular "
-                />
-                <Dropdown
-                  data={currencyTypes}
-                  value={formik.values.currency}
-                  onChange={e => formik.setFieldValue('currency', e)}
-                  mode="default"
-                  labelField="label"
-                  valueField="value"
-                  selectedTextStyle={{
-                    fontSize: 12,
-                    color: '#4D4A48',
-                    fontFamily: 'Poppins-Regular',
-                    textAlign: 'right',
-                    paddingRight: 5,
-                  }}
-                  style={{width: 100}}
-                />
+
+              <View>
+                <View className="h-[40px] flex-1 bg-white rounded-lg border border-customGray px-2 flex-row items-center">
+                  <TextInput
+                    defaultValue={formik.values.price.toString()}
+                    placeholderTextColor={'rgba(77, 74, 72, 0.5)'}
+                    onChangeText={e => formik.setFieldValue('price', e)}
+                    className="flex-1 text-customGray text-xs p-0 font-poppinsRegular "
+                    keyboardType="number-pad"
+                  />
+                  <Dropdown
+                    data={currencyTypes}
+                    value={formik.values.currency}
+                    onChange={e => formik.setFieldValue('currency', e)}
+                    mode="default"
+                    labelField="label"
+                    valueField="value"
+                    selectedTextStyle={{
+                      fontSize: 12,
+                      color: '#4D4A48',
+                      fontFamily: 'Poppins-Regular',
+                      textAlign: 'right',
+                      paddingRight: 5,
+                    }}
+                    style={{width: 100}}
+                  />
+                </View>
+                {formik.errors.price && formik.touched.price && (
+                  <Text className="text-red-400 text-xs ">
+                    {formik.errors.price}
+                  </Text>
+                )}
               </View>
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                {IntLabel('payment_rate')}: (%):
+                {IntLabel('payment_rate')} (%):
               </Text>
               <CustomInputs
                 type="text"
                 defaultValue={formik.values.paymentRate.toString()}
+                onChangeText={(e: any) =>
+                  formik.setFieldValue('paymentRate', e)
+                }
+                error={formik.errors.paymentRate}
+                touched={formik.touched.paymentRate}
               />
             </View>
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
                 {IntLabel('transaction_date')}:
               </Text>
-              <CustomInputs type="date" value={formik.values.date} />
+              <CustomInputs
+                type="date"
+                value={formik.values.date}
+                onChange={(e: any) => formik.setFieldValue('date', e)}
+                error={formik.errors.date}
+                touched={formik.touched.date}
+              />
             </View>
 
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                {IntLabel('company_images')}: (600 x 450):{' '}
+                {IntLabel('company_images')} (600 x 450):{' '}
               </Text>
               <AddPhotoComp
                 value={formik.values.companyImages}
-                width={600}
-                height={450}
+                onChange={(e: any) => formik.setFieldValue('companyImages', e)}
+                error={formik.errors.companyImages}
               />
             </View>
 
             <CustomButtons
               type="solid"
-              label={IntLabel('edit')}
+              label={IntLabel('send')}
               icon="question"
               style={{alignSelf: 'center'}}
-              onPress={() => ''}
+              onPress={() => formik.handleSubmit()}
             />
           </View>
 
@@ -215,4 +250,4 @@ const EditOffer = ({route}: any) => {
   );
 };
 
-export default EditOffer;
+export default NewOffer;

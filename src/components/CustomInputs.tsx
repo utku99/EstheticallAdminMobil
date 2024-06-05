@@ -43,6 +43,7 @@ interface props extends TextInputProps {
   touched?: any;
   title?: string;
   style?: any;
+  dateMode?: 'date' | 'datetime';
 }
 
 const CustomInputs: React.FC<props> = ({
@@ -61,6 +62,7 @@ const CustomInputs: React.FC<props> = ({
   disable = false,
   title,
   style,
+  dateMode = 'date',
 }) => {
   const [isFocusDropdown, setIsFocusDropdown] = useState(false);
   const [showDateModal, setShowDateModal] = useState(false);
@@ -113,9 +115,7 @@ const CustomInputs: React.FC<props> = ({
             textAlignVertical="top"
             multiline
           />
-          {error && (
-            <Text className="text-red-400 text-xs "> {error?.message}</Text>
-          )}
+          {error && <Text className="text-red-400 text-xs "> {error}</Text>}
         </View>
       )}
       {type == 'textareasmall' && (
@@ -171,7 +171,7 @@ const CustomInputs: React.FC<props> = ({
           </TouchableOpacity>
           <DatePicker
             modal
-            mode="date"
+            mode={dateMode}
             open={showDateModal}
             date={value == '' ? new Date() : value}
             locale={language?.flag_code ?? 'tr'}
@@ -239,9 +239,7 @@ const CustomInputs: React.FC<props> = ({
               }}
             />
           </View>
-          {error && (
-            <Text className="text-red-400 text-xs ">{error?.message}</Text>
-          )}
+          {error && <Text className="text-red-400 text-xs ">{error}</Text>}
         </View>
       )}
       {type == 'checkbox' && (

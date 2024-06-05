@@ -15,14 +15,17 @@ const Notification = () => {
   const [clicked, setClicked] = useState<any>(false);
 
   useEffect(() => {
-    Post('/api/Notification/GetNotificationsByUserID', {
-      userID: user?.id,
+    Post('/api/Notification/GetCompanyNotificationsByID', {
+      companyID: user?.companyId,
+      companyOfficeID: user?.companyOfficeId,
       languageId: language?.type ?? 1,
     }).then(res => {
       setNotifications(res.data.object);
     });
 
-    setClicked(false);
+    if (clicked) {
+      setClicked(false);
+    }
   }, [clicked]);
 
   return (

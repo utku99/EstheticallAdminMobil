@@ -3,51 +3,60 @@ import React, {useEffect, useState} from 'react';
 import {SIZES, temp} from '../../constants/constants';
 import CustomButtons from '../../components/CustomButtons';
 import CustomInputs from '../../components/CustomInputs';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import WebClient from '../../utility/WebClient';
 import MenuWrapper from '../menu/MenuWrapper';
 import AddPhotoComp from '../../components/AddPhotoComp';
-import {currencyTypes, offerStates} from '../../constants/Enum';
+import {
+  appointmentOperationStates,
+  currencyTypes,
+  offerStates,
+} from '../../constants/Enum';
 import {useFormik} from 'formik';
 import {useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
 import IntLabel from '../../components/IntLabel';
+import * as Yup from 'yup';
 
 const EditAppointment = () => {
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
   const navigation = useNavigation();
-  const [offerInfo, setOfferofferInfo] = useState<any>(null);
+  const [info, setInfo] = useState<any>(null);
   const [doctors, setDoctors] = useState<any>(null);
+  const route = useRoute<any>();
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      doctor:
-        doctors?.find((item: any) => item.label === offerInfo?.doctorName) ??
-        '',
-      price: offerInfo?.price ?? '',
-      currency:
-        currencyTypes.find(item => item?.value === offerInfo?.currencyType) ??
-        1,
-      paymentRate: offerInfo?.priceRate ?? '',
-      date: offerInfo?.date ?? '',
-      companyImages: offerInfo?.offerInfoSlider ?? [],
-      statu: offerStates.find(item => item.value === offerInfo?.status),
-    },
+      statu:
+        appointmentOperationStates.find(
+          tmp => tmp.value == info?.operationState,
+        ) ?? '',
+      date: info?.confirmDate ?? '',
+      doctor: info?.doctorModel ?? '',
+      desc: info?.description ?? '',
+    } as any,
+    validationSchema: Yup.object().shape({
+      statu: Yup.object().required(
+        IntLabel('validation_message_this_field_is_required'),
+      ),
+      date: Yup.string().required(
+        IntLabel('validation_message_this_field_is_required'),
+      ),
+      desc: Yup.string().required(
+        IntLabel('validation_message_this_field_is_required'),
+      ),
+    }),
     onSubmit: values => {
       Post(
-        '/api/Offers/EditOfferInfo',
+        '/api/Appointments/EditAppointment',
         {
-          offerID: offerInfo?.offerID,
-          offerInfoID: offerInfo?.offerInfoID,
-          companyID: user?.companyId,
-          companyOfficeID: user?.companyOfficeId,
-          doctorID: values.doctor.value,
-          price: values.price,
-          currencyType: values.currency.value,
-          priceRate: values.paymentRate,
-          date: '2023-12-05T07:32',
+          appointmentID: info.appointmentID,
+          confirmDate: values.date,
+          operationState: values.statu.value,
+          doctorId: values.doctor.value ?? info.doctorModel.value,
+          description: values.desc,
         },
         true,
         true,
@@ -58,6 +67,25 @@ const EditAppointment = () => {
       });
     },
   });
+
+  useEffect(() => {
+    Post('/api/Appointments/GetAppointmentDetails', {
+      appointmentID: route.params?.appointmentId,
+    }).then(res => {
+      setInfo(res.data.object);
+    });
+
+    Post('/api/CompanyDoctor/CompanyDoctorList', {
+      companyID: user?.companyId,
+      companyOfficeID: user?.companyOfficeId,
+    }).then(res => {
+      let newDoctor = res.data.object?.map((item: any) => ({
+        value: item?.companyDoctorId,
+        label: item?.doctorName,
+      }));
+      setDoctors(newDoctor);
+    });
+  }, []);
 
   return (
     <MenuWrapper title={IntLabel('edit_appointment')}>
@@ -70,7 +98,7 @@ const EditAppointment = () => {
             <View className="flex-row items-center space-x-2  w-[60%]">
               <View className="w-[62px] h-[62px] overflow-hidden rounded-full border-[0.6px] border-customGray">
                 <Image
-                  source={{uri: temp}}
+                  source={{uri: ''}}
                   className="w-full h-full"
                   resizeMode="cover"
                 />
@@ -79,12 +107,12 @@ const EditAppointment = () => {
                 <Text
                   numberOfLines={1}
                   className="text-customGray text-sm font-poppinsSemiBold">
-                  Berna
+                  {info?.userName}
                 </Text>
                 <Text
                   numberOfLines={1}
                   className="text-customGray font-poppins text-xs font-poppinsRegular">
-                  Ankara
+                  {info?.userAdress}
                 </Text>
               </View>
             </View>
@@ -97,25 +125,36 @@ const EditAppointment = () => {
               </Text>
               <CustomInputs
                 type="dropdown"
-                dropdownData={offerStates}
+                dropdownData={appointmentOperationStates}
                 value={formik.values.statu}
+                onChange={(e: any) => formik.setFieldValue('statu', e)}
+                error={formik.errors.statu}
               />
             </View>
-            {/* <View>
-              <Text className="text-customGray font-poppinsMedium text-sm mb-1">
-                Doktor:
-              </Text>
-              <CustomInputs
-                type="dropdown"
-                dropdownData={doctors}
-                value={formik.values.doctor}
-              />
-            </View> */}
+
+            {info?.doctorModel?.value != 0 && user?.companyType != 4 && (
+              <View>
+                <Text className="text-customGray font-poppinsMedium text-sm mb-1">
+                  {IntLabel('doctor')}:
+                </Text>
+                <CustomInputs
+                  type="dropdown"
+                  dropdownData={doctors}
+                  value={formik.values.doctor}
+                  onChange={(e: any) => formik.setFieldValue('doctor', e)}
+                />
+              </View>
+            )}
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm mb-1">
                 {IntLabel('desc')}:
               </Text>
-              <CustomInputs type="textarea" />
+              <CustomInputs
+                type="textarea"
+                value={formik.values.desc}
+                onChangeText={formik.handleChange('desc')}
+                error={formik.errors.desc}
+              />
             </View>
 
             <View>
@@ -134,7 +173,7 @@ const EditAppointment = () => {
               type="solid"
               label={IntLabel('save')}
               style={{alignSelf: 'center'}}
-              onPress={() => ''}
+              onPress={() => formik.handleSubmit()}
             />
           </View>
 

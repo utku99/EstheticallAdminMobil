@@ -40,7 +40,7 @@ const Appointment = () => {
     }).then((res: any) => {
       setRefusedAppointments(res.data.object);
     });
-  }, []);
+  }, [tab]);
 
   return (
     <MenuWrapper>
@@ -50,7 +50,7 @@ const Appointment = () => {
           contentContainerStyle={{paddingHorizontal: 10, gap: 5}}>
           <CustomButtons
             type={tab == 1 ? 'brownsolid' : 'brownoutlined'}
-            label={IntLabel('waiting')}
+            label={IntLabel('waiting_approval')}
             onPress={() => setTab(1)}
           />
           <CustomButtons

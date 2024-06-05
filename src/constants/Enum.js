@@ -15,7 +15,17 @@ export const appointmentOperationStates = [
 ]
 
 export const currencyTypes = [
-    { value: 1, label: "TL",icon:"₺" },
-    { value: 2, label: "Dolar",icon:"$" },
-    { value: 3, label: "Euro" ,icon:"€"},
+    { value: 1, label: "TL", icon: "₺" },
+    { value: 2, label: "Dolar", icon: "$" },
+    { value: 3, label: "Euro", icon: "€" },
 ]
+
+export const legalTextType = {
+    "ABOUT": 1,
+    "PRIVACYANDTERMSOFUSE": 2,
+    "IndividualMembershipAgreement": 3,
+    "CorporateMembershipAgreement": 4,
+    "EXPRESSCONSENTTEXT": 5, //açık rıza
+    "DISCLOSURETEXTANDCOOKIEPOLICY": 6, //aydınlatma metni ve çerez
+    "DISTANCESERVICESALESAGREEMENT": 7, //mesafeli hizmet satış 
+}

@@ -36,6 +36,10 @@ import {
   setTotalUsers,
 } from '../redux/slices/hubConnection';
 import VideoPlayer from './auth/VideoPlayer';
+import TermsOfUse from './menu/legalTexts/TermsOfUse';
+import Help from './menu/legalTexts/Help';
+import PrivacyPolicy from './menu/legalTexts/PrivacyPolicy';
+import AboutUs from './menu/legalTexts/AboutUs';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -108,6 +112,14 @@ const UserStack = () => {
       <Stack.Screen name="notification" component={Notification} />
       <Stack.Screen name="settings" component={Settings} />
       <Stack.Screen name="logout" component={LogOut} />
+
+      {/* legal texts */}
+      <Stack.Group>
+        <Stack.Screen name="termsofuse" component={TermsOfUse} />
+        <Stack.Screen name="help" component={Help} />
+        <Stack.Screen name="privacypolicy" component={PrivacyPolicy} />
+        <Stack.Screen name="aboutus" component={AboutUs} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

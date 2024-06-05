@@ -6,7 +6,7 @@ import WebClient from '../utility/WebClient';
 import moment from 'moment';
 import IntLabel from './IntLabel';
 
-const CompletedOfferComp = ({item}: any) => {
+const CompletedOfferComp = ({item, setClicked}: any) => {
   const {Post} = WebClient();
 
   return (
@@ -107,7 +107,9 @@ const CompletedOfferComp = ({item}: any) => {
                 },
                 true,
                 true,
-              ).then(res => {});
+              ).then(res => {
+                setClicked(true);
+              });
             }}
           />
         </View>

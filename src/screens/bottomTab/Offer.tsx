@@ -20,6 +20,8 @@ const Offer = () => {
   const [sentOffers, setSentOffers] = useState<any>([]);
   const [completedOffers, setCompletedOffers] = useState<any>([]);
 
+  const [clicked, setClicked] = useState(false);
+
   useEffect(() => {
     Post('/api/Offers/IncomingOffersMobile', {
       companyID: user.companyId,
@@ -41,7 +43,11 @@ const Offer = () => {
     }).then((res: any) => {
       setCompletedOffers(res.data.object);
     });
-  }, []);
+
+    if (clicked) {
+      setClicked(false);
+    }
+  }, [tab, clicked]);
 
   return (
     <MenuWrapper>
@@ -111,7 +117,9 @@ const Offer = () => {
               paddingBottom: 20,
             }}
             data={completedOffers}
-            renderItem={({item}) => <CompletedOfferComp item={item} />}
+            renderItem={({item}) => (
+              <CompletedOfferComp item={item} setClicked={setClicked} />
+            )}
           />
         </HandleData>
       )}
