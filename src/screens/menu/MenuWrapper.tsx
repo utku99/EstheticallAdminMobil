@@ -50,6 +50,7 @@ const MenuWrapper = ({children, title, type}: props) => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
+        style={{width: SIZES.width * 0.95}}
         contentContainerStyle={{flexGrow: 1}}>
         {children}
       </ScrollView>

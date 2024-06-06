@@ -108,7 +108,7 @@ const AddSharing = () => {
         data={['']}
         loading={loading}
         title={IntLabel('warning_no_active_record')}>
-        <View style={{width: SIZES.width * 0.9, flex: 1}}>
+        <View style={{width: SIZES.width * 0.95}} className=" flex-1">
           <CustomInputs
             type="dropdown"
             placeholder={IntLabel('office')}
@@ -196,7 +196,6 @@ const AddSharing = () => {
           </View>
 
           <View className="flex-1"></View>
-
           <CustomButtons
             type="solid"
             label={IntLabel('add')}

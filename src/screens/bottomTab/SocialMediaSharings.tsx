@@ -10,7 +10,6 @@ import {
 import React, {useEffect, useState} from 'react';
 import MenuWrapper from '../menu/MenuWrapper';
 import CustomButtons from '../../components/CustomButtons';
-import {SIZES, temp} from '../../constants/constants';
 import {useIntl} from 'react-intl';
 import IntLabel from '../../components/IntLabel';
 import CustomInputs from '../../components/CustomInputs';
@@ -20,6 +19,13 @@ import HandleData from '../../components/HandleData';
 import ModalWrapper from '../../components/ModalWrapper';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
+import {
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+  LoginButton,
+} from 'react-native-fbsdk-next';
+import {SIZES} from '../../constants/constants';
 
 const TableComp = ({item, selectedSharings, setSelectedSharings}: any) => {
   let value = selectedSharings.some((tmp: any) => tmp.id == item.id);
@@ -158,9 +164,7 @@ const SocialMediaSharings = () => {
 
   return (
     <MenuWrapper>
-      <ScrollView
-        style={{width: SIZES.width * 0.95}}
-        showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {isLogged ? (
           <>
             <View className="flex flex-row  space-x-4">
@@ -240,7 +244,7 @@ const SocialMediaSharings = () => {
           </>
         ) : (
           <View className="flex space-y-4 items-center">
-            <CustomButtons
+            {/* <CustomButtons
               type="solid"
               label={intl.formatMessage({
                 id: 'connect_facebook_and_instagram',
@@ -248,6 +252,21 @@ const SocialMediaSharings = () => {
               })}
               style={{width: 250}}
               onPress={() => ''}
+            /> */}
+
+            <LoginButton
+              onLoginFinished={(error, result) => {
+                if (error) {
+                  console.log('login has error: ' + result.error);
+                } else if (result.isCancelled) {
+                  console.log('login is cancelled.');
+                } else {
+                  AccessToken.getCurrentAccessToken().then(data => {
+                    console.log(data.accessToken.toString());
+                  });
+                }
+              }}
+              onLogoutFinished={() => console.log('logout.')}
             />
             <Text className=" text-customGray font-poppinsRegular text-sm">
               {IntLabel('facebook_connect_info')}

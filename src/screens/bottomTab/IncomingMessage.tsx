@@ -35,7 +35,7 @@ const IncomingMessage = () => {
   }, []);
 
   return (
-    <MenuWrapper title={IntLabel('messages')} type="message">
+    <MenuWrapper title={IntLabel('messages')}>
       <HandleData
         data={users}
         title={IntLabel('warning_no_active_record')}

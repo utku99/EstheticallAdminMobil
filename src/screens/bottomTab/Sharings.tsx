@@ -31,7 +31,7 @@ const Sharings = () => {
     Post('/api/Shared/ListCompanySharedsMobile', {
       companyId: user.companyId,
       companyOfficeId: user.companyOfficeId,
-      companyTypeId: user.userRoleId === 4 ? 1 : 0, // institution :0 , office:1
+      companyTypeId: user.companyOfficeId == 0 ? 0 : 1, // institution :0 , office:1
     }).then(res => {
       setSharings(res.data);
     });
@@ -77,7 +77,7 @@ const Sharings = () => {
           renderItem={({item}) => <SharingComp item={item} />}
         />
       </HandleData>
-      <View className="fixed bottom-0">
+      <View className="absolute bottom-0 left-0 right-0 flex-row justify-center ">
         <CustomButtons
           type="solid"
           theme="big"
