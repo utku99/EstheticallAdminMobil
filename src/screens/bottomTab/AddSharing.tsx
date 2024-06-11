@@ -20,6 +20,7 @@ const AddSharing = () => {
   const [services, setServices] = useState<any>([]);
 
   const formik = useFormik({
+    validateOnChange: false,
     initialValues: {
       office: '',
       service: '',

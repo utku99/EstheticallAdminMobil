@@ -1,4 +1,10 @@
-import {View, Text, ImageBackground, SafeAreaView} from 'react-native';
+import {
+  View,
+  Text,
+  ImageBackground,
+  SafeAreaView,
+  KeyboardAvoidingView,
+} from 'react-native';
 import React, {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import EstheticLogo from '../../assets/svg/common/EstheticLogo';
@@ -17,6 +23,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const formik = useFormik({
+    validateOnChange: false,
     initialValues: {
       email: '',
       password: '',
@@ -53,62 +60,64 @@ const Login = () => {
       source={require('../../assets/images/authBg/auth.jpg')}
       resizeMode="cover">
       <SafeAreaView className="flex-1">
-        <ScrollView
-          className=""
-          contentContainerStyle={{
-            alignItems: 'center',
-            paddingHorizontal: 30,
-            flexGrow: 1,
-            paddingVertical: 20,
-            justifyContent: 'space-between',
-          }}>
-          {/* top cont */}
-          <View className="relative  w-full items-center">
-            <View className="absolute right-0 -top-5 ">
-              <LangChoiceComp />
+        <KeyboardAvoidingView className="flex-1">
+          <ScrollView
+            className=""
+            contentContainerStyle={{
+              alignItems: 'center',
+              paddingHorizontal: 30,
+              flexGrow: 1,
+              paddingVertical: 20,
+              justifyContent: 'space-between',
+            }}>
+            {/* top cont */}
+            <View className="relative  w-full items-center">
+              <View className="absolute right-0 -top-5 ">
+                <LangChoiceComp />
+              </View>
+              <View className="">
+                <EstheticLogo width={165} height={47} />
+              </View>
             </View>
-            <View className="">
-              <EstheticLogo width={165} height={47} />
-            </View>
-          </View>
 
-          <View className="w-full ">
-            <Text className="text-customGray font-poppinsMedium text-xl self-center mb-6">
-              {IntLabel('company_login')}
-            </Text>
-            <View className="">
-              <CustomInputs
-                type="text"
-                placeholder={IntLabel('email')}
-                value={formik.values.email}
-                onBlur={formik.handleBlur('email')}
-                onChangeText={formik.handleChange('email')}
-                error={formik.errors.email}
-                touched={formik.touched.email}
+            <View className="w-full ">
+              <Text className="text-customGray font-poppinsMedium text-xl self-center mb-6">
+                {IntLabel('company_login')}
+              </Text>
+              <View className="">
+                <CustomInputs
+                  type="text"
+                  placeholder={IntLabel('email')}
+                  value={formik.values.email}
+                  onBlur={formik.handleBlur('email')}
+                  onChangeText={formik.handleChange('email')}
+                  error={formik.errors.email}
+                  touched={formik.touched.email}
+                />
+
+                <CustomInputs
+                  type="text"
+                  placeholder={IntLabel('password')}
+                  value={formik.values.password}
+                  onBlur={formik.handleBlur('password')}
+                  onChangeText={formik.handleChange('password')}
+                  error={formik.errors.password}
+                  touched={formik.touched.password}
+                  secureTextEntry
+                />
+              </View>
+            </View>
+
+            <View className="w-full ">
+              <CustomButtons
+                type="solid"
+                label={IntLabel('login')}
+                onPress={formik.handleSubmit}
+                theme="big"
               />
-
-              <CustomInputs
-                type="text"
-                placeholder={IntLabel('password')}
-                value={formik.values.password}
-                onBlur={formik.handleBlur('password')}
-                onChangeText={formik.handleChange('password')}
-                error={formik.errors.password}
-                touched={formik.touched.password}
-                secureTextEntry
-              />
             </View>
-          </View>
-
-          <View className="w-full ">
-            <CustomButtons
-              type="solid"
-              label={IntLabel('login')}
-              onPress={formik.handleSubmit}
-              theme="big"
-            />
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </ImageBackground>
   );

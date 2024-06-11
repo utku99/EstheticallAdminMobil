@@ -14,9 +14,7 @@ const SharingComments = ({route}: any) => {
   const {user} = useSelector((state: any) => state.user);
   const [index, setIndex] = useState<any>(0);
   const [comments, setComments] = useState<any>(0);
-  const isCarousel = useRef(null);
-
-  console.log();
+  const isCarousel = useRef<any>(null);
 
   useEffect(() => {
     Post('/api/Comment/ListCommentsMobile', {

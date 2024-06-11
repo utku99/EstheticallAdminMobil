@@ -1,4 +1,10 @@
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TouchableHighlight,
+} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import CustomInputs from './CustomInputs';
 
@@ -12,22 +18,16 @@ import BlueTick from '../assets/svg/common/BlueTick';
 import moment from 'moment';
 import IntLabel from './IntLabel';
 import Video from 'react-native-video';
+import Muted from '../assets/svg/homepages/Muted';
+import UnMuted from '../assets/svg/homepages/UnMuted';
 
-const SharingComp = ({item}: {item: any}) => {
-  const [sharedDetail, setSharedDetail] = useState<any>(null);
+const SharingComp = ({item, setClicked}: {item: any; setClicked: any}) => {
   const [index, setIndex] = useState<any>(0);
   const {Post, loading} = WebClient();
-  const isCarousel = useRef(null);
-  const navigation = useNavigation();
+  const isCarousel = useRef<any>(null);
+  const navigation = useNavigation<any>();
   const screenIsFocused = useIsFocused();
-
-  useEffect(() => {
-    Post('/api/Shared/ListCompanySharedsById', {
-      sharedId: item?.sharedId,
-    }).then(res => {
-      setSharedDetail(res.data.object);
-    });
-  }, []);
+  const [isMuted, setIsMuted] = useState(true);
 
   return (
     <View
@@ -42,16 +42,24 @@ const SharingComp = ({item}: {item: any}) => {
           }))}
           renderItem={({item}: any) =>
             item?.imgUrl?.includes('mp4') ? (
-              <Video
-                source={{uri: item?.imgUrl}}
-                controls
-                repeat={false}
-                playInBackground={false}
-                paused={!screenIsFocused}
-                playWhenInactive={false}
-                resizeMode="cover"
-                className="w-full h-full "
-              />
+              <TouchableHighlight
+                className="relative"
+                onPress={() => {
+                  setIsMuted(!isMuted);
+                }}>
+                <>
+                  <Video
+                    source={{uri: item?.imgUrl}}
+                    repeat
+                    muted={isMuted}
+                    resizeMode="cover"
+                    className="w-full h-full "
+                  />
+                  <View className="absolute bottom-2 right-2">
+                    {isMuted ? <Muted /> : <UnMuted />}
+                  </View>
+                </>
+              </TouchableHighlight>
             ) : (
               <Image
                 source={{uri: item?.imgUrl}}
@@ -67,7 +75,7 @@ const SharingComp = ({item}: {item: any}) => {
           onSnapToItem={i => setIndex(i)}
         />
         <Pagination
-          dotsLength={2}
+          dotsLength={item?.images?.length}
           activeDotIndex={index}
           carouselRef={isCarousel}
           dotStyle={{
@@ -136,7 +144,7 @@ const SharingComp = ({item}: {item: any}) => {
                   true,
                   true,
                 ).then(res => {
-                  console.log(res.data);
+                  setClicked(true);
                 });
               }}
               thumbColor={'#FF8170'}
@@ -145,7 +153,19 @@ const SharingComp = ({item}: {item: any}) => {
             />
           </View>
           <TouchableOpacity
-            onPress={() => ''}
+            onPress={() => {
+              Post(
+                '/api/Shared/DeleteShared',
+                {
+                  sharedId: item?.sharedId,
+                  isActive: false,
+                },
+                true,
+                true,
+              ).then(res => {
+                setClicked(true);
+              });
+            }}
             className=" bg-customOrange rounded-md w-[23px] h-[23px] items-center justify-center">
             <TrashIcon fill={'white'} />
           </TouchableOpacity>

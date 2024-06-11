@@ -9,15 +9,18 @@ import CustomButtons from '../../components/CustomButtons';
 import {OneSignal} from 'react-native-onesignal';
 import IntLabel from '../../components/IntLabel';
 import {useIntl} from 'react-intl';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const Sharings = () => {
-  const {Post, loading} = WebClient();
+  const {Post} = WebClient();
   const {user, language} = useSelector((state: any) => state.user);
   const [sharings, setSharings] = useState([]);
   const {connection, connectionId} = useSelector((state: any) => state.hub);
   const intl = useIntl();
   const navigation = useNavigation<any>();
+
+  const [clicked, setClicked] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   OneSignal.initialize('36ba4e67-6a5f-4bae-9269-4ccdededab2d');
 
@@ -33,7 +36,20 @@ const Sharings = () => {
       companyOfficeId: user.companyOfficeId,
       companyTypeId: user.companyOfficeId == 0 ? 0 : 1, // institution :0 , office:1
     }).then(res => {
-      setSharings(res.data);
+      let temp = res.data.map((tmp: any) => {
+        if (tmp.videoUrl) {
+          return {
+            ...tmp,
+            images: [{fileName: tmp.videoUrl}],
+          };
+        } else {
+          return tmp;
+        }
+      });
+
+      setSharings(temp);
+      setClicked(false);
+      setLoading(false);
     });
 
     if (OneSignal.User.pushSubscription.getPushSubscriptionId()) {
@@ -58,7 +74,7 @@ const Sharings = () => {
         TypeID: user?.companyOfficeId == 0 ? 2 : 3,
       });
     }
-  }, [OneSignal.User.pushSubscription.getPushSubscriptionId()]);
+  }, [OneSignal.User.pushSubscription.getPushSubscriptionId(), clicked]);
 
   return (
     <MenuWrapper title={IntLabel('sharings')} type="sharing">
@@ -72,12 +88,13 @@ const Sharings = () => {
             gap: 15,
             paddingBottom: 20,
           }}
-          initialNumToRender={4}
           data={sharings}
-          renderItem={({item}) => <SharingComp item={item} />}
+          renderItem={({item, index}) => (
+            <SharingComp key={index} item={item} setClicked={setClicked} />
+          )}
         />
       </HandleData>
-      <View className="absolute bottom-0 left-0 right-0 flex-row justify-center ">
+      <View className="absolute bottom-2 left-0 right-0 flex-row justify-center ">
         <CustomButtons
           type="solid"
           theme="big"

@@ -1,4 +1,4 @@
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
 import React from 'react';
 import CustomButtons from '../../components/CustomButtons';
 import {SIZES} from '../../constants/constants';
@@ -13,7 +13,8 @@ interface props {
 }
 
 const MenuWrapper = ({children, title, type}: props) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
+
   return (
     <View className=" items-center  h-full py-3 bg-[#FAFAFA] flex-1">
       <View
@@ -48,12 +49,16 @@ const MenuWrapper = ({children, title, type}: props) => {
         )}
       </View>
 
-      <ScrollView
+      {/* <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{width: SIZES.width * 0.95}}
+       
         contentContainerStyle={{flexGrow: 1}}>
+      </ScrollView> */}
+      <KeyboardAvoidingView
+        style={{width: SIZES.width * 0.95}}
+        className="flex-1">
         {children}
-      </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };

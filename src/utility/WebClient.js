@@ -8,14 +8,14 @@ import { deviceLanguage } from "../constants/constants";
 
 const WebClient = () => {
   const [loading, setLoading] = useState(false);
-  const { user ,language} = useSelector(state => state.user)
+  const { user, language } = useSelector(state => state.user)
 
 
   const defaultConfig = {
     baseURL: "https://estheticallv2-api.ranna.com.tr",
     headers: {
       'Content-Type': 'application/json',
-      "LanguageId": language? language?.type : deviceLanguage=="tr" ? 1 : 2
+      "LanguageId": language ? language?.type : deviceLanguage == "tr" ? 1 : 2
     },
   };
 
@@ -55,10 +55,10 @@ const WebClient = () => {
     try {
       const res = await axiosInstance.post(path, data);
 
-      if (res.data.code === "100" && success) {
-        toast(res.data.message);
+      if (success) {
+        toast(res.data.message ?? res.data.result?.message ?? res.data?.resultMessage);
       } else if (error) {
-        toast(res.data.message);
+        toast(res.data.message ?? res.data.result?.message ?? res.data?.resultMessage);
       }
 
       return res;

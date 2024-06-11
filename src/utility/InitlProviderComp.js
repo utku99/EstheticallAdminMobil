@@ -16,15 +16,16 @@ const InitlProviderComp = ({ children }) => {
     useEffect(() => {
         const func = async () => {
             await Post("/api/Language/Languages", {}).then(res => {
-                if (res.data.code === "100"  ) {
-                    let temp1 = res.data.object.map(item=>(
-                        {...item,
-                        value:item.id,
-                        label:item.language_code,
-                        type: item.flag_code == "tr" ? 1 : 2,
+                if (res.data.code === "100") {
+                    let temp1 = res.data.object.map(item => (
+                        {
+                            ...item,
+                            value: item.id,
+                            label: item.language_code,
+                            type: item.flag_code == "tr" ? 1 : 2,
                         }
                     ))
-                    let temp2 = res.data.object.find(item => language ? (language?.id== item.id) : item.language_code=="tr" )
+                    let temp2 = res.data.object.find(item => language ? (language?.id == item.id) : item.language_code == "tr")
                     setAppParameter(JSON.parse(temp2.cms_translates))
                     dispatch(setLanguages(temp1))
                 }

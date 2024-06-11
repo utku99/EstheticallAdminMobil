@@ -22,6 +22,7 @@ const NewOffer = ({route}: any) => {
   const [doctors, setDoctors] = useState<any>([]);
 
   const formik = useFormik({
+    validateOnChange: false,
     enableReinitialize: true,
     initialValues: {
       doctor: '',
