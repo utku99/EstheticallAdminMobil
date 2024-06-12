@@ -223,7 +223,7 @@ const CustomInputs: React.FC<props> = ({
                 {
                   paddingLeft: 8,
                   height: 40,
-                  backgroundColor: 'white',
+                  backgroundColor: disable ? '#CECECE' : 'white',
                   flex: 1,
                   borderRadius: 8,
                   borderWidth: 1,

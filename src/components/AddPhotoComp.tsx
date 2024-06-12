@@ -20,41 +20,65 @@ import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 import PickGallery from '../assets/svg/bottomTab/PickGallery';
 import PickCamera from '../assets/svg/bottomTab/PickCamera';
 import IntLabel from './IntLabel';
+import {toast} from '../utility/WebClient';
 
 const AddPhotoComp = ({
   value,
   onChange,
   error,
+  type,
 }: {
   value: any;
   onChange: any;
   error?: any;
+  type?: '';
 }) => {
   const [visible, setVisible] = useState(false);
 
-  const openGalery = () => {
+  const checkAndRequestPermission = async (permission: any) => {
+    const result = await check(permission);
+    if (result === RESULTS.GRANTED) {
+      return true;
+    } else {
+      const requestResult = await request(permission);
+      return requestResult === RESULTS.GRANTED;
+    }
+  };
+
+  const openGalery = async () => {
     picker
       .openPicker({
         cropping: false,
         includeBase64: true,
         multiple: true,
-        mediaType: 'photo',
+        mediaType: 'any',
         maxFiles: 5,
       })
       .then((image: any) => {
-        let temp = image.map((img: any) => img.data);
-        onChange(temp);
+        console.log(image);
+
+        if (image?.mime == 'video/mp4') {
+        } else {
+          let temp = image.map((img: any) => img.data);
+          onChange(temp);
+        }
       });
   };
-  const openCamera = () => {
+
+  const openCamera = async () => {
     picker
       .openCamera({
         cropping: false,
         includeBase64: true,
-        mediaType: 'photo',
+        mediaType: 'any',
       })
       .then((image: any) => {
-        onChange([image.data]);
+        console.log(image);
+
+        if (image?.mime == 'video/mp4') {
+        } else {
+          onChange([image.data]);
+        }
       });
   };
 
