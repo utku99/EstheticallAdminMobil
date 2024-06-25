@@ -5,22 +5,25 @@ import CustomButtons from '../../components/CustomButtons';
 import HandleData from '../../components/HandleData';
 import {useNavigation} from '@react-navigation/native';
 import WebClient from '../../utility/WebClient';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import SentOfferComp from '../../components/SentOfferComp';
 import AllOfferComp from '../../components/AllOfferComp';
 import CompletedOfferComp from '../../components/CompletedOfferComp';
 import IntLabel from '../../components/IntLabel';
+import {setClicked} from '../../redux/slices/common';
 
 const Offer = () => {
   const [tab, setTab] = useState(1);
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
+  const {clicked} = useSelector((state: any) => state.common);
 
   const [allOffers, setAllOffers] = useState<any>([]);
   const [sentOffers, setSentOffers] = useState<any>([]);
   const [completedOffers, setCompletedOffers] = useState<any>([]);
 
-  const [clicked, setClicked] = useState(false);
+  const [clicked2, setClicked2] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     Post('/api/Offers/IncomingOffersMobile', {
@@ -44,10 +47,9 @@ const Offer = () => {
       setCompletedOffers(res.data.object);
     });
 
-    if (clicked) {
-      setClicked(false);
-    }
-  }, [tab, clicked]);
+    setClicked2(false);
+    dispatch(setClicked(false));
+  }, [tab, clicked2, clicked]);
 
   return (
     <MenuWrapper>
@@ -118,7 +120,7 @@ const Offer = () => {
             }}
             data={completedOffers}
             renderItem={({item}) => (
-              <CompletedOfferComp item={item} setClicked={setClicked} />
+              <CompletedOfferComp item={item} setClicked={setClicked2} />
             )}
           />
         </HandleData>

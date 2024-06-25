@@ -17,10 +17,11 @@ import MenuWrapper from '../menu/MenuWrapper';
 import AddPhotoComp from '../../components/AddPhotoComp';
 import {currencyTypes, offerStates} from '../../constants/Enum';
 import {useFormik} from 'formik';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
 import IntLabel from '../../components/IntLabel';
 import * as Yup from 'yup';
+import {setClicked} from '../../redux/slices/common';
 
 const NewOffer = ({route}: any) => {
   const {Post, loading} = WebClient();
@@ -28,6 +29,7 @@ const NewOffer = ({route}: any) => {
   const navigation = useNavigation();
   const [offerInfo, setOfferInfo] = useState<any>(null);
   const [doctors, setDoctors] = useState<any>([]);
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     validateOnChange: false,
@@ -81,6 +83,7 @@ const NewOffer = ({route}: any) => {
         true,
       ).then(res => {
         if (res.data.code === '100') {
+          dispatch(setClicked(true));
           navigation.goBack();
         }
       });

@@ -17,8 +17,6 @@ const AllOfferComp = ({item}: any) => {
   const [seeAll, setSeeAll] = useState(false);
   const navigation = useNavigation<any>();
 
-  console.log(item?.extraServices);
-
   return (
     <View className="items-center">
       <View className="flex-row space-x-4 mt-4 mb-2">

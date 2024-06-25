@@ -250,7 +250,7 @@ const SentOfferComp = ({item}: any) => {
           {!seeAll && (
             <Text
               numberOfLines={1}
-              className="font-poppinsRegular text-sm text-white flex-1">
+              className="font-poppinsRegular text-xs text-white flex-1">
               {IntLabel('offer_price')}: {item?.price}
               {currencyTypes.find(cur => cur.value == item?.currencyType)?.icon}
             </Text>
@@ -261,7 +261,7 @@ const SentOfferComp = ({item}: any) => {
             {seeAll ? <DoctorArrowUpIcon /> : <DoctorArrowDownIcon />}
           </View>
           {!seeAll && (
-            <Text className="font-poppinsBold text-sm text-white flex-1 text-right">
+            <Text className="font-poppinsBold text-xs text-white flex-1 text-right">
               {IntLabel('see_details')}
             </Text>
           )}
