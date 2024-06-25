@@ -50,23 +50,18 @@ const Message = ({route}: any) => {
       message: string;
     },
     onSubmit: (values, {resetForm, setFieldValue}) => {
-      Post(
-        '/api/Chatting/SendMessage',
-        {
-          roomID: route.params?.selectedUser?.roomID,
-          senderId:
-            user.companyOfficeId == 0 ? user.companyId : user.companyOfficeId,
-          senderType: user.companyOfficeId == 0 ? 2 : 3,
-          message: values.message,
-          images: values.images,
-          messagesType: route.params?.selectedUser?.messagesType,
-          receiverId: route.params?.selectedUser?.correspondentID,
-          receiverType: route.params?.selectedUser?.correspondentType,
-          serviceID: route.params?.selectedUser?.serviceID,
-        },
-        false,
-        false,
-      ).then(res => {
+      Post('/api/Chatting/SendMessage', {
+        roomID: route.params?.selectedUser?.roomID,
+        senderId:
+          user.companyOfficeId == 0 ? user.companyId : user.companyOfficeId,
+        senderType: user.companyOfficeId == 0 ? 2 : 3,
+        message: values.message,
+        images: values.images,
+        messagesType: route.params?.selectedUser?.messagesType,
+        receiverId: route.params?.selectedUser?.correspondentID,
+        receiverType: route.params?.selectedUser?.correspondentType,
+        serviceID: route.params?.selectedUser?.serviceID,
+      }).then(res => {
         console.log(res.data);
 
         if (res.data.code == '100') {

@@ -7,13 +7,16 @@ import WaitingAppointmentComp from '../../components/WaitingAppointmentComp';
 import AcceptedAppointmentComp from '../../components/AcceptedAppointmentComp';
 import RefusedAppointmentComp from '../../components/RefusedAppointmentComp';
 import WebClient from '../../utility/WebClient';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import IntLabel from '../../components/IntLabel';
+import {setClicked} from '../../redux/slices/common';
 
 const Appointment = () => {
   const [tab, setTab] = useState(1);
   const {Post, loading} = WebClient();
   const {user} = useSelector((state: any) => state.user);
+  const {clicked} = useSelector((state: any) => state.common);
+  const dispatch = useDispatch();
 
   const [waitingAppointments, setWaitingAppointments] = useState<any>([]);
   const [acceptedAppointments, setAcceptedAppointments] = useState<any>([]);
@@ -40,7 +43,9 @@ const Appointment = () => {
     }).then((res: any) => {
       setRefusedAppointments(res.data.object);
     });
-  }, [tab]);
+
+    dispatch(setClicked(false));
+  }, [tab, clicked]);
 
   return (
     <MenuWrapper>

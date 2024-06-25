@@ -16,8 +16,7 @@ import axios from 'axios';
 
 const AddSharing = () => {
   const {Post, loading} = WebClient();
-  const {user, isLoggedIn, language} = useSelector((state: any) => state.user);
-  const [images, setImages] = useState<any>([]);
+  const {user, language, languages} = useSelector((state: any) => state.user);
   const [companyOffice, setCompanyOffice] = useState<any>([]);
   const [services, setServices] = useState<any>([]);
 
@@ -41,13 +40,13 @@ const AddSharing = () => {
       title: '',
       content: '',
       statu: false,
-      images: [],
+      image: [],
     } as any,
     validationSchema: Yup.object().shape({
-      service: Yup.string().required(
+      service: Yup.object().required(
         IntLabel('validation_message_this_field_is_required'),
       ),
-      subservice: Yup.string().required(
+      subservice: Yup.object().required(
         IntLabel('validation_message_this_field_is_required'),
       ),
       externalLink: Yup.string().required(
@@ -62,7 +61,7 @@ const AddSharing = () => {
       content: Yup.string().required(
         IntLabel('validation_message_this_field_is_required'),
       ),
-      videoFile: Yup.string().when('images', {
+      videoFile: Yup.string().when('image', {
         is: (val: any) => val.length == 0,
         then: schema =>
           schema.required(
@@ -86,7 +85,7 @@ const AddSharing = () => {
       } else {
         formData.append(
           'FileName',
-          values.images.map((item: any) => item.split(',')[1]),
+          values.image?.map((item: any) => item.split(',')[1]),
         );
       }
 
@@ -161,13 +160,14 @@ const AddSharing = () => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{width: SIZES.width * 0.95}}
-          className="flex-1">
+          contentContainerStyle={{flexGrow: 1}}>
           <CustomInputs
             type="dropdown"
             placeholder={IntLabel('office')}
             dropdownData={companyOffice}
             value={formik.values.office}
             onChange={(e: any) => formik.setFieldValue('office', e)}
+            error={formik.errors.office}
           />
 
           {formik.values.service?.value ? (
@@ -186,6 +186,7 @@ const AddSharing = () => {
               value={formik.values.subservice}
               onChange={(e: any) => formik.setFieldValue('subservice', e)}
               disable={services?.length == 0}
+              error={formik.errors.subservice}
             />
           ) : (
             <CustomInputs
@@ -194,35 +195,43 @@ const AddSharing = () => {
               dropdownData={services}
               value={formik.values.service}
               onChange={(e: any) => formik.setFieldValue('service', e)}
+              error={formik.errors.service}
             />
           )}
 
-          <CustomInputs
-            type="text"
-            placeholder={IntLabel('title')}
-            value={formik.values.title}
-            onChangeText={formik.handleChange('title')}
-          />
+          <View className="border p-2 border-dashed border-customLightGray mb-3">
+            <CustomInputs
+              type="dropdown"
+              placeholder={IntLabel('language')}
+              dropdownData={languages}
+              value={formik.values.language}
+              onChange={(e: any) => formik.setFieldValue('language', e)}
+              style={{width: 50}}
+            />
 
-          <CustomInputs
-            type="textarea"
-            placeholder={IntLabel('content')}
-            value={formik.values.content}
-            onChangeText={formik.handleChange('content')}
-          />
+            <CustomInputs
+              type="text"
+              placeholder={IntLabel('title')}
+              value={formik.values.title}
+              onChangeText={formik.handleChange('title')}
+              error={formik.errors.title}
+            />
+
+            <CustomInputs
+              type="textarea"
+              placeholder={IntLabel('content')}
+              value={formik.values.content}
+              onChangeText={formik.handleChange('content')}
+              error={formik.errors.content}
+            />
+          </View>
 
           <CustomInputs
             type="text"
             placeholder={IntLabel('external_link')}
             value={formik.values.externalLink}
             onChangeText={formik.handleChange('externalLink')}
-          />
-
-          <CustomInputs
-            type="text"
-            placeholder="Video"
-            value={formik.values.video}
-            onChangeText={formik.handleChange('video')}
+            error={formik.errors.externalLink}
           />
 
           <View className="flex-row items-center space-x-3 self-end">
@@ -241,9 +250,13 @@ const AddSharing = () => {
           </View>
 
           <AddPhotoComp
-            value={formik.values.images}
-            onChange={(e: any) => formik.setFieldValue('images', e)}
-            error={formik.errors.images}
+            value={formik.values.image}
+            onChange={(e: any) => {
+              console.log(e, '--------');
+
+              formik.setFieldValue('image', e);
+            }}
+            error={formik.errors.image}
           />
 
           <View className="flex-1"></View>

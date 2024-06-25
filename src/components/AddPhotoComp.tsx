@@ -59,7 +59,8 @@ const AddPhotoComp = ({
         maxFiles: 5,
       })
       .then((image: any) => {
-        if (image?.mime == 'video/mp4') {
+        if (image[0]?.mime == 'video/mp4') {
+          onChange(image[0]);
         } else {
           let temp = image.map((img: any) => img.data);
           type == 'add' ? onChange(temp) : onAdd(temp[0]);
@@ -76,6 +77,7 @@ const AddPhotoComp = ({
       })
       .then((image: any) => {
         if (image?.mime == 'video/mp4') {
+          console.log(image);
         } else {
           type == 'add' ? onChange([image.data]) : onAdd(image.data);
         }

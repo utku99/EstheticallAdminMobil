@@ -59,16 +59,18 @@ const RefusedAppointmentComp = ({item}: any) => {
 
         {seeAll && (
           <View className="p-[10px] space-y-3">
-            <View>
-              <Text className="text-customGray font-poppinsMedium text-sm">
-                {IntLabel('doctor')}
-              </Text>
-              <Text
-                numberOfLines={1}
-                className="text-customGray font-poppinsRegular text-sm">
-                {item?.doctorModel?.label}
-              </Text>
-            </View>
+            {item?.doctorModel?.label && (
+              <View>
+                <Text className="text-customGray font-poppinsMedium text-sm">
+                  {IntLabel('doctor')}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  className="text-customGray font-poppinsRegular text-sm">
+                  {item?.doctorModel?.label}
+                </Text>
+              </View>
+            )}
             <View>
               <Text className="text-customGray font-poppinsMedium text-sm">
                 {IntLabel('appointment_title')}:{' '}
@@ -150,7 +152,7 @@ const RefusedAppointmentComp = ({item}: any) => {
           {!seeAll && (
             <Text
               numberOfLines={1}
-              className="font-poppinsMedium text-sm text-white flex-1">
+              className="font-poppinsMedium text-xs text-white flex-1">
               Randevu ID:{' '}
               <Text className="font-poppinsRegular">{item?.appointmentID}</Text>
             </Text>
@@ -161,7 +163,7 @@ const RefusedAppointmentComp = ({item}: any) => {
             {seeAll ? <DoctorArrowUpIcon /> : <DoctorArrowDownIcon />}
           </View>
           {!seeAll && (
-            <Text className="font-poppinsBold text-sm text-white flex-1 text-right">
+            <Text className="font-poppinsBold text-xs text-white flex-1 text-right">
               Detayları Gör
             </Text>
           )}

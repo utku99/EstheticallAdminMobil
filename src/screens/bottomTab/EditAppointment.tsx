@@ -1,4 +1,12 @@
-import {View, Text, Image, Pressable, FlatList, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Pressable,
+  FlatList,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SIZES, temp} from '../../constants/constants';
 import CustomButtons from '../../components/CustomButtons';
@@ -13,11 +21,14 @@ import {
   offerStates,
 } from '../../constants/Enum';
 import {useFormik} from 'formik';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
 import IntLabel from '../../components/IntLabel';
 import * as Yup from 'yup';
 import moment from 'moment';
+import {setClicked} from '../../redux/slices/common';
+import SpinnerComp from '../../components/SpinnerComp';
+import {useIntl} from 'react-intl';
 
 const EditAppointment = () => {
   const {Post, loading} = WebClient();
@@ -26,24 +37,33 @@ const EditAppointment = () => {
   const [info, setInfo] = useState<any>(null);
   const [doctors, setDoctors] = useState<any>(null);
   const route = useRoute<any>();
+  const dispatch = useDispatch();
+
+  const statu = [
+    {value: 1, label: IntLabel('waiting')},
+    // { value: 2, label: "Ücret Ödenmiş" },
+    {value: 3, label: IntLabel('refused')},
+    {value: 4, label: IntLabel('accepted')},
+    {value: 5, label: IntLabel('completed')},
+    {value: 6, label: IntLabel('failed')},
+  ];
 
   const formik = useFormik({
     validateOnChange: false,
     enableReinitialize: true,
     initialValues: {
-      statu:
-        appointmentOperationStates.find(
-          tmp => tmp.value == info?.operationState,
-        ) ?? '',
-      date: info?.confirmDate ?? '',
+      date: info?.confirmDate ? moment(info?.confirmDate).toDate() : '',
       doctor: info?.doctorModel ?? '',
       desc: info?.description ?? '',
+      operationState: statu.find(
+        (item: any) => item.value == info?.operationState,
+      ),
     } as any,
     validationSchema: Yup.object().shape({
-      statu: Yup.object().required(
+      operationState: Yup.object().required(
         IntLabel('validation_message_this_field_is_required'),
       ),
-      date: Yup.object().required(
+      date: Yup.string().required(
         IntLabel('validation_message_this_field_is_required'),
       ),
       desc: Yup.string().required(
@@ -56,7 +76,7 @@ const EditAppointment = () => {
         {
           appointmentID: info.appointmentID,
           confirmDate: values.date,
-          operationState: values.statu.value,
+          operationState: info.operationState,
           doctorId: values.doctor.value ?? info.doctorModel.value,
           description: values.desc,
         },
@@ -64,6 +84,7 @@ const EditAppointment = () => {
         true,
       ).then(res => {
         if (res.data.code === '100') {
+          dispatch(setClicked(true));
           navigation.goBack();
         }
       });
@@ -89,13 +110,21 @@ const EditAppointment = () => {
     });
   }, []);
 
-  console.log(typeof moment(formik.values.date));
-
   return (
     <MenuWrapper title={IntLabel('edit_appointment')}>
-      <View className="items-center">
-        <View
-          className={`h-fit border border-customLightGray rounded-xl bg-white `}
+      {loading ? (
+        <View className=" flex-1 items-center justify-center">
+          <SpinnerComp />
+        </View>
+      ) : (
+        <ScrollView
+          className={`border border-customLightGray rounded-xl bg-white `}
+          contentContainerStyle={{flexGrow: 1}}
+          // contentContainerStyle={{
+          //   display: 'flex',
+          //   flexDirection: 'column',
+          //   justifyContent: 'space-between',
+          // }}
           style={{width: SIZES.width * 0.95}}>
           {/* header */}
           <View className="flex-row justify-between items-center p-[10px]">
@@ -129,14 +158,29 @@ const EditAppointment = () => {
               </Text>
               <CustomInputs
                 type="dropdown"
-                dropdownData={appointmentOperationStates}
-                value={formik.values.statu}
-                onChange={(e: any) => formik.setFieldValue('statu', e)}
-                error={formik.errors.statu}
+                dropdownData={statu}
+                value={formik.values.operationState}
+                onChange={(e: any) => {
+                  Post(
+                    '/api/Appointments/SetAppointmentState',
+                    {
+                      appointmentID: info?.appointmentID,
+                      operationState: e.value,
+                    },
+                    true,
+                    true,
+                  ).then(res => {
+                    if (res.data.code == '100') {
+                      dispatch(setClicked(true));
+                      navigation.goBack();
+                    }
+                  });
+                }}
+                error={formik.errors.operationState}
               />
             </View>
 
-            {info?.doctorModel?.value != 0 && user?.companyType != 4 && (
+            {info?.doctorModel?.label && (
               <View>
                 <Text className="text-customGray font-poppinsMedium text-sm mb-1">
                   {IntLabel('doctor')}:
@@ -167,12 +211,17 @@ const EditAppointment = () => {
               </Text>
               <CustomInputs
                 type="date"
-                value={new Date()}
+                dateMode="datetime"
+                value={formik.values.date}
                 onChange={(e: any) => formik.setFieldValue('date', e)}
                 error={formik.errors.date}
               />
             </View>
+          </View>
 
+          <View className="flex-1"></View>
+
+          <View className="mb-3">
             <CustomButtons
               type="solid"
               label={IntLabel('save')}
@@ -183,8 +232,8 @@ const EditAppointment = () => {
 
           {/* bottom */}
           <Pressable className="bg-customBrown w-full h-[35px] rounded-b-lg flex-row items-center justify-between px-[10px]"></Pressable>
-        </View>
-      </View>
+        </ScrollView>
+      )}
     </MenuWrapper>
   );
 };

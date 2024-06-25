@@ -12,7 +12,7 @@ import {useIntl} from 'react-intl';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const Sharings = () => {
-  const {Post} = WebClient();
+  const {Post, loading} = WebClient();
   const {user, language} = useSelector((state: any) => state.user);
   const [sharings, setSharings] = useState([]);
   const {connection, connectionId} = useSelector((state: any) => state.hub);
@@ -20,7 +20,6 @@ const Sharings = () => {
   const navigation = useNavigation<any>();
 
   const [clicked, setClicked] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   OneSignal.initialize('36ba4e67-6a5f-4bae-9269-4ccdededab2d');
 
@@ -31,50 +30,56 @@ const Sharings = () => {
   });
 
   useEffect(() => {
-    Post('/api/Shared/ListCompanySharedsMobile', {
-      companyId: user.companyId,
-      companyOfficeId: user.companyOfficeId,
-      companyTypeId: user.companyOfficeId == 0 ? 0 : 1, // institution :0 , office:1
-    }).then(res => {
-      let temp = res.data.map((tmp: any) => {
-        if (tmp.videoUrl) {
-          return {
-            ...tmp,
-            images: [{fileName: tmp.videoUrl}],
-          };
-        } else {
-          return tmp;
-        }
-      });
+    const func = async () => {
+      let OneSignalId = await OneSignal.User.pushSubscription.getIdAsync();
 
-      setSharings(temp);
-      setClicked(false);
-      setLoading(false);
-    });
-
-    if (OneSignal.User.pushSubscription.getPushSubscriptionId()) {
-      Post('/api/Notification/SendOneSignalID', {
-        oneSignalID: OneSignal.User.pushSubscription.getPushSubscriptionId(),
-        userID: user?.id,
-        languageId: language?.type ?? 1,
-        companyID: user?.companyOfficeId == 0 ? user?.companyId : 0,
-        companyOfficeID: user?.companyOfficeId == 0 ? 0 : user?.companyOfficeId,
+      Post('/api/Shared/ListCompanySharedsMobile', {
+        companyId: user.companyId,
+        companyOfficeId: user.companyOfficeId,
+        companyTypeId: user.companyOfficeId == 0 ? 0 : 1, // institution :0 , office:1
       }).then(res => {
-        if (res.data.resultCode == '100') {
-          console.log('player id sended');
-        } else {
-          console.log('no player id');
-        }
-      });
-    }
+        let temp = res.data.map((tmp: any) => {
+          if (tmp.videoUrl) {
+            return {
+              ...tmp,
+              images: [{fileName: tmp.videoUrl}],
+            };
+          } else {
+            return tmp;
+          }
+        });
 
-    if (user && connection) {
-      connection.invoke('LoginMessageHub', {
-        UserID: user?.companyId,
-        TypeID: user?.companyOfficeId == 0 ? 2 : 3,
+        setSharings(temp);
+        setClicked(false);
       });
-    }
-  }, [OneSignal.User.pushSubscription.getPushSubscriptionId(), clicked]);
+
+      if (OneSignalId) {
+        Post('/api/Notification/SendOneSignalID', {
+          oneSignalID: OneSignalId,
+          userID: user?.id,
+          languageId: language?.type ?? 1,
+          companyID: user?.companyOfficeId == 0 ? user?.companyId : 0,
+          companyOfficeID:
+            user?.companyOfficeId == 0 ? 0 : user?.companyOfficeId,
+        }).then(res => {
+          if (res.data.resultCode == '100') {
+            console.log('player id sended');
+          } else {
+            console.log('no player id');
+          }
+        });
+      }
+
+      if (user && connection) {
+        connection.invoke('LoginMessageHub', {
+          UserID: user?.companyId,
+          TypeID: user?.companyOfficeId == 0 ? 2 : 3,
+        });
+      }
+    };
+
+    func();
+  }, [clicked]);
 
   return (
     <MenuWrapper title={IntLabel('sharings')} type="sharing">
@@ -86,7 +91,7 @@ const Sharings = () => {
           contentContainerStyle={{
             display: 'flex',
             gap: 15,
-            paddingBottom: 20,
+            paddingBottom: 60,
           }}
           data={sharings}
           renderItem={({item, index}) => (

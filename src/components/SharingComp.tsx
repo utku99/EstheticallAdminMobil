@@ -20,10 +20,11 @@ import IntLabel from './IntLabel';
 import Video from 'react-native-video';
 import Muted from '../assets/svg/homepages/Muted';
 import UnMuted from '../assets/svg/homepages/UnMuted';
+import SpinnerComp from './SpinnerComp';
 
 const SharingComp = ({item, setClicked}: {item: any; setClicked: any}) => {
   const [index, setIndex] = useState<any>(0);
-  const {Post, loading} = WebClient();
+  const {Post} = WebClient();
   const isCarousel = useRef<any>(null);
   const navigation = useNavigation<any>();
   const screenIsFocused = useIsFocused();
@@ -131,7 +132,7 @@ const SharingComp = ({item, setClicked}: {item: any; setClicked: any}) => {
           {IntLabel('see_comments')}
         </Text>
         <View className="flex-row items-center space-x-6 mr-4">
-          <View className="z-30">
+          <View className="z-30 ">
             <Switch
               value={item?.isActive}
               onChange={() => {
@@ -163,6 +164,8 @@ const SharingComp = ({item, setClicked}: {item: any; setClicked: any}) => {
                 true,
                 true,
               ).then(res => {
+                console.log(res.data, '--');
+
                 setClicked(true);
               });
             }}
