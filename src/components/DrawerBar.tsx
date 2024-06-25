@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import IntLabel from './IntLabel';
 
 const DrawerBar = ({props}: any) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   return (
     <DrawerContentScrollView>
       <DrawerItem

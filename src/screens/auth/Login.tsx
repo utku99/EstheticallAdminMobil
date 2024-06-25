@@ -46,7 +46,7 @@ const Login = () => {
         true,
         true,
       ).then(res => {
-        if (res.data.code === '100' && res.data.object.userRoleId === 2) {
+        if (res.data.code === '100' && res.data.object.userRoleId != 1) {
           dispatch(setUser(res.data.object));
           dispatch(setLoggedIn(true));
         }

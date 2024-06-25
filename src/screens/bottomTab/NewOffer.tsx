@@ -1,4 +1,12 @@
-import {View, Text, Image, Pressable, FlatList, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Pressable,
+  FlatList,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SIZES, temp} from '../../constants/constants';
 import CustomButtons from '../../components/CustomButtons';
@@ -100,11 +108,9 @@ const NewOffer = ({route}: any) => {
     });
   }, []);
 
-  console.log(formik.values.price);
-
   return (
     <MenuWrapper title={IntLabel('give_new_offer')}>
-      <View className="items-center">
+      <ScrollView>
         <View
           className={`h-fit border border-customLightGray rounded-xl bg-white `}
           style={{width: SIZES.width * 0.95}}>
@@ -249,7 +255,7 @@ const NewOffer = ({route}: any) => {
           {/* bottom */}
           <Pressable className="bg-customBrown w-full h-[35px] rounded-b-lg flex-row items-center justify-between px-[10px]"></Pressable>
         </View>
-      </View>
+      </ScrollView>
     </MenuWrapper>
   );
 };

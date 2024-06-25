@@ -17,6 +17,7 @@ import {useSelector} from 'react-redux';
 import {Dropdown} from 'react-native-element-dropdown';
 import IntLabel from '../../components/IntLabel';
 import * as Yup from 'yup';
+import moment from 'moment';
 
 const EditAppointment = () => {
   const {Post, loading} = WebClient();
@@ -42,7 +43,7 @@ const EditAppointment = () => {
       statu: Yup.object().required(
         IntLabel('validation_message_this_field_is_required'),
       ),
-      date: Yup.string().required(
+      date: Yup.object().required(
         IntLabel('validation_message_this_field_is_required'),
       ),
       desc: Yup.string().required(
@@ -87,6 +88,8 @@ const EditAppointment = () => {
       setDoctors(newDoctor);
     });
   }, []);
+
+  console.log(typeof moment(formik.values.date));
 
   return (
     <MenuWrapper title={IntLabel('edit_appointment')}>
@@ -164,7 +167,7 @@ const EditAppointment = () => {
               </Text>
               <CustomInputs
                 type="date"
-                value={formik.values.date}
+                value={new Date()}
                 onChange={(e: any) => formik.setFieldValue('date', e)}
                 error={formik.errors.date}
               />

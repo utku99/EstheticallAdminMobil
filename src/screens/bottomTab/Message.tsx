@@ -160,7 +160,7 @@ const Message = ({route}: any) => {
                           formik.setFieldValue('images', a);
                         }}
                         className="absolute bottom-1 right-1 bg-customOrange rounded-md w-[24px] h-[24px] items-center justify-center">
-                        <TrashIcon width={14} height={17} />
+                        <TrashIcon width={14} height={17} fill={'white'} />
                       </Pressable>
                     </View>
                   )}

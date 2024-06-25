@@ -13,7 +13,7 @@ const IncomingMessage = () => {
     (state: any) => state.hub,
   );
   const {Post, loading} = WebClient();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const {user} = useSelector((state: any) => state.user);
   const [users, setUsers] = useState([]);
 
@@ -41,7 +41,10 @@ const IncomingMessage = () => {
         title={IntLabel('warning_no_active_record')}
         loading={loading}>
         <FlatList
-          contentContainerStyle={{display: 'flex', gap: 15}}
+          contentContainerStyle={{
+            display: 'flex',
+            gap: 15,
+          }}
           data={users}
           renderItem={({item}) => <MessageComp item={item} />}
         />
