@@ -1,9 +1,9 @@
-import {View, Text, FlatList, ScrollView} from 'react-native';
+import {View, Text, FlatList, ScrollView, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import MenuWrapper from '../menu/MenuWrapper';
 import HandleData from '../../components/HandleData';
 import WebClient, {toast} from '../../utility/WebClient';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {SIZES} from '../../constants/constants';
 import CustomInputs from '../../components/CustomInputs';
 import AddPhotoComp from '../../components/AddPhotoComp';
@@ -13,16 +13,18 @@ import {useFormik} from 'formik';
 import IntLabel from '../../components/IntLabel';
 import * as Yup from 'yup';
 import axios from 'axios';
+import {setClicked} from '../../redux/slices/common';
 
 const AddSharing = () => {
   const {Post, loading} = WebClient();
   const {user, language, languages} = useSelector((state: any) => state.user);
   const [companyOffice, setCompanyOffice] = useState<any>([]);
   const [services, setServices] = useState<any>([]);
+  const dispatch = useDispatch();
 
   const config = {
     headers: {
-      Authorization: 'Bearer ' + user?.access_token,
+      Authorization: 'Bearer ' + user?.token,
       LanguageId: language?.type,
       'content-type': 'multipart/form-data',
     },
@@ -43,6 +45,9 @@ const AddSharing = () => {
       image: [],
     } as any,
     validationSchema: Yup.object().shape({
+      office: Yup.object().required(
+        IntLabel('validation_message_this_field_is_required'),
+      ),
       service: Yup.object().required(
         IntLabel('validation_message_this_field_is_required'),
       ),
@@ -61,14 +66,14 @@ const AddSharing = () => {
       content: Yup.string().required(
         IntLabel('validation_message_this_field_is_required'),
       ),
-      videoFile: Yup.string().when('image', {
-        is: (val: any) => val.length == 0,
-        then: schema =>
-          schema.required(
-            IntLabel('validation_message_this_field_is_required'),
-          ),
-        otherwise: schema => schema,
-      }),
+      // videoFile: Yup.string().when('image', {
+      //   is: (val: any) => val.length == 0,
+      //   then: schema =>
+      //     schema.required(
+      //       IntLabel('validation_message_this_field_is_required'),
+      //     ),
+      //   otherwise: schema => schema,
+      // }),
     }),
     onSubmit: (values, {resetForm}) => {
       let formData = new FormData();
@@ -83,10 +88,7 @@ const AddSharing = () => {
       if (values.image?.length == 0) {
         formData.append('VideoFile', values.videoFile);
       } else {
-        formData.append(
-          'FileName',
-          values.image?.map((item: any) => item.split(',')[1]),
-        );
+        formData.append('FileName', values.image);
       }
 
       formData.append('VideoUrl', 'a');
@@ -113,6 +115,7 @@ const AddSharing = () => {
         .then(res => {
           if (res.data.code == '100') {
             resetForm();
+            dispatch(setClicked(true));
             toast(res.data.message);
           } else {
             toast(res.data.message);
@@ -200,14 +203,15 @@ const AddSharing = () => {
           )}
 
           <View className="border p-2 border-dashed border-customLightGray mb-3">
-            <CustomInputs
-              type="dropdown"
-              placeholder={IntLabel('language')}
-              dropdownData={languages}
-              value={formik.values.language}
-              onChange={(e: any) => formik.setFieldValue('language', e)}
-              style={{width: 50}}
-            />
+            <View className="w-[150px]">
+              <CustomInputs
+                type="dropdown"
+                placeholder={IntLabel('language')}
+                dropdownData={languages}
+                value={formik.values.language}
+                onChange={(e: any) => formik.setFieldValue('language', e)}
+              />
+            </View>
 
             <CustomInputs
               type="text"
@@ -215,6 +219,7 @@ const AddSharing = () => {
               value={formik.values.title}
               onChangeText={formik.handleChange('title')}
               error={formik.errors.title}
+              touched={formik.touched.title}
             />
 
             <CustomInputs
@@ -232,9 +237,10 @@ const AddSharing = () => {
             value={formik.values.externalLink}
             onChangeText={formik.handleChange('externalLink')}
             error={formik.errors.externalLink}
+            touched={formik.touched.externalLink}
           />
 
-          <View className="flex-row items-center space-x-3 self-end">
+          <View className="flex-row items-center space-x-3 self-end  mb-3">
             <Text className="text-base font-poppinsMedium text-customGray ">
               {formik.values.statu ? IntLabel('active') : IntLabel('passive')}
             </Text>
@@ -249,15 +255,27 @@ const AddSharing = () => {
             />
           </View>
 
-          <AddPhotoComp
-            value={formik.values.image}
-            onChange={(e: any) => {
-              console.log(e, '--------');
+          {formik.values.image?.length == 0 && (
+            <AddPhotoComp
+              value={formik.values.videoFile}
+              type="video"
+              onChange={(e: any) => {
+                formik.setFieldValue('videoFile', e);
+              }}
+              error={formik.errors.videoFile}
+              formik={formik}
+            />
+          )}
 
-              formik.setFieldValue('image', e);
-            }}
-            error={formik.errors.image}
-          />
+          {!formik.values.videoFile && (
+            <AddPhotoComp
+              value={formik.values.image}
+              onChange={(e: any) => {
+                formik.setFieldValue('image', e);
+              }}
+              error={formik.errors.image}
+            />
+          )}
 
           <View className="flex-1"></View>
 

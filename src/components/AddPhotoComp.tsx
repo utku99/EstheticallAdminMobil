@@ -21,6 +21,7 @@ import PickGallery from '../assets/svg/bottomTab/PickGallery';
 import PickCamera from '../assets/svg/bottomTab/PickCamera';
 import IntLabel from './IntLabel';
 import {toast} from '../utility/WebClient';
+import CustomButtons from './CustomButtons';
 
 const AddPhotoComp = ({
   value,
@@ -29,13 +30,15 @@ const AddPhotoComp = ({
   type = 'add',
   onAdd,
   onDelete,
+  formik,
 }: {
   value: any;
   onChange?: any;
   error?: any;
-  type?: 'add' | 'edit';
+  type?: 'add' | 'edit' | 'video';
   onAdd?: any;
   onDelete?: any;
+  formik?: any;
 }) => {
   const [visible, setVisible] = useState(false);
 
@@ -55,15 +58,18 @@ const AddPhotoComp = ({
         cropping: false,
         includeBase64: true,
         multiple: true,
-        mediaType: 'any',
+        mediaType: type == 'video' ? 'video' : 'photo',
         maxFiles: 5,
       })
       .then((image: any) => {
-        if (image[0]?.mime == 'video/mp4') {
-          onChange(image[0]);
-        } else {
-          let temp = image.map((img: any) => img.data);
-          type == 'add' ? onChange(temp) : onAdd(temp[0]);
+        let temp = image.map((img: any) => img.data);
+
+        if (type == 'add') {
+          return onChange(temp);
+        } else if (type == 'edit') {
+          return onAdd(temp[0]);
+        } else if (type == 'video') {
+          return onChange(image[0]);
         }
       });
   };
@@ -73,13 +79,15 @@ const AddPhotoComp = ({
       .openCamera({
         cropping: false,
         includeBase64: true,
-        mediaType: 'any',
+        mediaType: type == 'video' ? 'video' : 'photo',
       })
       .then((image: any) => {
-        if (image?.mime == 'video/mp4') {
-          console.log(image);
-        } else {
-          type == 'add' ? onChange([image.data]) : onAdd(image.data);
+        if (type == 'add') {
+          return onChange([image.data]);
+        } else if (type == 'edit') {
+          return onAdd(image.data);
+        } else if (type == 'video') {
+          return onChange(image[0]);
         }
       });
   };
@@ -201,6 +209,77 @@ const AddPhotoComp = ({
                 </View>
               )}
             />
+          </View>
+          <Modal
+            animationType="fade"
+            transparent
+            visible={visible}
+            onRequestClose={() => setVisible(false)}>
+            <TouchableWithoutFeedback onPress={() => setVisible(false)}>
+              <View className="bg-black/50 flex-1 justify-end">
+                <TouchableWithoutFeedback>
+                  <View className="bg-white rounded-t-3xl flex-row justify-evenly items-center py-10">
+                    <TouchableOpacity
+                      className="items-center border w-fit p-5 rounded-lg border-customOrange space-y-2"
+                      onPress={() => {
+                        openCamera();
+                        setVisible(false);
+                      }}>
+                      <PickCamera />
+                      <Text className="font-poppinsRegular text-customGray">
+                        {IntLabel('open_camera')}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className="items-center border w-fit p-5 rounded-lg border-customOrange space-y-2"
+                      onPress={() => {
+                        openGalery();
+                        setVisible(false);
+                      }}>
+                      <PickGallery />
+                      <Text className="font-poppinsRegular text-customGray">
+                        {IntLabel('open_gallery')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            </TouchableWithoutFeedback>
+          </Modal>
+        </View>
+      )}
+      {type == 'video' && (
+        <View className="mb-3">
+          <View className="flex-row">
+            {!value && (
+              <View>
+                <CustomButtons
+                  label={IntLabel('add_video')}
+                  type="solid"
+                  onPress={() => {
+                    setVisible(true);
+                  }}
+                />
+                {error && (
+                  <Text className="text-red-400 text-xs "> {error}</Text>
+                )}
+              </View>
+            )}
+            {value && (
+              <View className="flex-row space-x-3">
+                <Text className="text-customGray font-poppinsRegular ">
+                  {value?.path
+                    ?.split('/')
+                    ?.find((tmp: any) => tmp.includes('mp4'))}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    formik.setFieldValue('videoFile', '');
+                  }}>
+                  <Text className="text-red-400 font-poppinsSemiBold">X</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
           <Modal
             animationType="fade"

@@ -10,16 +10,18 @@ import {OneSignal} from 'react-native-onesignal';
 import IntLabel from '../../components/IntLabel';
 import {useIntl} from 'react-intl';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {setClicked} from '../../redux/slices/common';
 
 const Sharings = () => {
   const {Post, loading} = WebClient();
   const {user, language} = useSelector((state: any) => state.user);
   const [sharings, setSharings] = useState([]);
   const {connection, connectionId} = useSelector((state: any) => state.hub);
+  const {clicked} = useSelector((state: any) => state.common);
   const intl = useIntl();
   const navigation = useNavigation<any>();
-
-  const [clicked, setClicked] = useState(false);
+  const dispatch = useDispatch();
+  const [clicked2, setClicked2] = useState(false);
 
   OneSignal.initialize('36ba4e67-6a5f-4bae-9269-4ccdededab2d');
 
@@ -50,7 +52,8 @@ const Sharings = () => {
         });
 
         setSharings(temp);
-        setClicked(false);
+        setClicked2(false);
+        dispatch(setClicked(false));
       });
 
       if (OneSignalId) {
@@ -79,7 +82,7 @@ const Sharings = () => {
     };
 
     func();
-  }, [clicked]);
+  }, [clicked2, clicked]);
 
   return (
     <MenuWrapper title={IntLabel('sharings')} type="sharing">
@@ -95,7 +98,7 @@ const Sharings = () => {
           }}
           data={sharings}
           renderItem={({item, index}) => (
-            <SharingComp key={index} item={item} setClicked={setClicked} />
+            <SharingComp key={index} item={item} setClicked={setClicked2} />
           )}
         />
       </HandleData>
