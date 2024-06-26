@@ -86,7 +86,11 @@ const AddSharing = () => {
       formData.append('RedirectUrl', values.externalLink);
 
       if (values.image?.length == 0) {
-        formData.append('VideoFile', values.videoFile);
+        formData.append('VideoFile', {
+          uri: values.videoFile?.path,
+          type: values.videoFile?.mime,
+          name: 'video.mp4',
+        });
       } else {
         formData.append('FileName', values.image);
       }
@@ -154,6 +158,8 @@ const AddSharing = () => {
       setServices(newServices);
     });
   }, [formik.values.office]);
+
+  console.log(formik.values.videoFile);
 
   return (
     <MenuWrapper title={IntLabel('add_sharing')}>
